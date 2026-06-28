@@ -5,366 +5,437 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ViajaFácil</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Inter:wght@400;500;600&display=swap');
-:root{--sky:#0EA5E9;--sky-d:#0284C7;--sky-l:#E0F2FE;--mint:#10B981;--mint-l:#ECFDF5;--amber:#F59E0B;--amber-l:#FFFBEB;--rose:#F43F5E;--rose-l:#FFF1F2;--coral:#F97316;--slate:#1E293B;--muted:#64748B;--bg:#F8FAFC;--white:#fff;--r:20px;--sh:0 4px 24px rgba(0,0,0,.09);--shl:0 8px 40px rgba(0,0,0,.14)}
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800;900&display=swap');
+:root{
+  --cream:#FFF6EC;--orange:#F2742C;--orange2:#E5562B;--ink:#1f2937;--muted:#7c6f63;--line:#F1E7DA;
+  --t-orange:#FFE7DC;--t-teal:#D9F4EF;--t-violet:#EAE2FB;--t-amber:#FDEFD2;--red:#E5484D;--red-l:#FDECEC;
+  --r:26px;--rb:24px;--sh:0 4px 18px rgba(0,0,0,.07);--shl:0 10px 34px rgba(0,0,0,.14);
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;font-size:18px;line-height:1.45}
+h1,h2,h3,.bl{font-family:'Baloo 2',sans-serif}
+.show{display:block!important}.flexshow{display:flex!important}
 
-/* ONBOARDING */
-#ob{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(160deg,#0EA5E9 0%,#2563EB 55%,#1E293B 100%);position:relative;overflow:hidden}
-#ob::before{content:'';position:absolute;width:320px;height:320px;background:rgba(255,255,255,.06);border-radius:50%;top:-80px;right:-80px}
-#ob::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.04);border-radius:50%;bottom:120px;left:-60px}
-.ob-hero{padding:52px 28px 28px;color:#fff;position:relative;z-index:1}
-.ob-logo{font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;margin-bottom:6px;letter-spacing:-.5px}
-.ob-logo span{color:#BAE6FD}
-.ob-tag{font-size:15px;opacity:.85;line-height:1.5;max-width:280px}
-.ob-plane{font-size:68px;margin-top:18px;display:block;animation:fl 3s ease-in-out infinite}
-@keyframes fl{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
-.ob-card{background:#fff;border-radius:28px 28px 0 0;padding:26px 22px 36px;position:relative;z-index:1;margin-top:auto}
-.ob-q{font-family:'Nunito',sans-serif;font-size:21px;font-weight:800;color:var(--slate);margin-bottom:4px}
-.ob-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
-.search-box{display:flex;align-items:center;background:var(--bg);border:2px solid #E2E8F0;border-radius:14px;padding:0 14px;margin-bottom:14px;transition:border-color .2s}
-.search-box:focus-within{border-color:var(--sky)}
-.search-box input{flex:1;border:none;background:transparent;padding:14px 8px;font-size:16px;font-family:'Inter',sans-serif;outline:none;color:var(--slate)}
-.dest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;max-height:230px;overflow-y:auto}
-.dp{background:var(--bg);border:2px solid #E2E8F0;border-radius:12px;padding:11px 6px;text-align:center;cursor:pointer;transition:all .15s;font-size:11px;font-weight:600;color:var(--muted)}
-.dp .fl{font-size:24px;display:block;margin-bottom:3px}
-.dp:hover,.dp.sel{border-color:var(--sky);background:var(--sky-l);color:var(--sky-d)}
-.dp.sel{font-weight:700}
-.ob-btn{width:100%;background:linear-gradient(135deg,var(--sky),#2563EB);border:none;border-radius:var(--r);padding:19px;color:#fff;font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 8px 28px rgba(14,165,233,.38);transition:transform .15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.ob-btn:active{transform:scale(.97)}
-.ob-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+/* ====== SCREENS (lang / dest) ====== */
+.full{display:none;min-height:100vh;padding:26px 22px 36px}
+.brand{font-family:'Baloo 2';font-size:24px;font-weight:800;color:var(--orange);text-align:center}
+.big-title{font-family:'Baloo 2';font-size:32px;font-weight:800;color:var(--ink);text-align:center;line-height:1.12;margin-top:20px}
+.sub-native{font-size:18px;font-weight:600;color:var(--muted);text-align:center;margin-top:8px}
 
-/* APP */
-#app{display:none}
-.hdr{background:linear-gradient(135deg,var(--sky) 0%,#2563EB 100%);padding:18px 18px 14px;color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(14,165,233,.3)}
-.hdr-row{display:flex;align-items:center;justify-content:space-between}
-.hdr-logo{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900}
-.hdr-logo span{color:#BAE6FD}
-.dest-badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
-.hdr-sub{font-size:12px;opacity:.8;margin-top:3px}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:26px}
+.lang-tile{background:#fff;border:3px solid var(--line);border-radius:var(--r);padding:20px 10px;text-align:center;cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s}
+.lang-tile:active{transform:scale(.96)}
+.lang-tile .fl{font-size:42px;line-height:1}
+.lang-tile .nm{font-family:'Baloo 2';font-size:21px;font-weight:700;color:var(--ink);margin-top:7px}
+.lang-tile.sel{border-color:var(--orange);background:#FFF3EA;box-shadow:0 6px 20px rgba(242,116,44,.20)}
 
-/* SCREENS */
-.sc{display:none;padding:18px}
-.sc.on{display:block}
+.big-btn{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:var(--rb);padding:22px;color:#fff;font-family:'Baloo 2';font-size:23px;font-weight:800;cursor:pointer;box-shadow:0 8px 26px rgba(242,116,44,.4);transition:transform .12s;margin-top:26px}
+.big-btn:active{transform:scale(.97)}
+.big-btn:disabled{opacity:.45;box-shadow:none;cursor:default}
 
-/* HOME */
-.dest-hero{background:linear-gradient(135deg,#1E293B,#334155);border-radius:var(--r);padding:18px;color:#fff;margin-bottom:18px;display:flex;align-items:center;gap:14px}
-.dh-flag{font-size:50px;line-height:1}
-.dh-name{font-family:'Nunito',sans-serif;font-size:21px;font-weight:900;margin-bottom:2px}
-.dh-det{font-size:13px;opacity:.75;line-height:1.5}
-.ch-btn{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.sec-ttl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
-.card{background:var(--white);border-radius:var(--r);padding:19px 13px 15px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s;border:2px solid transparent;text-align:center;position:relative}
-.card:active{transform:scale(.96)}
-.c-ico{font-size:36px;margin-bottom:7px;display:block}
-.c-ttl{font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:var(--slate);margin-bottom:3px}
-.c-dsc{font-size:11px;color:var(--muted);line-height:1.4}
-.c-badge{position:absolute;top:9px;right:9px;background:var(--coral);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:7px;text-transform:uppercase}
-.cb{background:linear-gradient(135deg,#FFF1F2,#FFE4E6);border:2px solid var(--rose);border-radius:var(--r);padding:16px 18px;display:flex;align-items:center;gap:13px;cursor:pointer;margin-bottom:8px}
-.cb:active{transform:scale(.98)}
-.cb-ico{font-size:32px;flex-shrink:0}
-.cb-ttl{font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--slate)}
-.cb-dsc{font-size:12px;color:var(--muted)}
-.cb-arr{margin-left:auto;font-size:20px;color:var(--rose)}
+.search{display:flex;align-items:center;gap:8px;background:#fff;border:3px solid var(--line);border-radius:18px;padding:4px 16px;margin-top:22px}
+.search input{flex:1;border:none;background:transparent;padding:15px 4px;font-size:19px;font-family:'Nunito';font-weight:600;outline:none;color:var(--ink)}
+.dest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.dest-tile{background:#fff;border:3px solid var(--line);border-radius:20px;padding:16px 8px;text-align:center;cursor:pointer;transition:transform .12s,border-color .15s}
+.dest-tile:active{transform:scale(.96)}
+.dest-tile .fl{font-size:34px;line-height:1}
+.dest-tile .nm{font-family:'Baloo 2';font-size:17px;font-weight:700;color:var(--ink);margin-top:5px}
+.dest-tile.sel{border-color:var(--orange);background:#FFF3EA}
 
-/* SCREEN HEADER */
-.sc-hdr{display:flex;align-items:center;gap:11px;margin-bottom:18px}
-.bk{width:44px;height:44px;border-radius:12px;background:var(--white);border:none;box-shadow:var(--sh);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sc-ttl{font-family:'Nunito',sans-serif;font-size:21px;font-weight:800}
-.sc-flag{margin-left:auto;font-size:18px}
+/* ====== APP ====== */
+#app{display:none;padding-bottom:104px}
+.hdr{background:linear-gradient(135deg,var(--orange),var(--orange2));padding:16px 20px 18px;color:#fff;position:sticky;top:0;z-index:40;box-shadow:0 4px 18px rgba(242,116,44,.28)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hdr-logo{font-family:'Baloo 2';font-size:22px;font-weight:800}
+.dest-badge{background:rgba(255,255,255,.22);border:none;border-radius:18px;padding:9px 15px;font-family:'Nunito';font-size:17px;font-weight:800;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px}
 
-/* TRADUCTOR */
-.lang-bar{background:var(--white);border-radius:var(--r);padding:11px 13px;box-shadow:var(--sh);display:flex;align-items:center;gap:7px;margin-bottom:13px}
-.lc{flex:1;background:var(--sky-l);border:none;border-radius:12px;padding:11px 7px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--sky-d);cursor:pointer;text-align:center}
-.sw{background:var(--sky);border:none;border-radius:10px;width:36px;height:36px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
-.tip{background:var(--sky-l);border-radius:12px;padding:10px 13px;font-size:13px;color:var(--sky-d);margin-bottom:13px;display:flex;gap:6px;align-items:flex-start}
-.big-mic{width:100%;background:linear-gradient(135deg,var(--sky),#2563EB);border:none;border-radius:var(--r);padding:24px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:0 8px 32px rgba(14,165,233,.38);transition:transform .15s;margin-bottom:13px}
+.sec{display:none;padding:22px 18px 6px}
+.sec.on{display:block}
+.greet{font-family:'Baloo 2';font-size:28px;font-weight:800;margin-bottom:18px}
+
+/* home cards */
+.cards{display:flex;flex-direction:column;gap:14px}
+.fcard{background:#fff;border-radius:var(--r);padding:20px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh);cursor:pointer;transition:transform .12s;border:3px solid transparent}
+.fcard:active{transform:scale(.97)}
+.fic{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:34px;flex-shrink:0}
+.fctt{font-family:'Baloo 2';font-size:22px;font-weight:700;color:var(--ink);line-height:1.18}
+.fcds{font-size:16px;font-weight:600;color:var(--muted);margin-top:3px;line-height:1.25}
+.fcard>div:last-child{min-width:0}
+.fcard.emer{background:linear-gradient(135deg,#FDECEC,#FBDADA);border-color:var(--red)}
+.fcard.emer .fctt{color:#B3261E}.fcard.emer .fcds{color:#C2453F;font-weight:700}
+
+/* sub header */
+.sub-hdr{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.bk{width:54px;height:54px;border-radius:16px;background:#fff;border:none;box-shadow:var(--sh);font-size:25px;cursor:pointer;flex-shrink:0}
+.bk:active{transform:scale(.94)}
+.sc-title{font-family:'Baloo 2';font-size:26px;font-weight:800}
+
+.tip{background:#fff;border:2px solid var(--line);border-radius:18px;padding:14px 16px;font-size:17px;font-weight:600;color:var(--muted);margin-bottom:16px;display:flex;gap:8px;align-items:flex-start}
+
+/* translator */
+.lang-bar{display:flex;align-items:center;gap:8px;background:#fff;border-radius:var(--r);padding:12px;box-shadow:var(--sh);margin-bottom:16px}
+.lc{flex:1;background:var(--t-orange);border:none;border-radius:16px;padding:13px 6px;cursor:pointer;text-align:center}
+.lc .lcf{font-size:26px;line-height:1}
+.lc .lcn{font-family:'Baloo 2';font-size:16px;font-weight:700;color:var(--orange2);margin-top:3px}
+.sw{width:48px;height:48px;border-radius:14px;background:var(--orange);border:none;color:#fff;font-size:20px;cursor:pointer;flex-shrink:0}
+.big-mic{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:var(--r);padding:26px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(242,116,44,.38);transition:transform .12s;margin-bottom:16px}
 .big-mic:active{transform:scale(.97)}
-.big-mic.rec{background:linear-gradient(135deg,var(--rose),#DC2626);animation:pu 1.2s infinite;box-shadow:0 8px 32px rgba(244,63,94,.38)}
+.big-mic.rec{background:linear-gradient(135deg,var(--red),#DC2626);animation:pu 1.2s infinite;box-shadow:0 8px 30px rgba(229,72,77,.4)}
 @keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
-.m-ico{font-size:48px;line-height:1}
-.m-lbl{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800}
-.m-sub{font-size:13px;opacity:.8}
-.ta-w{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:13px}
-.ta-w textarea{width:100%;border:none;padding:15px;font-size:17px;font-family:'Inter',sans-serif;resize:none;outline:none;color:var(--slate);background:transparent;min-height:72px}
-.ta-w button{width:100%;background:var(--sky);border:none;color:#fff;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer}
-.res-box{background:var(--sky-l);border-radius:var(--r);padding:17px;display:none}
-.res-box.sh{display:block}
-.res-txt{font-size:20px;font-weight:600;color:var(--sky-d);line-height:1.5;margin-bottom:11px}
-.sp-btn{background:var(--sky);border:none;color:#fff;padding:10px 16px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+.m-ico{font-size:52px;line-height:1}
+.m-lbl{font-family:'Baloo 2';font-size:21px;font-weight:800}
+.m-sub{font-size:16px;opacity:.9;font-weight:600}
+.ta-w{background:#fff;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
+.ta-w label{display:block;padding:14px 16px 4px;font-size:16px;font-weight:700;color:var(--muted)}
+.ta-w textarea{width:100%;border:none;padding:6px 16px 14px;font-size:19px;font-family:'Nunito';font-weight:600;resize:none;outline:none;color:var(--ink);background:transparent;min-height:74px}
+.ta-w .tbtn{width:100%;background:var(--orange);border:none;color:#fff;padding:16px;font-family:'Baloo 2';font-size:19px;font-weight:800;cursor:pointer}
+.res{background:#fff;border:3px solid var(--orange);border-radius:var(--r);padding:20px;display:none}
+.res.on{display:block}
+.res-txt{font-size:24px;font-weight:700;color:var(--ink);line-height:1.4;margin-bottom:14px}
+.sp-btn{background:var(--orange);border:none;color:#fff;padding:13px 20px;border-radius:16px;font-family:'Baloo 2';font-size:18px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
 
-/* CARTELES */
-.cam-z{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:13px}
-.cam-ph{background:linear-gradient(135deg,#1E293B,#334155);height:185px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer}
-.cam-ph p{color:rgba(255,255,255,.65);font-size:14px}
-#cam-prev{width:100%;max-height:245px;object-fit:cover;display:none}
-#fi{display:none}
-.ph-btn{width:100%;background:linear-gradient(135deg,var(--mint),#059669);border:none;border-radius:var(--r);padding:19px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 28px rgba(16,185,129,.3);margin-bottom:13px}
-.ph-btn span{font-size:24px}
-.ph-btn p{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800}
-.ocr-out{background:var(--mint-l);border-radius:var(--r);padding:17px;display:none}
-.ocr-out.sh{display:block}
-.ocr-orig{font-size:13px;color:var(--muted);margin-bottom:5px;font-style:italic}
-.ocr-trans{font-size:20px;font-weight:600;color:#065F46;line-height:1.5}
+/* carteles */
+.cam-z{background:#fff;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
+.cam-ph{background:linear-gradient(135deg,#2a3340,#3b4757);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;color:rgba(255,255,255,.8);font-size:18px;font-weight:600}
+#cam-prev{width:100%;max-height:260px;object-fit:cover;display:none}
+.ph-btn{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:var(--r);padding:22px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Baloo 2';font-size:20px;font-weight:800;box-shadow:0 8px 26px rgba(242,116,44,.34);margin-bottom:16px}
+.ocr{background:#fff;border:3px solid #10B981;border-radius:var(--r);padding:20px;display:none}
+.ocr.on{display:block}
+.ocr-o{font-size:16px;color:var(--muted);font-weight:600;margin-bottom:8px}
+.ocr-t{font-size:23px;font-weight:700;color:#065F46;line-height:1.4}
 
-/* MONEDAS */
-.cur-c{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:17px;margin-bottom:13px}
-.cl{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:5px}
-.cr{display:flex;align-items:center;gap:7px;margin-bottom:13px}
-.ci{flex:1;border:2px solid #E2E8F0;border-radius:12px;padding:13px;font-size:23px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--slate);outline:none;transition:border-color .2s}
-.ci:focus{border-color:var(--amber)}
-.cs{background:var(--amber-l);border:2px solid var(--amber);border-radius:12px;padding:12px 9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#92400E;outline:none;cursor:pointer}
-.conv-btn{width:100%;background:linear-gradient(135deg,var(--amber),#D97706);border:none;border-radius:var(--r);padding:18px;color:#fff;font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;cursor:pointer;margin-bottom:13px;box-shadow:0 8px 28px rgba(245,158,11,.3)}
-.cur-res{background:var(--amber-l);border-radius:var(--r);padding:22px;text-align:center;display:none}
-.cur-res.sh{display:block}
-.cr-amt{font-family:'Nunito',sans-serif;font-size:42px;font-weight:900;color:#92400E;line-height:1;margin-bottom:4px}
-.cr-rate{font-size:13px;color:var(--muted)}
+/* monedas */
+.mon-c{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:20px;margin-bottom:16px}
+.ml{font-size:17px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.mr{display:flex;gap:9px;margin-bottom:18px}
+.amt{flex:1;border:3px solid var(--line);border-radius:16px;padding:15px;font-family:'Baloo 2';font-size:26px;font-weight:700;color:var(--ink);outline:none}
+.amt:focus,.cs:focus{border-color:var(--orange)}
+.cs{border:3px solid var(--line);border-radius:16px;padding:14px 10px;font-family:'Nunito';font-size:17px;font-weight:700;color:var(--ink);outline:none;cursor:pointer;background:#fff}
+.mr:last-child{margin-bottom:0}
+.conv-btn{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:var(--r);padding:20px;color:#fff;font-family:'Baloo 2';font-size:21px;font-weight:800;cursor:pointer;margin-bottom:16px;box-shadow:0 8px 26px rgba(242,116,44,.34)}
+.mon-res{background:#fff;border:3px solid var(--orange);border-radius:var(--r);padding:24px;text-align:center;display:none}
+.mon-res.on{display:block}
+.mr-amt{font-family:'Baloo 2';font-size:44px;font-weight:800;color:var(--orange2);line-height:1.05}
+.mr-rate{font-size:16px;font-weight:600;color:var(--muted);margin-top:8px}
 
-/* EMERGENCIAS */
-.el{display:flex;flex-direction:column;gap:10px}
-.ei{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:15px 17px;display:flex;align-items:center;gap:13px;text-decoration:none;border:2px solid transparent;transition:transform .1s}
-.ei:active{transform:scale(.97)}
-.ei.pol{border-color:#2563EB}.ei.amb{border-color:var(--rose)}.ei.bom{border-color:var(--coral)}.ei.emb{border-color:var(--mint)}.ei.gen{border-color:var(--amber)}
-.ei-ico{font-size:29px;flex-shrink:0}
-.ei-n{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--slate)}
-.ei-num{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--rose)}
-.ei-c{margin-left:auto;font-size:22px}
+/* frases */
+.fcat{font-family:'Baloo 2';font-size:20px;font-weight:800;color:var(--ink);margin:20px 0 10px}
+.frase{background:#fff;border-radius:20px;padding:16px 18px;margin-bottom:11px;box-shadow:var(--sh);cursor:pointer;border-left:6px solid var(--orange)}
+.frase:active{transform:scale(.98)}
+.fr-mine{font-size:16px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.fr-dest{font-size:21px;font-weight:700;color:var(--ink);margin-bottom:5px;line-height:1.3}
+.fr-hint{font-size:15px;font-weight:700;color:var(--orange)}
 
-/* FRASES */
-.fi{background:#fff;border-radius:14px;padding:13px 15px;margin-bottom:9px;box-shadow:var(--sh);cursor:pointer;border-left:4px solid var(--sky)}
-.fi-es{font-size:13px;color:var(--muted);margin-bottom:4px}
-.fi-d{font-size:17px;font-weight:700;color:var(--slate);margin-bottom:3px}
-.fi-h{font-size:11px;color:var(--sky)}
+/* emergencias */
+.elist{display:flex;flex-direction:column;gap:12px}
+.ei{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px;display:flex;align-items:center;gap:15px;text-decoration:none;border:3px solid transparent}
+.ei:active{transform:scale(.98)}
+.ei-ico{font-size:34px;flex-shrink:0}
+.ei-n{font-family:'Baloo 2';font-size:18px;font-weight:700;color:var(--ink)}
+.ei-num{font-family:'Baloo 2';font-size:26px;font-weight:800;color:var(--red)}
+.ei-c{margin-left:auto;font-size:26px}
 
-/* LOADING */
-.ld{display:none;text-align:center;padding:18px}
-.ld.sh{display:block}
-.sp{width:32px;height:32px;border:3px solid #E2E8F0;border-top-color:var(--sky);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 8px}
+/* loading */
+.ld{display:none;text-align:center;padding:20px}
+.ld.on{display:block}
+.sp{width:38px;height:38px;border:4px solid var(--line);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ld p{font-size:14px;color:var(--muted)}
+.ld p{font-size:17px;font-weight:600;color:var(--muted)}
 
-/* LANG MODAL */
+/* nav */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:2px solid var(--line);display:flex;padding:8px 0 16px;z-index:50;box-shadow:0 -4px 22px rgba(0,0,0,.05)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px}
+.ni-i{font-size:26px}
+.ni-l{font-family:'Nunito';font-size:13px;font-weight:800;color:#a99c8e}
+.ni.on .ni-l{color:var(--orange2)}
+
+/* modal */
 .mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end}
 .mb.op{display:flex}
-.ms{background:#fff;border-radius:24px 24px 0 0;padding:18px;width:100%;max-height:70vh;overflow-y:auto}
-.ms h3{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;margin-bottom:13px;text-align:center}
-.lg{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
-.lo{background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--slate)}
-.lo:hover{border-color:var(--sky);background:var(--sky-l)}
+.ms{background:#fff;border-radius:28px 28px 0 0;padding:20px 18px 28px;width:100%;max-width:480px;margin:0 auto;max-height:74vh;overflow-y:auto}
+.ms h3{font-family:'Baloo 2';font-size:21px;font-weight:800;text-align:center;margin-bottom:16px}
+.lg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lo{background:var(--cream);border:2px solid var(--line);border-radius:16px;padding:15px 8px;cursor:pointer;text-align:center;font-family:'Baloo 2';font-size:17px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px}
+.lo:active{border-color:var(--orange)}
 
-/* NAV */
-.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid #E2E8F0;display:flex;padding:8px 0 12px;z-index:100}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px}
-.ni-i{font-size:21px}
-.ni-l{font-size:10px;font-weight:600;color:var(--muted)}
-.ni.on .ni-l{color:var(--sky)}
-.spacer{height:72px}
+/* ===== accesibilidad: toggle + modo letra grande ===== */
+.ob-top{display:flex;justify-content:flex-end;margin-bottom:2px}
+.big-toggle{background:#fff;border:2px solid var(--line);border-radius:16px;padding:11px 16px;font-family:'Baloo 2';font-size:16px;font-weight:700;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.big-toggle.act{background:var(--orange);border-color:var(--orange);color:#fff}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-big{background:rgba(255,255,255,.22);border:none;border-radius:14px;padding:10px 13px;font-family:'Baloo 2';font-size:17px;font-weight:800;color:#fff;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.hdr-big.act{background:#fff;color:var(--orange2)}
+body.big{font-size:21px}
+body.big .big-title{font-size:38px}
+body.big .sub-native{font-size:20px}
+body.big .lang-tile .nm{font-size:25px}
+body.big .lang-tile .fl{font-size:48px}
+body.big .big-btn{font-size:27px}
+body.big .dest-tile .nm{font-size:20px}
+body.big .dest-badge{font-size:19px}
+body.big .greet{font-size:34px}
+body.big .fctt{font-size:27px}
+body.big .fcds{font-size:19px}
+body.big .fic{font-size:40px}
+body.big .sc-title{font-size:31px}
+body.big .tip{font-size:20px}
+body.big .lc .lcn{font-size:19px}
+body.big .lc .lcf{font-size:30px}
+body.big .m-lbl{font-size:26px}
+body.big .m-sub{font-size:19px}
+body.big .m-ico{font-size:60px}
+body.big .ta-w textarea{font-size:23px}
+body.big .ta-w label{font-size:19px}
+body.big .tbtn{font-size:23px}
+body.big .res-txt{font-size:29px}
+body.big .sp-btn{font-size:22px}
+body.big .ph-btn{font-size:24px}
+body.big .ocr-t{font-size:28px}
+body.big .ocr-o{font-size:19px}
+body.big .amt{font-size:30px}
+body.big .cs{font-size:20px}
+body.big .ml{font-size:20px}
+body.big .conv-btn{font-size:25px}
+body.big .mr-amt{font-size:52px}
+body.big .mr-rate{font-size:19px}
+body.big .fcat{font-size:24px}
+body.big .fr-mine{font-size:19px}
+body.big .fr-dest{font-size:26px}
+body.big .fr-hint{font-size:18px}
+body.big .ei-n{font-size:22px}
+body.big .ei-num{font-size:31px}
+body.big .ei-ico{font-size:40px}
+body.big .ni-l{font-size:15px}
+body.big .ni-i{font-size:30px}
+body.big #poichips button{font-size:19px}
+/* RTL (árabe) */
+[dir="rtl"] .fr-hint,[dir="rtl"] .frase{text-align:right}
+[dir="rtl"] .frase{border-left:none;border-right:6px solid var(--orange)}
+[dir="rtl"] .mr-amt,[dir="rtl"] .ei-num{direction:ltr}
 </style>
 </head>
 <body>
 
-<!-- ════════ ONBOARDING ════════ -->
-<div id="ob">
-  <div class="ob-hero">
-    <div class="ob-logo">Viaja<span>Fácil</span></div>
-    <p class="ob-tag">Tu asistente inteligente para viajar sin barreras de idioma</p>
-    <span class="ob-plane">✈️</span>
-  </div>
-  <div class="ob-card">
-    <div class="lang-bar" style="margin-bottom:14px">
-      <span style="font-size:13px;color:var(--muted)">🌐 Tu idioma:</span>
-      <button onclick="openL('my')" class="mylang-disp" style="margin-left:auto;background:none;border:0;font-weight:700;font-size:14px;cursor:pointer;color:inherit">🇪🇸 Español</button>
-    </div>
-    <p class="ob-q">¿A dónde vas a viajar? 🌍</p>
-    <p class="ob-sub">Elige tu destino y la app se configura sola: idioma, moneda y emergencias</p>
-    <div class="search-box">
-      <span style="font-size:19px">🔍</span>
-      <input type="text" id="dsearch" placeholder="Buscar país..." oninput="filterD()" autocomplete="off">
-    </div>
-    <div class="dest-grid" id="dgrid"></div>
-    <button class="ob-btn" id="obgobtn" disabled onclick="startApp()">
-      <span id="obbtxt">Selecciona un destino</span>
-      <span id="obarr" style="display:none">→</span>
-    </button>
-  </div>
+<!-- ========= 1. ELEGIR IDIOMA DE LA APP ========= -->
+<div id="screen-lang" class="full">
+  <div class="ob-top"><button class="big-toggle" onclick="toggleBig()">🔤 <span data-i18n="bigText">Letra grande</span></button></div>
+  <div class="brand">ViajaFácil ✈️</div>
+  <h1 class="big-title">Elige tu idioma</h1>
+  <p class="sub-native">Choose your language · Choisissez votre langue</p>
+  <div class="lang-grid" id="uilang-grid"></div>
+  <button class="big-btn" onclick="goDest()" data-i18n="continue">Continuar →</button>
 </div>
 
-<!-- ════════ APP ════════ -->
+<!-- ========= 2. ELEGIR DESTINO ========= -->
+<div id="screen-dest" class="full">
+  <div class="ob-top"><button class="big-toggle" onclick="toggleBig()">🔤 <span data-i18n="bigText">Letra grande</span></button></div>
+  <div class="brand">ViajaFácil ✈️</div>
+  <h1 class="big-title" data-i18n="destTitle">¿A dónde viajas?</h1>
+  <p class="sub-native" data-i18n="destSub">Toca tu país. La app se prepara sola.</p>
+  <div class="search">
+    <span style="font-size:22px">🔍</span>
+    <input type="text" id="dsearch" data-i18n-ph="destSearch" placeholder="Buscar país..." oninput="filterD()" autocomplete="off">
+  </div>
+  <div class="dest-grid" id="dgrid"></div>
+  <button class="big-btn" id="destbtn" disabled onclick="startApp()">Elige un país</button>
+</div>
+
+<!-- ========= 3. APP ========= -->
 <div id="app">
   <div class="hdr">
     <div class="hdr-row">
-      <div class="hdr-logo">Viaja<span>Fácil</span> ✈️</div>
-      <div class="dest-badge" onclick="cambiarDest()">
-        <span id="hflag"></span><span id="hname"></span><span>✏️</span>
+      <div class="hdr-logo">ViajaFácil ✈️</div>
+      <div class="hdr-right">
+        <button class="hdr-big" onclick="toggleBig()">🔤 +</button>
+        <button class="dest-badge" onclick="changeDest()"><span id="hflag"></span><span id="hname"></span> ✏️</button>
       </div>
     </div>
-    <div class="hdr-sub" id="hsub"></div>
   </div>
 
   <!-- HOME -->
-  <div id="sc-home" class="sc on">
-    <div class="dest-hero">
-      <span class="dh-flag" id="hflag2"></span>
-      <div>
-        <div class="dh-name" id="hname2"></div>
-        <div class="dh-det" id="hdet"></div>
+  <div id="sec-home" class="sec on">
+    <div class="greet" data-i18n="homeQ">¿Qué necesitas?</div>
+    <div class="cards">
+      <div class="fcard" onclick="go('trad')">
+        <div class="fic" style="background:var(--t-orange)">🗣️</div>
+        <div><div class="fctt" data-i18n="cTradT">Hablar y traducir</div><div class="fcds" data-i18n="cTradS">Di algo y lo traduzco</div></div>
       </div>
-      <button class="ch-btn" onclick="cambiarDest()">Cambiar ✏️</button>
+      <div class="fcard" onclick="go('cart')">
+        <div class="fic" style="background:var(--t-teal)">📷</div>
+        <div><div class="fctt" data-i18n="cCartT">Leer un cartel</div><div class="fcds" data-i18n="cCartS">Hazle una foto</div></div>
+      </div>
+      <div class="fcard" onclick="go('fras')">
+        <div class="fic" style="background:var(--t-violet)">💬</div>
+        <div><div class="fctt" data-i18n="cFrasT">Frases útiles</div><div class="fcds" data-i18n="cFrasS">Las que más se usan</div></div>
+      </div>
+      <div class="fcard" onclick="go('mon')">
+        <div class="fic" style="background:var(--t-amber)">💱</div>
+        <div><div class="fctt" data-i18n="cMonT">Cambiar dinero</div><div class="fcds" data-i18n="cMonS">¿Cuánto es?</div></div>
+      </div>
+      <div class="fcard" onclick="go('poi')">
+        <div class="fic" style="background:var(--t-teal)">🧭</div>
+        <div><div class="fctt" data-i18n="cPoiT">Lugares de interés</div><div class="fcds" data-i18n="cPoiS">Qué ver cerca de ti</div></div>
+      </div>
+      <div class="fcard emer" onclick="go('emer')">
+        <div class="fic" style="background:var(--red);color:#fff">🆘</div>
+        <div><div class="fctt" data-i18n="cEmerT">Emergencias</div><div class="fcds" data-i18n="cEmerS">Llamar pidiendo ayuda</div></div>
+      </div>
     </div>
-    <p class="sec-ttl">¿Qué necesitas?</p>
-    <div class="grid">
-      <div class="card" style="border-color:var(--sky)" onclick="go('trad')"><span class="c-ico">🗣️</span><div class="c-ttl">Traductor</div><div class="c-dsc">Voz y texto al instante</div></div>
-      <div class="card" style="border-color:var(--mint)" onclick="go('cart')"><span class="c-ico">📷</span><div class="c-ttl">Leer Carteles</div><div class="c-dsc">Cámara + IA</div><div class="c-badge">IA</div></div>
-      <div class="card" style="border-color:var(--amber)" onclick="go('mon')"><span class="c-ico">💱</span><div class="c-ttl">Monedas</div><div class="c-dsc">Cambio en tiempo real</div></div>
-      <div class="card" style="border-color:#8B5CF6" onclick="go('fras')"><span class="c-ico">💬</span><div class="c-ttl">Frases Útiles</div><div class="c-dsc">Las esenciales al viajar</div></div>
-      <div class="card" style="border-color:#14b8a6" onclick="go('poi')"><span class="c-ico">🧭</span><div class="c-ttl">Lugares de interés</div><div class="c-dsc">Cerca de ti, con ruta</div><div class="c-badge">GPS</div></div>
-    </div>
-    <p class="sec-ttl">Urgencias</p>
-    <div class="cb" onclick="go('emer')">
-      <span class="cb-ico">🆘</span>
-      <div><div class="cb-ttl">Emergencias</div><div class="cb-dsc">Teléfonos urgentes en <span id="hemer"></span></div></div>
-      <span class="cb-arr">›</span>
-    </div>
-    <div class="spacer"></div>
   </div>
 
   <!-- TRADUCTOR -->
-  <div id="sc-trad" class="sc">
-    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">🗣️ Traductor</div><span class="sc-flag" id="tflag"></span></div>
+  <div id="sec-trad" class="sec">
+    <div class="sub-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-title" data-i18n="tradTitle">Hablar y traducir</div></div>
     <div class="lang-bar">
-      <button class="lc" onclick="openL('from')"><div id="ff">🇪🇸</div><div id="fn" style="font-size:12px">Español</div></button>
+      <button class="lc" onclick="openL('from')"><div class="lcf" id="ff">🇪🇸</div><div class="lcn" id="fn">Español</div></button>
       <button class="sw" onclick="swL()">⇄</button>
-      <button class="lc" onclick="openL('to')"><div id="tf">🏳️</div><div id="tn" style="font-size:12px">Destino</div></button>
+      <button class="lc" onclick="openL('to')"><div class="lcf" id="tf">🏳️</div><div class="lcn" id="tn">—</div></button>
     </div>
-    <div class="tip">ℹ️ Pulsa el micrófono y habla. La IA traduce automáticamente al idioma de tu destino.</div>
+    <div class="tip"><span>👉</span><span data-i18n="tradTip">Pulsa el botón grande y habla. Lo traduzco solo.</span></div>
     <button class="big-mic" id="micbtn" onclick="toggleMic()">
       <span class="m-ico" id="mico">🎤</span>
-      <p class="m-lbl" id="mlbl">Pulsa y habla</p>
-      <p class="m-sub" id="msub">Toca para empezar</p>
+      <span class="m-lbl" id="mlbl" data-i18n="micIdleT">Pulsa y habla</span>
+      <span class="m-sub" id="msub" data-i18n="micIdleS">Toca para empezar</span>
     </button>
+    <button class="ph-btn" id="convbtn" onclick="toggleConv()" style="margin-bottom:16px">🔁 <span data-i18n="convBtn">Modo conversación</span></button>
     <div class="ta-w">
-      <textarea id="txtin" placeholder="O escribe aquí el texto..." rows="3"></textarea>
-      <button onclick="doTrans()">✨ Traducir texto</button>
+      <label data-i18n="orType">O escribe aquí:</label>
+      <textarea id="txtin" rows="3"></textarea>
+      <button class="tbtn" onclick="doTrans()"><span data-i18n="tradBtn">Traducir</span></button>
     </div>
-    <div class="ld" id="ldtrad"><div class="sp"></div><p>Traduciendo...</p></div>
-    <div class="res-box" id="restrad"><div class="res-txt" id="restxt"></div><button class="sp-btn" onclick="spkRes()">🔊 Escuchar</button></div>
-    <div class="spacer"></div>
+    <div class="ld" id="ldtrad"><div class="sp"></div><p data-i18n="translating">Traduciendo...</p></div>
+    <div class="res" id="restrad"><div class="res-txt" id="restxt"></div><button class="sp-btn" onclick="spkRes()">🔊 <span data-i18n="listen">Escuchar</span></button> <button class="sp-btn" onclick="if(S.lastT)speakSlow(S.lastT,S.toL.c)" style="background:#fff;color:var(--orange2);box-shadow:var(--sh)">🐢 <span data-i18n="slow">Despacio</span></button></div>
   </div>
 
   <!-- CARTELES -->
-  <div id="sc-cart" class="sc">
-    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">📷 Leer Carteles</div><span class="sc-flag" id="cflag"></span></div>
-    <div class="tip">ℹ️ Apunta con la cámara al cartel, menú o señal y pulsa Capturar. La IA detecta el idioma y lo traduce al tuyo al momento.</div>
-    <div class="lang-bar" style="margin-bottom:13px"><span style="font-size:13px;color:var(--muted)">🌐 Traducir a:</span><button onclick="openL('my')" class="mylang-disp" style="margin-left:auto;background:none;border:0;font-weight:700;cursor:pointer;font-size:14px;color:inherit">🇪🇸 Español</button></div>
+  <div id="sec-cart" class="sec">
+    <div class="sub-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-title" data-i18n="cartTitle">Leer un cartel</div></div>
+    <div class="tip"><span>👉</span><span data-i18n="cartTip">Haz una foto a un cartel, menú o señal. Lo leo y traduzco.</span></div>
     <div class="cam-z">
-      <video id="cam-live" autoplay playsinline muted style="width:100%;border-radius:14px;display:none;background:#000"></video>
-      <div class="cam-ph" id="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:44px">📸</span><p>Activando cámara…</p></div>
-      <img id="cam-prev" alt="preview">
+      <video id="cam-live" autoplay playsinline muted style="width:100%;max-height:300px;object-fit:cover;display:none;background:#000"></video>
+      <div class="cam-ph" id="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:48px">📸</span><span data-i18n="cartTap">Toca para hacer una foto</span></div>
+      <img id="cam-prev" alt="">
     </div>
-    <input type="file" id="fi" accept="image/*" capture="environment" onchange="doOCR(event)" style="display:none">
-    <button class="ph-btn" onclick="snap()"><span>📷</span><p>Capturar y traducir</p></button>
-    <button class="ph-btn" onclick="document.getElementById('fi').click()" style="margin-top:8px;opacity:.65"><span>🖼️</span><p>O subir una foto de la galería</p></button>
-    <div class="ld" id="ldcart"><div class="sp"></div><p>Analizando con IA...</p></div>
-    <div class="ocr-out" id="ocrout"><div class="ocr-orig" id="ocrorig"></div><div class="ocr-trans" id="ocrtrans"></div></div>
-    <div class="spacer"></div>
+    <input type="file" id="fi" accept="image/*" capture="environment" style="display:none" onchange="doOCR(event)">
+    <button class="ph-btn" onclick="snap()">📷 <span data-i18n="cartBtn">Capturar y traducir</span></button>
+    <button class="ph-btn" onclick="document.getElementById('fi').click()" style="background:#fff;color:var(--orange2);box-shadow:var(--sh);margin-top:-6px">🖼️ <span data-i18n="cartGallery">Subir de galería</span></button>
+    <div class="ld" id="ldcart"><div class="sp"></div><p data-i18n="analyzing">Leyendo la foto...</p></div>
+    <div class="ocr" id="ocrout"><div class="ocr-o" id="ocrorig"></div><div class="ocr-t" id="ocrtrans"></div></div>
   </div>
 
   <!-- MONEDAS -->
-  <div id="sc-mon" class="sc">
-    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">💱 Cambio de Moneda</div><span class="sc-flag" id="mflag"></span></div>
-    <div class="cur-c">
-      <div class="cl">Tengo esta cantidad:</div>
-      <div class="cr">
-        <input type="number" class="ci" id="amtin" value="100">
-        <select class="cs" id="cfrom">
-          <option value="EUR">🇪🇺 EUR</option><option value="USD">🇺🇸 USD</option><option value="GBP">🇬🇧 GBP</option>
-          <option value="CHF">🇨🇭 CHF</option><option value="JPY">🇯🇵 JPY</option><option value="MXN">🇲🇽 MXN</option>
-          <option value="BRL">🇧🇷 BRL</option><option value="ARS">🇦🇷 ARS</option><option value="COP">🇨🇴 COP</option>
-          <option value="CLP">🇨🇱 CLP</option><option value="INR">🇮🇳 INR</option><option value="AUD">🇦🇺 AUD</option>
-          <option value="CAD">🇨🇦 CAD</option><option value="NOK">🇳🇴 NOK</option><option value="SEK">🇸🇪 SEK</option>
-          <option value="DKK">🇩🇰 DKK</option><option value="PLN">🇵🇱 PLN</option><option value="TRY">🇹🇷 TRY</option>
-          <option value="RUB">🇷🇺 RUB</option><option value="KRW">🇰🇷 KRW</option><option value="THB">🇹🇭 THB</option>
-          <option value="SGD">🇸🇬 SGD</option><option value="AED">🇦🇪 AED</option><option value="ZAR">🇿🇦 ZAR</option>
-          <option value="MAD">🇲🇦 MAD</option><option value="EGP">🇪🇬 EGP</option><option value="NZD">🇳🇿 NZD</option>
-        </select>
+  <div id="sec-mon" class="sec">
+    <div class="sub-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-title" data-i18n="monTitle">Cambiar dinero</div></div>
+    <div class="mon-c">
+      <div class="ml" data-i18n="monHave">Tengo esta cantidad:</div>
+      <div class="mr">
+        <input type="number" class="amt" id="amtin" value="100" inputmode="decimal">
+        <select class="cs" id="cfrom" style="width:130px"></select>
       </div>
-      <div class="cl">Quiero saber cuánto son en:</div>
-      <div class="cr">
-        <select class="cs" id="cto" style="flex:1;font-size:15px;padding:13px 9px">
-          <option value="NOK">🇳🇴 NOK – Corona Noruega</option><option value="EUR">🇪🇺 EUR – Euro</option>
-          <option value="USD">🇺🇸 USD – Dólar</option><option value="GBP">🇬🇧 GBP – Libra</option>
-          <option value="JPY">🇯🇵 JPY – Yen</option><option value="CHF">🇨🇭 CHF – Franco Suizo</option>
-          <option value="CNY">🇨🇳 CNY – Yuan</option><option value="MXN">🇲🇽 MXN – Peso MX</option>
-          <option value="BRL">🇧🇷 BRL – Real</option><option value="ARS">🇦🇷 ARS – Peso AR</option>
-          <option value="INR">🇮🇳 INR – Rupia</option><option value="AUD">🇦🇺 AUD – $ Australiano</option>
-          <option value="CAD">🇨🇦 CAD – $ Canadiense</option><option value="SEK">🇸🇪 SEK – Corona Sueca</option>
-          <option value="DKK">🇩🇰 DKK – Corona Danesa</option><option value="TRY">🇹🇷 TRY – Lira</option>
-          <option value="KRW">🇰🇷 KRW – Won</option><option value="THB">🇹🇭 THB – Baht</option>
-          <option value="SGD">🇸🇬 SGD – $ Singapur</option><option value="AED">🇦🇪 AED – Dírham</option>
-          <option value="ZAR">🇿🇦 ZAR – Rand</option><option value="MAD">🇲🇦 MAD – Dírham Marroquí</option>
-          <option value="EGP">🇪🇬 EGP – Libra Egipcia</option><option value="NZD">🇳🇿 NZD – $ NZ</option>
-        </select>
-      </div>
+      <div class="ml" data-i18n="monWant">¿Cuánto es en...?</div>
+      <div class="mr"><select class="cs" id="cto" style="flex:1"></select></div>
     </div>
-    <button class="conv-btn" onclick="doConv()">💱 Convertir ahora</button>
-    <div class="ld" id="ldmon"><div class="sp"></div><p>Obteniendo tipo de cambio...</p></div>
-    <div class="cur-res" id="curres"><div class="cr-amt" id="cramt">—</div><div class="cr-rate" id="crrate"></div></div>
-    <div class="spacer"></div>
+    <button class="conv-btn" onclick="doConv()">💱 <span data-i18n="monBtn">Calcular</span></button>
+    <div class="ld" id="ldmon"><div class="sp"></div><p>...</p></div>
+    <div class="mon-res" id="monres"><div class="mr-amt" id="mramt">—</div><div class="mr-rate" id="mrrate"></div></div>
   </div>
 
   <!-- FRASES -->
-  <div id="sc-fras" class="sc">
-    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">💬 Frases Útiles</div><span class="sc-flag" id="fflag"></span></div>
-    <div class="tip">ℹ️ Toca cualquier frase para escucharla en <span id="frasname"></span>.</div>
+  <div id="sec-fras" class="sec">
+    <div class="sub-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-title" data-i18n="frasTitle">Frases útiles</div></div>
+    <div class="tip"><span>👉</span><span data-i18n="frasTip">Toca una frase para escucharla.</span></div>
     <div id="fraslist"></div>
-    <div class="spacer"></div>
   </div>
 
   <!-- EMERGENCIAS -->
-  <div id="sc-emer" class="sc">
-    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">🆘 Emergencias</div><span class="sc-flag" id="eflag"></span></div>
-    <div class="tip" id="etip">ℹ️ Teléfonos de emergencia en tu destino. Toca para llamar.</div>
-    <div class="el" id="emerlist"></div>
-    <div class="spacer"></div>
+  <div id="sec-emer" class="sec">
+    <div class="sub-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-title" data-i18n="emerTitle">Emergencias</div></div>
+    <div class="tip"><span>👉</span><span data-i18n="emerTip">Números de ayuda en tu destino. Toca para llamar.</span></div>
+    <div class="elist" id="emerlist"></div>
   </div>
 
   <!-- LUGARES DE INTERÉS -->
-  <div id="sc-poi" class="sc">
-    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">🧭 Lugares de interés</div><span class="sc-flag" id="pflag"></span></div>
-    <div class="tip">ℹ️ Los 10 mejores sitios cerca de ti (por valoración y popularidad). Elige categoría y toca uno para ir con Google Maps.</div>
-    <div id="poichips" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px">
-      <button onclick="poiCat(this,'tourist_attraction')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#14b8a6;color:#fff;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🏛️ Monumentos</button>
-      <button onclick="poiCat(this,'restaurant')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🍽️ Restaurantes</button>
-      <button onclick="poiCat(this,'museum')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🖼️ Museos</button>
-      <button onclick="poiCat(this,'cafe')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">☕ Cafés</button>
-      <button onclick="poiCat(this,'bar')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🍸 Bares</button>
+  <div id="sec-poi" class="sec">
+    <div class="sub-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-title" data-i18n="poiTitle">Lugares de interés</div></div>
+    <div class="tip"><span>👉</span><span data-i18n="poiTip">Los mejores sitios cerca de ti. Toca uno para ir.</span></div>
+    <a id="poiaff" class="ph-btn" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:none">🎟️ <span data-i18n="poiAff">Reservar tours y entradas</span></a>
+    <div id="poichips" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px">
+      <button onclick="poiCat(this,'tourist_attraction')" style="flex:0 0 auto;padding:10px 15px;border-radius:18px;border:none;background:var(--orange);color:#fff;font-family:'Baloo 2';font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap">🏛️ <span data-i18n="poiMon">Monumentos</span></button>
+      <button onclick="poiCat(this,'restaurant')" style="flex:0 0 auto;padding:10px 15px;border-radius:18px;border:none;background:#fff;color:var(--ink);box-shadow:var(--sh);font-family:'Baloo 2';font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap">🍽️ <span data-i18n="poiRes">Restaurantes</span></button>
+      <button onclick="poiCat(this,'museum')" style="flex:0 0 auto;padding:10px 15px;border-radius:18px;border:none;background:#fff;color:var(--ink);box-shadow:var(--sh);font-family:'Baloo 2';font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap">🖼️ <span data-i18n="poiMus">Museos</span></button>
+      <button onclick="poiCat(this,'cafe')" style="flex:0 0 auto;padding:10px 15px;border-radius:18px;border:none;background:#fff;color:var(--ink);box-shadow:var(--sh);font-family:'Baloo 2';font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap">☕ <span data-i18n="poiCaf">Cafés</span></button>
+      <button onclick="poiCat(this,'bar')" style="flex:0 0 auto;padding:10px 15px;border-radius:18px;border:none;background:#fff;color:var(--ink);box-shadow:var(--sh);font-family:'Baloo 2';font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap">🍸 <span data-i18n="poiBar">Bares</span></button>
     </div>
-    <button class="ph-btn" onclick="loadPOI(true)" style="margin-bottom:12px"><span>🔄</span><p>Actualizar ubicación</p></button>
-    <div class="el" id="poilist"></div>
-    <div class="spacer"></div>
+    <button class="ph-btn" onclick="loadPOI(true)" style="background:#fff;color:var(--orange2);box-shadow:var(--sh)">🔄 <span data-i18n="poiRefresh">Actualizar ubicación</span></button>
+    <div class="ld" id="ldpoi"><div class="sp"></div><p data-i18n="poiLoading">Buscando lugares...</p></div>
+    <div class="elist" id="poilist"></div>
   </div>
 
   <!-- NAV -->
   <div class="bnav">
-    <div class="ni on" onclick="go('home')" id="nav-home"><span class="ni-i">🏠</span><span class="ni-l">Inicio</span></div>
-    <div class="ni" onclick="go('trad')" id="nav-trad"><span class="ni-i">🗣️</span><span class="ni-l">Traducir</span></div>
-    <div class="ni" onclick="go('cart')" id="nav-cart"><span class="ni-i">📷</span><span class="ni-l">Carteles</span></div>
-    <div class="ni" onclick="go('mon')" id="nav-mon"><span class="ni-i">💱</span><span class="ni-l">Monedas</span></div>
-    <div class="ni" onclick="go('emer')" id="nav-emer"><span class="ni-i">🆘</span><span class="ni-l">Ayuda</span></div>
+    <div class="ni on" id="nav-home" onclick="go('home')"><span class="ni-i">🏠</span><span class="ni-l" data-i18n="navHome">Inicio</span></div>
+    <div class="ni" id="nav-trad" onclick="go('trad')"><span class="ni-i">🗣️</span><span class="ni-l" data-i18n="navTrad">Traducir</span></div>
+    <div class="ni" id="nav-cart" onclick="go('cart')"><span class="ni-i">📷</span><span class="ni-l" data-i18n="navCart">Carteles</span></div>
+    <div class="ni" id="nav-mon" onclick="go('mon')"><span class="ni-i">💱</span><span class="ni-l" data-i18n="navMon">Dinero</span></div>
+    <div class="ni" id="nav-emer" onclick="go('emer')"><span class="ni-i">🆘</span><span class="ni-l" data-i18n="navEmer">Ayuda</span></div>
   </div>
 </div>
 
-<!-- LANG MODAL -->
+<!-- MODAL IDIOMA -->
 <div class="mb" id="lmodal" onclick="closeLM(event)">
-  <div class="ms"><h3>Selecciona idioma</h3><div class="lg" id="lgrid"></div></div>
+  <div class="ms"><h3 data-i18n="langModalTitle">Elige el idioma</h3><div class="lg" id="lgrid"></div></div>
 </div>
 
 <script>
-// ════════════════════════════════════
-// DATOS
-// ════════════════════════════════════
+// ===================== DATOS =====================
+const UILANGS=[
+  {c:'es',n:'Español',f:'🇪🇸'},{c:'en',n:'English',f:'🇬🇧'},{c:'fr',n:'Français',f:'🇫🇷'},
+  {c:'de',n:'Deutsch',f:'🇩🇪'},{c:'it',n:'Italiano',f:'🇮🇹'},{c:'pt',n:'Português',f:'🇵🇹'},
+  {c:'nl',n:'Nederlands',f:'🇳🇱'},{c:'pl',n:'Polski',f:'🇵🇱'},{c:'ru',n:'Русский',f:'🇷🇺'},
+  {c:'zh',n:'中文',f:'🇨🇳'},{c:'ja',n:'日本語',f:'🇯🇵'},{c:'ko',n:'한국어',f:'🇰🇷'},
+  {c:'tr',n:'Türkçe',f:'🇹🇷'},{c:'ar',n:'العربية',f:'🇸🇦'}
+];
+
+const I18N={
+  es:{continue:"Continuar →",destTitle:"¿A dónde viajas?",destSub:"Toca tu país. La app se prepara sola.",destSearch:"Buscar país...",homeQ:"¿Qué necesitas?",cTradT:"Hablar y traducir",cTradS:"Di algo y lo traduzco",cCartT:"Leer un cartel",cCartS:"Hazle una foto",cFrasT:"Frases útiles",cFrasS:"Las que más se usan",cMonT:"Cambiar dinero",cMonS:"¿Cuánto es?",cEmerT:"Emergencias",cEmerS:"Llamar pidiendo ayuda",navHome:"Inicio",navTrad:"Traducir",navCart:"Carteles",navMon:"Dinero",navEmer:"Ayuda",tradTitle:"Hablar y traducir",tradTip:"Pulsa el botón grande y habla. Lo traduzco solo.",micIdleT:"Pulsa y habla",micIdleS:"Toca para empezar",micRecT:"Escuchando...",micRecS:"Habla ahora",orType:"O escribe aquí:",tradBtn:"Traducir",listen:"Escuchar",translating:"Traduciendo...",cartTitle:"Leer un cartel",cartTip:"Haz una foto a un cartel, menú o señal. Lo leo y traduzco.",cartTap:"Toca para hacer una foto",cartBtn:"Hacer una foto",analyzing:"Leyendo la foto...",monTitle:"Cambiar dinero",monHave:"Tengo esta cantidad:",monWant:"¿Cuánto es en...?",monBtn:"Calcular",monApprox:"Cambio aproximado",frasTitle:"Frases útiles",frasTip:"Toca una frase para escucharla.",emerTitle:"Emergencias",emerTip:"Números de ayuda en tu destino. Toca para llamar.",langModalTitle:"Elige el idioma",destBtnEmpty:"Elige un país",travelTo:"Viajar a",bigText:"Letra grande"},
+  en:{continue:"Continue →",destTitle:"Where are you traveling?",destSub:"Tap your country. The app sets itself up.",destSearch:"Search country...",homeQ:"What do you need?",cTradT:"Speak and translate",cTradS:"Say something, I translate it",cCartT:"Read a sign",cCartS:"Take a photo",cFrasT:"Useful phrases",cFrasS:"The most used ones",cMonT:"Change money",cMonS:"How much is it?",cEmerT:"Emergencies",cEmerS:"Call for help",navHome:"Home",navTrad:"Translate",navCart:"Signs",navMon:"Money",navEmer:"Help",tradTitle:"Speak and translate",tradTip:"Press the big button and speak. I translate for you.",micIdleT:"Press and speak",micIdleS:"Tap to start",micRecT:"Listening...",micRecS:"Speak now",orType:"Or type here:",tradBtn:"Translate",listen:"Listen",translating:"Translating...",cartTitle:"Read a sign",cartTip:"Take a photo of a sign, menu or notice. I read and translate it.",cartTap:"Tap to take a photo",cartBtn:"Take a photo",analyzing:"Reading the photo...",monTitle:"Change money",monHave:"I have this amount:",monWant:"How much is it in...?",monBtn:"Calculate",monApprox:"Approximate rate",frasTitle:"Useful phrases",frasTip:"Tap a phrase to hear it.",emerTitle:"Emergencies",emerTip:"Help numbers at your destination. Tap to call.",langModalTitle:"Choose the language",destBtnEmpty:"Choose a country",travelTo:"Travel to",bigText:"Large text"},
+  fr:{continue:"Continuer →",destTitle:"Où voyagez-vous ?",destSub:"Touchez votre pays. L'app se règle seule.",destSearch:"Chercher un pays...",homeQ:"De quoi avez-vous besoin ?",cTradT:"Parler et traduire",cTradS:"Dites quelque chose, je traduis",cCartT:"Lire un panneau",cCartS:"Prenez une photo",cFrasT:"Phrases utiles",cFrasS:"Les plus utilisées",cMonT:"Changer de l'argent",cMonS:"Combien ça coûte ?",cEmerT:"Urgences",cEmerS:"Appeler à l'aide",navHome:"Accueil",navTrad:"Traduire",navCart:"Panneaux",navMon:"Argent",navEmer:"Aide",tradTitle:"Parler et traduire",tradTip:"Appuyez sur le grand bouton et parlez. Je traduis.",micIdleT:"Appuyez et parlez",micIdleS:"Touchez pour commencer",micRecT:"J'écoute...",micRecS:"Parlez maintenant",orType:"Ou écrivez ici :",tradBtn:"Traduire",listen:"Écouter",translating:"Traduction...",cartTitle:"Lire un panneau",cartTip:"Photographiez un panneau, un menu ou une affiche. Je lis et traduis.",cartTap:"Touchez pour prendre une photo",cartBtn:"Prendre une photo",analyzing:"Lecture de la photo...",monTitle:"Changer de l'argent",monHave:"J'ai ce montant :",monWant:"Combien ça fait en...?",monBtn:"Calculer",monApprox:"Taux approximatif",frasTitle:"Phrases utiles",frasTip:"Touchez une phrase pour l'écouter.",emerTitle:"Urgences",emerTip:"Numéros d'aide à destination. Touchez pour appeler.",langModalTitle:"Choisissez la langue",destBtnEmpty:"Choisissez un pays",travelTo:"Voyager en",bigText:"Grand texte"},
+  de:{continue:"Weiter →",destTitle:"Wohin reisen Sie?",destSub:"Tippen Sie Ihr Land an. Die App stellt sich ein.",destSearch:"Land suchen...",homeQ:"Was brauchen Sie?",cTradT:"Sprechen und übersetzen",cTradS:"Sagen Sie etwas, ich übersetze",cCartT:"Schild lesen",cCartS:"Foto machen",cFrasT:"Nützliche Sätze",cFrasS:"Die häufigsten",cMonT:"Geld umrechnen",cMonS:"Wie viel kostet das?",cEmerT:"Notfälle",cEmerS:"Hilfe anrufen",navHome:"Start",navTrad:"Übersetzen",navCart:"Schilder",navMon:"Geld",navEmer:"Hilfe",tradTitle:"Sprechen und übersetzen",tradTip:"Großen Knopf drücken und sprechen. Ich übersetze.",micIdleT:"Drücken und sprechen",micIdleS:"Zum Starten tippen",micRecT:"Ich höre zu...",micRecS:"Sprechen Sie jetzt",orType:"Oder hier schreiben:",tradBtn:"Übersetzen",listen:"Anhören",translating:"Übersetze...",cartTitle:"Schild lesen",cartTip:"Fotografieren Sie ein Schild, Menü oder einen Hinweis. Ich lese und übersetze.",cartTap:"Zum Fotografieren tippen",cartBtn:"Foto machen",analyzing:"Foto wird gelesen...",monTitle:"Geld umrechnen",monHave:"Ich habe diesen Betrag:",monWant:"Wie viel ist das in...?",monBtn:"Berechnen",monApprox:"Ungefährer Kurs",frasTitle:"Nützliche Sätze",frasTip:"Tippen Sie einen Satz an, um ihn zu hören.",emerTitle:"Notfälle",emerTip:"Hilfenummern am Reiseziel. Zum Anrufen tippen.",langModalTitle:"Sprache wählen",destBtnEmpty:"Land wählen",travelTo:"Reisen nach",bigText:"Große Schrift"},
+  it:{continue:"Continua →",destTitle:"Dove viaggi?",destSub:"Tocca il tuo paese. L'app si configura da sola.",destSearch:"Cerca paese...",homeQ:"Di cosa hai bisogno?",cTradT:"Parlare e tradurre",cTradS:"Dì qualcosa, traduco io",cCartT:"Leggere un cartello",cCartS:"Fai una foto",cFrasT:"Frasi utili",cFrasS:"Le più usate",cMonT:"Cambiare soldi",cMonS:"Quanto costa?",cEmerT:"Emergenze",cEmerS:"Chiamare aiuto",navHome:"Inizio",navTrad:"Tradurre",navCart:"Cartelli",navMon:"Soldi",navEmer:"Aiuto",tradTitle:"Parlare e tradurre",tradTip:"Premi il pulsante grande e parla. Traduco io.",micIdleT:"Premi e parla",micIdleS:"Tocca per iniziare",micRecT:"Ascolto...",micRecS:"Parla ora",orType:"Oppure scrivi qui:",tradBtn:"Tradurre",listen:"Ascoltare",translating:"Traduco...",cartTitle:"Leggere un cartello",cartTip:"Fotografa un cartello, un menù o un avviso. Leggo e traduco.",cartTap:"Tocca per fare una foto",cartBtn:"Fare una foto",analyzing:"Leggo la foto...",monTitle:"Cambiare soldi",monHave:"Ho questa somma:",monWant:"Quanto è in...?",monBtn:"Calcola",monApprox:"Cambio approssimativo",frasTitle:"Frasi utili",frasTip:"Tocca una frase per ascoltarla.",emerTitle:"Emergenze",emerTip:"Numeri di aiuto a destinazione. Tocca per chiamare.",langModalTitle:"Scegli la lingua",destBtnEmpty:"Scegli un paese",travelTo:"Viaggiare in",bigText:"Testo grande"},
+  pt:{continue:"Continuar →",destTitle:"Para onde viaja?",destSub:"Toque no seu país. A app configura-se sozinha.",destSearch:"Procurar país...",homeQ:"Do que precisa?",cTradT:"Falar e traduzir",cTradS:"Diga algo, eu traduzo",cCartT:"Ler um cartaz",cCartS:"Tire uma foto",cFrasT:"Frases úteis",cFrasS:"As mais usadas",cMonT:"Trocar dinheiro",cMonS:"Quanto custa?",cEmerT:"Emergências",cEmerS:"Ligar a pedir ajuda",navHome:"Início",navTrad:"Traduzir",navCart:"Cartazes",navMon:"Dinheiro",navEmer:"Ajuda",tradTitle:"Falar e traduzir",tradTip:"Carregue no botão grande e fale. Eu traduzo.",micIdleT:"Carregue e fale",micIdleS:"Toque para começar",micRecT:"A ouvir...",micRecS:"Fale agora",orType:"Ou escreva aqui:",tradBtn:"Traduzir",listen:"Ouvir",translating:"A traduzir...",cartTitle:"Ler um cartaz",cartTip:"Tire uma foto a um cartaz, menu ou aviso. Eu leio e traduzo.",cartTap:"Toque para tirar uma foto",cartBtn:"Tirar uma foto",analyzing:"A ler a foto...",monTitle:"Trocar dinheiro",monHave:"Tenho esta quantia:",monWant:"Quanto é em...?",monBtn:"Calcular",monApprox:"Câmbio aproximado",frasTitle:"Frases úteis",frasTip:"Toque numa frase para a ouvir.",emerTitle:"Emergências",emerTip:"Números de ajuda no destino. Toque para ligar.",langModalTitle:"Escolha o idioma",destBtnEmpty:"Escolha um país",travelTo:"Viajar para",bigText:"Texto grande"},
+  nl:{continue:"Doorgaan →",destTitle:"Waar reist u heen?",destSub:"Tik op uw land. De app stelt zichzelf in.",destSearch:"Land zoeken...",homeQ:"Wat heeft u nodig?",cTradT:"Spreken en vertalen",cTradS:"Zeg iets, ik vertaal het",cCartT:"Een bord lezen",cCartS:"Maak een foto",cFrasT:"Handige zinnen",cFrasS:"De meest gebruikte",cMonT:"Geld wisselen",cMonS:"Hoeveel kost het?",cEmerT:"Noodgevallen",cEmerS:"Bel om hulp",navHome:"Start",navTrad:"Vertalen",navCart:"Borden",navMon:"Geld",navEmer:"Hulp",tradTitle:"Spreken en vertalen",tradTip:"Druk op de grote knop en spreek. Ik vertaal het.",micIdleT:"Druk en spreek",micIdleS:"Tik om te beginnen",micRecT:"Ik luister...",micRecS:"Spreek nu",orType:"Of typ hier:",tradBtn:"Vertalen",listen:"Beluisteren",translating:"Vertalen...",cartTitle:"Een bord lezen",cartTip:"Fotografeer een bord, menu of melding. Ik lees en vertaal het.",cartTap:"Tik om een foto te maken",cartBtn:"Foto maken",analyzing:"Foto wordt gelezen...",monTitle:"Geld wisselen",monHave:"Ik heb dit bedrag:",monWant:"Hoeveel is het in...?",monBtn:"Berekenen",monApprox:"Geschatte koers",frasTitle:"Handige zinnen",frasTip:"Tik op een zin om hem te horen.",emerTitle:"Noodgevallen",emerTip:"Hulpnummers op uw bestemming. Tik om te bellen.",langModalTitle:"Kies de taal",destBtnEmpty:"Kies een land",travelTo:"Reizen naar",bigText:"Grote tekst"},
+  pl:{continue:"Dalej →",destTitle:"Dokąd podróżujesz?",destSub:"Dotknij swojego kraju. Aplikacja sama się ustawi.",destSearch:"Szukaj kraju...",homeQ:"Czego potrzebujesz?",cTradT:"Mów i tłumacz",cTradS:"Powiedz coś, przetłumaczę",cCartT:"Przeczytaj znak",cCartS:"Zrób zdjęcie",cFrasT:"Przydatne zwroty",cFrasS:"Najczęściej używane",cMonT:"Wymień pieniądze",cMonS:"Ile to kosztuje?",cEmerT:"Nagłe wypadki",cEmerS:"Zadzwoń po pomoc",navHome:"Start",navTrad:"Tłumacz",navCart:"Znaki",navMon:"Pieniądze",navEmer:"Pomoc",tradTitle:"Mów i tłumacz",tradTip:"Naciśnij duży przycisk i mów. Przetłumaczę.",micIdleT:"Naciśnij i mów",micIdleS:"Dotknij, aby zacząć",micRecT:"Słucham...",micRecS:"Mów teraz",orType:"Albo wpisz tutaj:",tradBtn:"Tłumacz",listen:"Słuchaj",translating:"Tłumaczę...",cartTitle:"Przeczytaj znak",cartTip:"Zrób zdjęcie znaku, menu lub ogłoszenia. Przeczytam i przetłumaczę.",cartTap:"Dotknij, aby zrobić zdjęcie",cartBtn:"Zrób zdjęcie",analyzing:"Czytam zdjęcie...",monTitle:"Wymień pieniądze",monHave:"Mam taką kwotę:",monWant:"Ile to jest w...?",monBtn:"Oblicz",monApprox:"Kurs przybliżony",frasTitle:"Przydatne zwroty",frasTip:"Dotknij zwrotu, aby go usłyszeć.",emerTitle:"Nagłe wypadki",emerTip:"Numery pomocy w miejscu docelowym. Dotknij, aby zadzwonić.",langModalTitle:"Wybierz język",destBtnEmpty:"Wybierz kraj",travelTo:"Podróż do",bigText:"Duży tekst"},
+  ru:{continue:"Далее →",destTitle:"Куда вы едете?",destSub:"Нажмите свою страну. Приложение настроится само.",destSearch:"Поиск страны...",homeQ:"Что вам нужно?",cTradT:"Говорить и переводить",cTradS:"Скажите что-нибудь, я переведу",cCartT:"Прочитать вывеску",cCartS:"Сделайте фото",cFrasT:"Полезные фразы",cFrasS:"Самые нужные",cMonT:"Обмен денег",cMonS:"Сколько это стоит?",cEmerT:"Экстренные случаи",cEmerS:"Позвать на помощь",navHome:"Главная",navTrad:"Перевод",navCart:"Вывески",navMon:"Деньги",navEmer:"Помощь",tradTitle:"Говорить и переводить",tradTip:"Нажмите большую кнопку и говорите. Я переведу.",micIdleT:"Нажмите и говорите",micIdleS:"Коснитесь, чтобы начать",micRecT:"Слушаю...",micRecS:"Говорите сейчас",orType:"Или напишите здесь:",tradBtn:"Перевести",listen:"Слушать",translating:"Перевожу...",cartTitle:"Прочитать вывеску",cartTip:"Сфотографируйте вывеску, меню или объявление. Я прочитаю и переведу.",cartTap:"Коснитесь, чтобы сделать фото",cartBtn:"Сделать фото",analyzing:"Читаю фото...",monTitle:"Обмен денег",monHave:"У меня есть такая сумма:",monWant:"Сколько это в...?",monBtn:"Посчитать",monApprox:"Примерный курс",frasTitle:"Полезные фразы",frasTip:"Коснитесь фразы, чтобы услышать её.",emerTitle:"Экстренные случаи",emerTip:"Телефоны помощи в месте назначения. Коснитесь, чтобы позвонить.",langModalTitle:"Выберите язык",destBtnEmpty:"Выберите страну",travelTo:"Поездка в",bigText:"Крупный шрифт"},
+  zh:{continue:"继续 →",destTitle:"您要去哪里？",destSub:"点击您的国家，应用会自动设置。",destSearch:"搜索国家...",homeQ:"您需要什么？",cTradT:"说话并翻译",cTradS:"说点什么，我来翻译",cCartT:"读取标牌",cCartS:"拍一张照片",cFrasT:"实用短语",cFrasS:"最常用的",cMonT:"兑换货币",cMonS:"多少钱？",cEmerT:"紧急情况",cEmerS:"呼叫求助",navHome:"主页",navTrad:"翻译",navCart:"标牌",navMon:"货币",navEmer:"帮助",tradTitle:"说话并翻译",tradTip:"按大按钮然后说话，我会翻译。",micIdleT:"按住并说话",micIdleS:"点击开始",micRecT:"正在聆听...",micRecS:"现在请说",orType:"或在此输入：",tradBtn:"翻译",listen:"收听",translating:"翻译中...",cartTitle:"读取标牌",cartTip:"拍下标牌、菜单或告示，我会读取并翻译。",cartTap:"点击拍照",cartBtn:"拍照",analyzing:"正在读取照片...",monTitle:"兑换货币",monHave:"我有这么多：",monWant:"换成...是多少？",monBtn:"计算",monApprox:"近似汇率",frasTitle:"实用短语",frasTip:"点击短语即可收听。",emerTitle:"紧急情况",emerTip:"目的地的求助电话，点击即可拨打。",langModalTitle:"选择语言",destBtnEmpty:"选择国家",travelTo:"前往",bigText:"大字体"},
+  ja:{continue:"次へ →",destTitle:"どこへ行きますか？",destSub:"国をタップすると、アプリが自動で設定します。",destSearch:"国を検索...",homeQ:"何が必要ですか？",cTradT:"話して翻訳",cTradS:"話しかけてください、翻訳します",cCartT:"看板を読む",cCartS:"写真を撮る",cFrasT:"便利なフレーズ",cFrasS:"よく使うもの",cMonT:"両替",cMonS:"いくらですか？",cEmerT:"緊急",cEmerS:"助けを呼ぶ",navHome:"ホーム",navTrad:"翻訳",navCart:"看板",navMon:"お金",navEmer:"ヘルプ",tradTitle:"話して翻訳",tradTip:"大きなボタンを押して話してください。翻訳します。",micIdleT:"押して話す",micIdleS:"タップで開始",micRecT:"聞いています...",micRecS:"今話してください",orType:"またはここに入力：",tradBtn:"翻訳",listen:"聞く",translating:"翻訳中...",cartTitle:"看板を読む",cartTip:"看板・メニュー・お知らせを撮影してください。読み取って翻訳します。",cartTap:"タップして写真を撮る",cartBtn:"写真を撮る",analyzing:"写真を読み取り中...",monTitle:"両替",monHave:"この金額があります：",monWant:"...でいくら？",monBtn:"計算",monApprox:"おおよそのレート",frasTitle:"便利なフレーズ",frasTip:"フレーズをタップすると聞けます。",emerTitle:"緊急",emerTip:"目的地の緊急電話。タップで発信します。",langModalTitle:"言語を選ぶ",destBtnEmpty:"国を選ぶ",travelTo:"行き先：",bigText:"大きな文字"},
+  ko:{continue:"계속 →",destTitle:"어디로 여행하세요?",destSub:"나라를 누르면 앱이 자동으로 설정됩니다.",destSearch:"나라 검색...",homeQ:"무엇이 필요하세요?",cTradT:"말하고 번역하기",cTradS:"말씀하시면 번역해 드려요",cCartT:"표지판 읽기",cCartS:"사진 찍기",cFrasT:"유용한 표현",cFrasS:"가장 많이 쓰는 것",cMonT:"환전",cMonS:"얼마예요?",cEmerT:"긴급 상황",cEmerS:"도움 요청 전화",navHome:"홈",navTrad:"번역",navCart:"표지판",navMon:"돈",navEmer:"도움",tradTitle:"말하고 번역하기",tradTip:"큰 버튼을 누르고 말하세요. 제가 번역해요.",micIdleT:"누르고 말하기",micIdleS:"눌러서 시작",micRecT:"듣고 있어요...",micRecS:"지금 말하세요",orType:"또는 여기에 입력:",tradBtn:"번역",listen:"듣기",translating:"번역 중...",cartTitle:"표지판 읽기",cartTip:"표지판, 메뉴, 안내문을 찍으세요. 읽고 번역해 드려요.",cartTap:"눌러서 사진 찍기",cartBtn:"사진 찍기",analyzing:"사진을 읽는 중...",monTitle:"환전",monHave:"이만큼 있어요:",monWant:"...로 얼마예요?",monBtn:"계산",monApprox:"대략적인 환율",frasTitle:"유용한 표현",frasTip:"표현을 누르면 들을 수 있어요.",emerTitle:"긴급 상황",emerTip:"목적지의 도움 전화. 눌러서 전화하세요.",langModalTitle:"언어 선택",destBtnEmpty:"나라 선택",travelTo:"여행지:",bigText:"큰 글자"},
+  tr:{continue:"Devam →",destTitle:"Nereye seyahat ediyorsunuz?",destSub:"Ülkenize dokunun. Uygulama kendini ayarlar.",destSearch:"Ülke ara...",homeQ:"Neye ihtiyacınız var?",cTradT:"Konuş ve çevir",cTradS:"Bir şey söyleyin, çeviririm",cCartT:"Tabela oku",cCartS:"Fotoğraf çek",cFrasT:"Faydalı ifadeler",cFrasS:"En çok kullanılanlar",cMonT:"Para bozdur",cMonS:"Ne kadar?",cEmerT:"Acil durumlar",cEmerS:"Yardım için ara",navHome:"Ana sayfa",navTrad:"Çevir",navCart:"Tabelalar",navMon:"Para",navEmer:"Yardım",tradTitle:"Konuş ve çevir",tradTip:"Büyük düğmeye basın ve konuşun. Ben çeviririm.",micIdleT:"Bas ve konuş",micIdleS:"Başlamak için dokun",micRecT:"Dinliyorum...",micRecS:"Şimdi konuşun",orType:"Veya buraya yazın:",tradBtn:"Çevir",listen:"Dinle",translating:"Çeviriyorum...",cartTitle:"Tabela oku",cartTip:"Bir tabela, menü veya duyurunun fotoğrafını çekin. Okuyup çeviririm.",cartTap:"Fotoğraf çekmek için dokun",cartBtn:"Fotoğraf çek",analyzing:"Fotoğraf okunuyor...",monTitle:"Para bozdur",monHave:"Bu kadar param var:",monWant:"...olarak ne kadar?",monBtn:"Hesapla",monApprox:"Yaklaşık kur",frasTitle:"Faydalı ifadeler",frasTip:"Duymak için bir ifadeye dokunun.",emerTitle:"Acil durumlar",emerTip:"Gideceğiniz yerdeki yardım numaraları. Aramak için dokunun.",langModalTitle:"Dili seçin",destBtnEmpty:"Bir ülke seçin",travelTo:"Seyahat:",bigText:"Büyük yazı"},
+  ar:{continue:"متابعة →",destTitle:"إلى أين تسافر؟",destSub:"اضغط على بلدك، وسيُعدّ التطبيق نفسه.",destSearch:"ابحث عن بلد...",homeQ:"ماذا تحتاج؟",cTradT:"تحدّث وترجم",cTradS:"قل شيئاً وسأترجمه",cCartT:"اقرأ لافتة",cCartS:"التقط صورة",cFrasT:"عبارات مفيدة",cFrasS:"الأكثر استخداماً",cMonT:"تبديل العملة",cMonS:"كم السعر؟",cEmerT:"طوارئ",cEmerS:"اتصل للمساعدة",navHome:"الرئيسية",navTrad:"ترجمة",navCart:"لافتات",navMon:"المال",navEmer:"مساعدة",tradTitle:"تحدّث وترجم",tradTip:"اضغط الزر الكبير وتحدّث، وسأترجم.",micIdleT:"اضغط وتحدّث",micIdleS:"اضغط للبدء",micRecT:"أستمع...",micRecS:"تحدّث الآن",orType:"أو اكتب هنا:",tradBtn:"ترجم",listen:"استمع",translating:"جارٍ الترجمة...",cartTitle:"اقرأ لافتة",cartTip:"صوّر لافتة أو قائمة أو إعلاناً، وسأقرؤه وأترجمه.",cartTap:"اضغط لالتقاط صورة",cartBtn:"التقط صورة",analyzing:"جارٍ قراءة الصورة...",monTitle:"تبديل العملة",monHave:"لديّ هذا المبلغ:",monWant:"كم يساوي بـ...؟",monBtn:"احسب",monApprox:"سعر تقريبي",frasTitle:"عبارات مفيدة",frasTip:"اضغط على عبارة لسماعها.",emerTitle:"طوارئ",emerTip:"أرقام المساعدة في وجهتك. اضغط للاتصال.",langModalTitle:"اختر اللغة",destBtnEmpty:"اختر بلداً",travelTo:"السفر إلى",bigText:"خط كبير"}
+};
+Object.assign(I18N.es,{cPoiT:'Lugares de interés',cPoiS:'Qué ver cerca de ti',poiTitle:'Lugares de interés',poiTip:'Los mejores sitios cerca de ti. Toca uno para ir.',poiAff:'Reservar tours y entradas',poiMon:'Monumentos',poiRes:'Restaurantes',poiMus:'Museos',poiCaf:'Cafés',poiBar:'Bares',poiRefresh:'Actualizar ubicación',poiLoading:'Buscando lugares...',cartGallery:'Subir de galería',slow:'Despacio',convBtn:'Modo conversación',poiNoGeo:'Tu navegador no permite ubicación.',poiDenied:'Activa el permiso de ubicación y pulsa Actualizar.',poiNone:'No hay sitios destacados cerca.',poiUnavail:'Lugares no disponible ahora mismo.',poiErr:'No se pudo cargar. Revisa tu conexión.',ocrErr:'No se pudo leer (puede ser un límite temporal). Inténtalo de nuevo.'});
+Object.assign(I18N.en,{cPoiT:'Places to visit',cPoiS:'What to see near you',poiTitle:'Places to visit',poiTip:'The best spots near you. Tap one to go.',poiAff:'Book tours & tickets',poiMon:'Landmarks',poiRes:'Restaurants',poiMus:'Museums',poiCaf:'Cafés',poiBar:'Bars',poiRefresh:'Update location',poiLoading:'Finding places...',cartGallery:'Upload from gallery',slow:'Slow',convBtn:'Conversation mode',poiNoGeo:'Your browser does not allow location.',poiDenied:'Enable location permission and tap Update.',poiNone:'No standout places nearby.',poiUnavail:'Places unavailable right now.',poiErr:'Could not load. Check your connection.',ocrErr:'Could not read it (maybe a temporary limit). Try again.'});
+Object.assign(I18N.fr,{cPoiT:'Lieux à visiter',cPoiS:'À voir près de vous',poiTitle:'Lieux à visiter',poiTip:'Les meilleurs endroits près de vous. Touchez-en un pour y aller.',poiAff:'Réserver visites et billets',poiMon:'Monuments',poiRes:'Restaurants',poiMus:'Musées',poiCaf:'Cafés',poiBar:'Bars',poiRefresh:'Actualiser la position',poiLoading:'Recherche de lieux...',cartGallery:'Importer depuis la galerie',slow:'Lentement',convBtn:'Mode conversation',poiNoGeo:'Votre navigateur ne permet pas la localisation.',poiDenied:'Activez la localisation et touchez Actualiser.',poiNone:'Aucun lieu remarquable à proximité.',poiUnavail:'Lieux indisponibles pour le moment.',poiErr:'Échec du chargement. Vérifiez votre connexion.',ocrErr:'Lecture impossible (peut-être une limite temporaire). Réessayez.'});
+Object.assign(I18N.de,{cPoiT:'Sehenswerte Orte',cPoiS:'Was es in der Nähe zu sehen gibt',poiTitle:'Sehenswerte Orte',poiTip:'Die besten Orte in Ihrer Nähe. Tippen Sie auf einen, um hinzugehen.',poiAff:'Touren & Tickets buchen',poiMon:'Sehenswürdigkeiten',poiRes:'Restaurants',poiMus:'Museen',poiCaf:'Cafés',poiBar:'Bars',poiRefresh:'Standort aktualisieren',poiLoading:'Orte werden gesucht...',cartGallery:'Aus Galerie hochladen',slow:'Langsam',convBtn:'Gesprächsmodus',poiNoGeo:'Ihr Browser erlaubt keine Standortbestimmung.',poiDenied:'Aktivieren Sie die Standortfreigabe und tippen Sie auf Aktualisieren.',poiNone:'Keine besonderen Orte in der Nähe.',poiUnavail:'Orte derzeit nicht verfügbar.',poiErr:'Laden fehlgeschlagen. Prüfen Sie Ihre Verbindung.',ocrErr:'Konnte nicht gelesen werden (evtl. vorübergehendes Limit). Versuchen Sie es erneut.'});
+Object.assign(I18N.it,{cPoiT:'Luoghi da visitare',cPoiS:'Cosa vedere vicino a te',poiTitle:'Luoghi da visitare',poiTip:'I posti migliori vicino a te. Toccane uno per andarci.',poiAff:'Prenota tour e biglietti',poiMon:'Monumenti',poiRes:'Ristoranti',poiMus:'Musei',poiCaf:'Caffè',poiBar:'Bar',poiRefresh:'Aggiorna posizione',poiLoading:'Ricerca luoghi...',cartGallery:'Carica dalla galleria',slow:'Lentamente',convBtn:'Modalità conversazione',poiNoGeo:'Il tuo browser non consente la posizione.',poiDenied:'Attiva il permesso di posizione e tocca Aggiorna.',poiNone:'Nessun luogo di rilievo nelle vicinanze.',poiUnavail:'Luoghi non disponibili al momento.',poiErr:'Caricamento non riuscito. Controlla la connessione.',ocrErr:'Impossibile leggere (forse un limite temporaneo). Riprova.'});
+Object.assign(I18N.pt,{cPoiT:'Lugares para visitar',cPoiS:'O que ver perto de si',poiTitle:'Lugares para visitar',poiTip:'Os melhores sítios perto de si. Toque num para ir.',poiAff:'Reservar tours e bilhetes',poiMon:'Monumentos',poiRes:'Restaurantes',poiMus:'Museus',poiCaf:'Cafés',poiBar:'Bares',poiRefresh:'Atualizar localização',poiLoading:'A procurar lugares...',cartGallery:'Carregar da galeria',slow:'Devagar',convBtn:'Modo conversa',poiNoGeo:'O seu navegador não permite localização.',poiDenied:'Ative a permissão de localização e toque em Atualizar.',poiNone:'Não há lugares de destaque por perto.',poiUnavail:'Lugares indisponíveis de momento.',poiErr:'Não foi possível carregar. Verifique a sua ligação.',ocrErr:'Não foi possível ler (talvez um limite temporário). Tente novamente.'});
+Object.assign(I18N.nl,{cPoiT:'Plaatsen om te bezoeken',cPoiS:'Wat te zien bij u in de buurt',poiTitle:'Plaatsen om te bezoeken',poiTip:'De beste plekken bij u in de buurt. Tik er een aan om te gaan.',poiAff:'Tours en tickets boeken',poiMon:'Bezienswaardigheden',poiRes:'Restaurants',poiMus:'Musea',poiCaf:'Cafés',poiBar:'Bars',poiRefresh:'Locatie bijwerken',poiLoading:'Plaatsen zoeken...',cartGallery:'Uploaden uit galerij',slow:'Langzaam',convBtn:'Gespreksmodus',poiNoGeo:'Uw browser staat locatie niet toe.',poiDenied:'Schakel locatietoestemming in en tik op Bijwerken.',poiNone:'Geen bijzondere plaatsen in de buurt.',poiUnavail:'Plaatsen momenteel niet beschikbaar.',poiErr:'Laden mislukt. Controleer uw verbinding.',ocrErr:'Kon het niet lezen (misschien een tijdelijke limiet). Probeer opnieuw.'});
+Object.assign(I18N.pl,{cPoiT:'Miejsca do odwiedzenia',cPoiS:'Co zobaczyć w pobliżu',poiTitle:'Miejsca do odwiedzenia',poiTip:'Najlepsze miejsca w pobliżu. Dotknij jedno, aby przejść.',poiAff:'Rezerwuj wycieczki i bilety',poiMon:'Zabytki',poiRes:'Restauracje',poiMus:'Muzea',poiCaf:'Kawiarnie',poiBar:'Bary',poiRefresh:'Odśwież lokalizację',poiLoading:'Szukanie miejsc...',cartGallery:'Prześlij z galerii',slow:'Wolno',convBtn:'Tryb rozmowy',poiNoGeo:'Twoja przeglądarka nie zezwala na lokalizację.',poiDenied:'Włącz uprawnienie lokalizacji i dotknij Odśwież.',poiNone:'Brak wyróżniających się miejsc w pobliżu.',poiUnavail:'Miejsca obecnie niedostępne.',poiErr:'Nie udało się załadować. Sprawdź połączenie.',ocrErr:'Nie udało się odczytać (może chwilowy limit). Spróbuj ponownie.'});
+Object.assign(I18N.ru,{cPoiT:'Места для посещения',cPoiS:'Что посмотреть рядом',poiTitle:'Места для посещения',poiTip:'Лучшие места рядом с вами. Коснитесь одного, чтобы перейти.',poiAff:'Забронировать туры и билеты',poiMon:'Достопримечательности',poiRes:'Рестораны',poiMus:'Музеи',poiCaf:'Кафе',poiBar:'Бары',poiRefresh:'Обновить местоположение',poiLoading:'Поиск мест...',cartGallery:'Загрузить из галереи',slow:'Медленно',convBtn:'Режим разговора',poiNoGeo:'Ваш браузер не разрешает определение местоположения.',poiDenied:'Включите разрешение на геолокацию и нажмите Обновить.',poiNone:'Поблизости нет примечательных мест.',poiUnavail:'Места сейчас недоступны.',poiErr:'Не удалось загрузить. Проверьте соединение.',ocrErr:'Не удалось распознать (возможно, временный лимит). Попробуйте снова.'});
+Object.assign(I18N.zh,{cPoiT:'值得游览的地方',cPoiS:'你附近有什么可看',poiTitle:'值得游览的地方',poiTip:'你附近最棒的地点。点击一个即可前往。',poiAff:'预订行程和门票',poiMon:'名胜古迹',poiRes:'餐厅',poiMus:'博物馆',poiCaf:'咖啡馆',poiBar:'酒吧',poiRefresh:'更新位置',poiLoading:'正在查找地点...',cartGallery:'从相册上传',slow:'慢速',convBtn:'对话模式',poiNoGeo:'您的浏览器不允许定位。',poiDenied:'请开启定位权限并点击更新。',poiNone:'附近没有值得一看的地方。',poiUnavail:'地点暂时不可用。',poiErr:'加载失败，请检查网络连接。',ocrErr:'无法识别（可能是暂时限制）。请重试。'});
+Object.assign(I18N.ja,{cPoiT:'訪れる場所',cPoiS:'近くで見られるもの',poiTitle:'訪れる場所',poiTip:'近くのおすすめスポット。タップして向かいましょう。',poiAff:'ツアー・チケットを予約',poiMon:'名所',poiRes:'レストラン',poiMus:'美術館・博物館',poiCaf:'カフェ',poiBar:'バー',poiRefresh:'現在地を更新',poiLoading:'場所を検索中...',cartGallery:'ギャラリーからアップロード',slow:'ゆっくり',convBtn:'会話モード',poiNoGeo:'お使いのブラウザでは位置情報を利用できません。',poiDenied:'位置情報の許可を有効にして「更新」をタップしてください。',poiNone:'近くに目立った場所はありません。',poiUnavail:'場所は現在利用できません。',poiErr:'読み込めませんでした。接続を確認してください。',ocrErr:'読み取れませんでした（一時的な制限かもしれません）。もう一度お試しください。'});
+Object.assign(I18N.ko,{cPoiT:'가볼 만한 곳',cPoiS:'근처에서 볼 만한 것',poiTitle:'가볼 만한 곳',poiTip:'근처 최고의 장소예요. 하나를 누르면 이동해요.',poiAff:'투어·티켓 예약',poiMon:'명소',poiRes:'식당',poiMus:'박물관',poiCaf:'카페',poiBar:'바',poiRefresh:'위치 새로고침',poiLoading:'장소 찾는 중...',cartGallery:'갤러리에서 올리기',slow:'천천히',convBtn:'대화 모드',poiNoGeo:'브라우저가 위치 정보를 허용하지 않습니다.',poiDenied:'위치 권한을 켜고 새로고침을 누르세요.',poiNone:'근처에 눈에 띄는 장소가 없어요.',poiUnavail:'지금은 장소를 이용할 수 없어요.',poiErr:'불러오지 못했어요. 연결을 확인하세요.',ocrErr:'읽지 못했어요 (일시적 제한일 수 있어요). 다시 시도하세요.'});
+Object.assign(I18N.tr,{cPoiT:'Gezilecek yerler',cPoiS:'Yakınında görülecekler',poiTitle:'Gezilecek yerler',poiTip:'Yakınındaki en iyi yerler. Gitmek için birine dokun.',poiAff:'Tur ve bilet rezerve et',poiMon:'Tarihi yerler',poiRes:'Restoranlar',poiMus:'Müzeler',poiCaf:'Kafeler',poiBar:'Barlar',poiRefresh:'Konumu güncelle',poiLoading:'Yerler aranıyor...',cartGallery:'Galeriden yükle',slow:'Yavaş',convBtn:'Sohbet modu',poiNoGeo:'Tarayıcınız konuma izin vermiyor.',poiDenied:'Konum iznini açın ve Güncelle düğmesine dokunun.',poiNone:'Yakında öne çıkan yer yok.',poiUnavail:'Yerler şu anda kullanılamıyor.',poiErr:'Yüklenemedi. Bağlantınızı kontrol edin.',ocrErr:'Okunamadı (geçici bir sınır olabilir). Tekrar deneyin.'});
+Object.assign(I18N.ar,{cPoiT:'أماكن للزيارة',cPoiS:'ما يمكن رؤيته بالقرب منك',poiTitle:'أماكن للزيارة',poiTip:'أفضل الأماكن بالقرب منك. اضغط على أحدها للذهاب.',poiAff:'احجز الجولات والتذاكر',poiMon:'المعالم',poiRes:'مطاعم',poiMus:'متاحف',poiCaf:'مقاهٍ',poiBar:'حانات',poiRefresh:'تحديث الموقع',poiLoading:'جارٍ البحث عن أماكن...',cartGallery:'رفع من المعرض',slow:'ببطء',convBtn:'وضع المحادثة',poiNoGeo:'متصفحك لا يسمح بتحديد الموقع.',poiDenied:'فعّل إذن الموقع واضغط تحديث.',poiNone:'لا توجد أماكن مميزة قريبة.',poiUnavail:'الأماكن غير متاحة حالياً.',poiErr:'تعذّر التحميل. تحقق من اتصالك.',ocrErr:'تعذّرت القراءة (قد يكون حدّاً مؤقتاً). حاول مرة أخرى.'});
+
+const CATS={
+  '🏨 Hotel':{es:'🏨 Hotel',en:'🏨 Hotel',fr:'🏨 Hôtel',de:'🏨 Hotel',it:'🏨 Hotel',pt:'🏨 Hotel',nl:'🏨 Hotel',pl:'🏨 Hotel',ru:'🏨 Отель',zh:'🏨 酒店',ja:'🏨 ホテル',ko:'🏨 호텔',tr:'🏨 Otel',ar:'🏨 فندق'},
+  '🍽️ Restaurante':{es:'🍽️ Restaurante',en:'🍽️ Restaurant',fr:'🍽️ Restaurant',de:'🍽️ Restaurant',it:'🍽️ Ristorante',pt:'🍽️ Restaurante',nl:'🍽️ Restaurant',pl:'🍽️ Restauracja',ru:'🍽️ Ресторан',zh:'🍽️ 餐厅',ja:'🍽️ レストラン',ko:'🍽️ 식당',tr:'🍽️ Restoran',ar:'🍽️ مطعم'},
+  '🚕 Transporte':{es:'🚕 Transporte',en:'🚕 Transport',fr:'🚕 Transport',de:'🚕 Transport',it:'🚕 Trasporti',pt:'🚕 Transporte',nl:'🚕 Vervoer',pl:'🚕 Transport',ru:'🚕 Транспорт',zh:'🚕 交通',ja:'🚕 交通',ko:'🚕 교통',tr:'🚕 Ulaşım',ar:'🚕 مواصلات'},
+  '🏥 Salud':{es:'🏥 Salud',en:'🏥 Health',fr:'🏥 Santé',de:'🏥 Gesundheit',it:'🏥 Salute',pt:'🏥 Saúde',nl:'🏥 Gezondheid',pl:'🏥 Zdrowie',ru:'🏥 Здоровье',zh:'🏥 健康',ja:'🏥 健康',ko:'🏥 건강',tr:'🏥 Sağlık',ar:'🏥 صحة'},
+  '🗺️ Orientación':{es:'🗺️ Orientación',en:'🗺️ Directions',fr:'🗺️ Orientation',de:'🗺️ Orientierung',it:'🗺️ Orientamento',pt:'🗺️ Orientação',nl:'🗺️ Routebeschrijving',pl:'🗺️ Orientacja',ru:'🗺️ Ориентир',zh:'🗺️ 方向',ja:'🗺️ 道案内',ko:'🗺️ 길찾기',tr:'🗺️ Yön',ar:'🗺️ الاتجاهات'},
+  '💰 Dinero':{es:'💰 Dinero',en:'💰 Money',fr:'💰 Argent',de:'💰 Geld',it:'💰 Soldi',pt:'💰 Dinheiro',nl:'💰 Geld',pl:'💰 Pieniądze',ru:'💰 Деньги',zh:'💰 钱',ja:'💰 お金',ko:'💰 돈',tr:'💰 Para',ar:'💰 المال'}
+};
+
 const DESTS=[
   {id:'no',n:'Noruega',f:'🇳🇴',lang:'Noruego',lc:'no',mon:'NOK',mnom:'Corona Noruega'},
   {id:'se',n:'Suecia',f:'🇸🇪',lang:'Sueco',lc:'sv',mon:'SEK',mnom:'Corona Sueca'},
@@ -406,10 +477,9 @@ const DESTS=[
   {id:'id',n:'Indonesia',f:'🇮🇩',lang:'Indonesio',lc:'id',mon:'IDR',mnom:'Rupia Indonesia'},
   {id:'vn',n:'Vietnam',f:'🇻🇳',lang:'Vietnamita',lc:'vi',mon:'VND',mnom:'Dong Vietnamita'},
   {id:'my',n:'Malasia',f:'🇲🇾',lang:'Malayo',lc:'ms',mon:'MYR',mnom:'Ringgit Malayo'},
-  {id:'is',n:'Islandia',f:'🇮🇸',lang:'Islandés',lc:'is',mon:'ISK',mnom:'Corona Islandesa'},
+  {id:'is',n:'Islandia',f:'🇮🇸',lang:'Islandés',lc:'is',mon:'ISK',mnom:'Corona Islandesa'}
 ];
-
-// Resto de países del mundo. La bandera se calcula desde el código ISO del país.
+// Resto de países del mundo. Bandera calculada desde el código ISO.
 const flagOf=id=>id.toUpperCase().replace(/[A-Z]/g,c=>String.fromCodePoint(127397+c.charCodeAt(0)));
 [
   ['es','España','Español','es','EUR','Euro'],
@@ -482,25 +552,23 @@ const flagOf=id=>id.toUpperCase().replace(/[A-Z]/g,c=>String.fromCodePoint(12739
 DESTS.sort((a,b)=>a.n.localeCompare(b.n,'es'));
 
 const EMER={
-  no:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'113',c:'amb'},{ico:'🚒',n:'Bomberos',num:'110',c:'bom'},{ico:'🏛️',n:'Embajada España (Oslo)',num:'+47 22 99 18 00',c:'emb'},{ico:'🆘',n:'Emergencias Europa',num:'112',c:'gen'}],
+  no:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'113',c:'amb'},{ico:'🚒',n:'Bomberos',num:'110',c:'bom'},{ico:'🏛️',n:'Embajada España (Oslo)',num:'+47 22 99 18 00',c:'emb'}],
   se:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'},{ico:'🏛️',n:'Embajada España (Estocolmo)',num:'+46 8 667 43 00',c:'emb'}],
   dk:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'},{ico:'🏛️',n:'Embajada España (Copenhague)',num:'+45 35 42 47 00',c:'emb'}],
-  fr:[{ico:'👮',n:'Police',num:'17',c:'pol'},{ico:'🚑',n:'SAMU (Médico)',num:'15',c:'amb'},{ico:'🚒',n:'Pompiers',num:'18',c:'bom'},{ico:'🏛️',n:'Embajada España (París)',num:'+33 1 44 43 18 00',c:'emb'},{ico:'🆘',n:'Emergencias Europa',num:'112',c:'gen'}],
-  de:[{ico:'👮',n:'Polizei',num:'110',c:'pol'},{ico:'🚑',n:'Rettungsdienst',num:'112',c:'amb'},{ico:'🚒',n:'Feuerwehr',num:'112',c:'bom'},{ico:'🏛️',n:'Embajada España (Berlín)',num:'+49 30 254 007 0',c:'emb'}],
-  it:[{ico:'👮',n:'Carabinieri',num:'112',c:'pol'},{ico:'🚑',n:'Pronto Soccorso',num:'118',c:'amb'},{ico:'🚒',n:'Vigili del Fuoco',num:'115',c:'bom'},{ico:'🏛️',n:'Embajada España (Roma)',num:'+39 06 684 0401',c:'emb'}],
-  uk:[{ico:'👮',n:'Police',num:'999',c:'pol'},{ico:'🚑',n:'Ambulance',num:'999',c:'amb'},{ico:'🚒',n:'Fire Brigade',num:'999',c:'bom'},{ico:'🏛️',n:'Embajada España (Londres)',num:'+44 20 7235 5555',c:'emb'}],
+  fr:[{ico:'👮',n:'Police',num:'17',c:'pol'},{ico:'🚑',n:'SAMU (Médico)',num:'15',c:'amb'},{ico:'🚒',n:'Pompiers',num:'18',c:'bom'},{ico:'🆘',n:'Emergencias Europa',num:'112',c:'gen'}],
+  de:[{ico:'👮',n:'Polizei',num:'110',c:'pol'},{ico:'🚑',n:'Rettungsdienst',num:'112',c:'amb'},{ico:'🚒',n:'Feuerwehr',num:'112',c:'bom'}],
+  it:[{ico:'👮',n:'Carabinieri',num:'112',c:'pol'},{ico:'🚑',n:'Pronto Soccorso',num:'118',c:'amb'},{ico:'🚒',n:'Vigili del Fuoco',num:'115',c:'bom'}],
+  uk:[{ico:'👮',n:'Police',num:'999',c:'pol'},{ico:'🚑',n:'Ambulance',num:'999',c:'amb'},{ico:'🚒',n:'Fire Brigade',num:'999',c:'bom'}],
   us:[{ico:'👮',n:'Police',num:'911',c:'pol'},{ico:'🚑',n:'Ambulance',num:'911',c:'amb'},{ico:'🚒',n:'Fire Department',num:'911',c:'bom'}],
-  jp:[{ico:'👮',n:'警察 Policía',num:'110',c:'pol'},{ico:'🚑',n:'救急 Ambulancia',num:'119',c:'amb'},{ico:'🚒',n:'消防 Bomberos',num:'119',c:'bom'},{ico:'🏛️',n:'Embajada España (Tokio)',num:'+81 3 3583 8531',c:'emb'}],
+  jp:[{ico:'👮',n:'警察 Policía',num:'110',c:'pol'},{ico:'🚑',n:'救急 Ambulancia',num:'119',c:'amb'},{ico:'🚒',n:'消防 Bomberos',num:'119',c:'bom'}],
   cn:[{ico:'👮',n:'警察 Policía',num:'110',c:'pol'},{ico:'🚑',n:'急救 Ambulancia',num:'120',c:'amb'},{ico:'🚒',n:'消防 Bomberos',num:'119',c:'bom'}],
   mx:[{ico:'👮',n:'Policía',num:'911',c:'pol'},{ico:'🚑',n:'Cruz Roja',num:'065',c:'amb'},{ico:'🚒',n:'Bomberos',num:'068',c:'bom'}],
   pt:[{ico:'👮',n:'PSP / GNR',num:'112',c:'pol'},{ico:'🚑',n:'INEM (Médico)',num:'112',c:'amb'},{ico:'🚒',n:'Bombeiros',num:'112',c:'bom'}],
   au:[{ico:'👮',n:'Police',num:'000',c:'pol'},{ico:'🚑',n:'Ambulance',num:'000',c:'amb'},{ico:'🚒',n:'Fire',num:'000',c:'bom'}],
-  tr:[{ico:'👮',n:'Polis',num:'155',c:'pol'},{ico:'🚑',n:'Acil Sağlık',num:'112',c:'amb'},{ico:'🚒',n:'İtfaiye',num:'110',c:'bom'}],
+  tr:[{ico:'👮',n:'Polis',num:'155',c:'pol'},{ico:'🚑',n:'Acil Sağlık',num:'112',c:'amb'},{ico:'🚒',n:'İtfaiye',num:'110',c:'bom'}]
 };
 const DEMER=[{ico:'🆘',n:'Emergencias',num:'112',c:'gen'},{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'}];
-
-// Números reales por país [policía, ambulancia, bomberos]. Los que no aparezcan usan el 112
-// (que en móvil enruta a emergencias en gran parte del mundo). Los países europeos ya usan 112.
+// Números reales por país [policía, ambulancia, bomberos]. Los no listados usan 112.
 const EMERNUM={
   ca:['911','911','911'],ar:['911','107','100'],cl:['133','131','132'],co:['123','123','123'],
   br:['190','192','193'],pe:['105','106','116'],bo:['110','118','119'],uy:['911','105','104'],
@@ -524,7 +592,7 @@ const EMERNUM={
   tz:['112','112','112'],ug:['999','999','999'],
 };
 Object.keys(EMERNUM).forEach(id=>{
-  if(EMER[id])return; // no pisar los que ya tienen ficha detallada
+  if(EMER[id])return;
   const e=EMERNUM[id];
   EMER[id]=[
     {ico:'👮',n:'Policía',num:e[0],c:'pol'},
@@ -534,19 +602,19 @@ Object.keys(EMERNUM).forEach(id=>{
 });
 
 const FRASES=[
-  {cat:'🏨 Hotel',es:'¿Dónde está mi habitación?',en:'Where is my room?',no:'Hvor er rommet mitt?',fr:'Où est ma chambre?',de:'Wo ist mein Zimmer?',it:'Dov\'è la mia camera?',pt:'Onde fica o meu quarto?',ja:'私の部屋はどこですか？',zh:'我的房间在哪里？',ko:'제 방이 어디인가요?',sv:'Var är mitt rum?',da:'Hvor er mit værelse?'},
+  {cat:'🏨 Hotel',es:'¿Dónde está mi habitación?',en:'Where is my room?',no:'Hvor er rommet mitt?',fr:'Où est ma chambre ?',de:'Wo ist mein Zimmer?',it:'Dov\'è la mia camera?',pt:'Onde fica o meu quarto?',ja:'私の部屋はどこですか？',zh:'我的房间在哪里？',ko:'제 방이 어디인가요?',sv:'Var är mitt rum?',da:'Hvor er mit værelse?'},
   {cat:'🏨 Hotel',es:'La llave de la habitación, por favor',en:'Room key, please',no:'Romsenøkkelen, takk',fr:'La clé de chambre, s\'il vous plaît',de:'Den Zimmerschlüssel, bitte',it:'La chiave della camera, per favore',pt:'A chave do quarto, por favor',ja:'部屋の鍵をください',zh:'请给我房间钥匙',ko:'방 열쇠 주세요',sv:'Rumsnyckeln, tack',da:'Værelsenøglen, tak'},
   {cat:'🍽️ Restaurante',es:'La cuenta, por favor',en:'The bill, please',no:'Regningen, takk',fr:'L\'addition, s\'il vous plaît',de:'Die Rechnung, bitte',it:'Il conto, per favore',pt:'A conta, por favor',ja:'お会計をお願いします',zh:'买单',ko:'계산서 주세요',sv:'Notan, tack',da:'Regningen, tak'},
-  {cat:'🍽️ Restaurante',es:'¿Tiene menú en español?',en:'Do you have a menu in Spanish?',no:'Har dere meny på spansk?',fr:'Avez-vous un menu en espagnol?',de:'Haben Sie eine Speisekarte auf Spanisch?',it:'Avete un menù in spagnolo?',pt:'Tem menu em espanhol?',ja:'スペイン語のメニューはありますか？',zh:'有西班牙语菜单吗？',ko:'스페인어 메뉴가 있나요?',sv:'Har ni meny på spanska?',da:'Har I menu på spansk?'},
+  {cat:'🍽️ Restaurante',es:'¿Tiene menú en mi idioma?',en:'Do you have a menu in my language?',no:'Har dere meny på mitt språk?',fr:'Avez-vous un menu dans ma langue ?',de:'Haben Sie eine Speisekarte in meiner Sprache?',it:'Avete un menù nella mia lingua?',pt:'Tem menu na minha língua?',ja:'私の言語のメニューはありますか？',zh:'有我的语言的菜单吗？',ko:'제 언어로 된 메뉴가 있나요?',sv:'Har ni meny på mitt språk?',da:'Har I menu på mit sprog?'},
   {cat:'🍽️ Restaurante',es:'Soy alérgico al gluten',en:'I am allergic to gluten',no:'Jeg er allergisk mot gluten',fr:'Je suis allergique au gluten',de:'Ich bin glutenallergisch',it:'Sono allergico al glutine',pt:'Sou alérgico ao glúten',ja:'グルテンアレルギーがあります',zh:'我对面筋过敏',ko:'저는 글루텐 알레르기가 있어요',sv:'Jag är allergisk mot gluten',da:'Jeg er glutenallergiker'},
-  {cat:'🚕 Transporte',es:'¿Me puede llevar al aeropuerto?',en:'Can you take me to the airport?',no:'Kan du kjøre meg til flyplassen?',fr:'Pouvez-vous m\'emmener à l\'aéroport?',de:'Können Sie mich zum Flughafen bringen?',it:'Può portarmi all\'aeroporto?',pt:'Pode levar-me ao aeroporto?',ja:'空港まで連れて行ってください',zh:'请送我去机场',ko:'공항까지 데려다 주세요',sv:'Kan du köra mig till flygplatsen?',da:'Kan du køre mig til lufthavnen?'},
-  {cat:'🚕 Transporte',es:'¿Cuánto cuesta?',en:'How much does it cost?',no:'Hvor mye koster det?',fr:'Combien ça coûte?',de:'Was kostet das?',it:'Quanto costa?',pt:'Quanto custa?',ja:'いくらですか？',zh:'多少钱？',ko:'얼마예요?',sv:'Hur mycket kostar det?',da:'Hvad koster det?'},
+  {cat:'🚕 Transporte',es:'¿Me puede llevar al aeropuerto?',en:'Can you take me to the airport?',no:'Kan du kjøre meg til flyplassen?',fr:'Pouvez-vous m\'emmener à l\'aéroport ?',de:'Können Sie mich zum Flughafen bringen?',it:'Può portarmi all\'aeroporto?',pt:'Pode levar-me ao aeroporto?',ja:'空港まで連れて行ってください',zh:'请送我去机场',ko:'공항까지 데려다 주세요',sv:'Kan du köra mig till flygplatsen?',da:'Kan du køre mig til lufthavnen?'},
+  {cat:'🚕 Transporte',es:'¿Cuánto cuesta?',en:'How much does it cost?',no:'Hvor mye koster det?',fr:'Combien ça coûte ?',de:'Was kostet das?',it:'Quanto costa?',pt:'Quanto custa?',ja:'いくらですか？',zh:'多少钱？',ko:'얼마예요?',sv:'Hur mycket kostar det?',da:'Hvad koster det?'},
   {cat:'🏥 Salud',es:'Necesito un médico',en:'I need a doctor',no:'Jeg trenger lege',fr:'J\'ai besoin d\'un médecin',de:'Ich brauche einen Arzt',it:'Ho bisogno di un medico',pt:'Preciso de um médico',ja:'医者が必要です',zh:'我需要医生',ko:'의사가 필요해요',sv:'Jag behöver en läkare',da:'Jeg har brug for en læge'},
   {cat:'🏥 Salud',es:'Llame a una ambulancia',en:'Call an ambulance',no:'Ring etter ambulanse',fr:'Appelez une ambulance',de:'Rufen Sie einen Krankenwagen',it:'Chiami un\'ambulanza',pt:'Chame uma ambulância',ja:'救急車を呼んでください',zh:'请叫救护车',ko:'구급차를 불러주세요',sv:'Ring en ambulans',da:'Ring efter en ambulance'},
   {cat:'🗺️ Orientación',es:'Estoy perdido/a',en:'I am lost',no:'Jeg har gått meg vill',fr:'Je suis perdu(e)',de:'Ich habe mich verlaufen',it:'Mi sono perso/a',pt:'Estou perdido/a',ja:'道に迷いました',zh:'我迷路了',ko:'길을 잃었어요',sv:'Jag har gått vilse',da:'Jeg er faret vild'},
-  {cat:'🗺️ Orientación',es:'¿Dónde está la farmacia?',en:'Where is the pharmacy?',no:'Hvor er apoteket?',fr:'Où est la pharmacie?',de:'Wo ist die Apotheke?',it:'Dov\'è la farmacia?',pt:'Onde é a farmácia?',ja:'薬局はどこですか？',zh:'药店在哪里？',ko:'약국이 어디 있어요?',sv:'Var är apoteket?',da:'Hvor er apoteket?'},
-  {cat:'💰 Dinero',es:'¿Dónde hay un cajero automático?',en:'Where is an ATM?',no:'Hvor er det minibank?',fr:'Où est un distributeur?',de:'Wo ist ein Geldautomat?',it:'Dov\'è un bancomat?',pt:'Onde há uma caixa automática?',ja:'ATMはどこですか？',zh:'ATM在哪里？',ko:'ATM이 어디 있어요?',sv:'Var finns det ett bankomat?',da:'Hvor er der en hæveautomat?'},
-  {cat:'💰 Dinero',es:'¿Aceptan tarjeta de crédito?',en:'Do you accept credit cards?',no:'Tar dere kredittkort?',fr:'Acceptez-vous les cartes de crédit?',de:'Nehmen Sie Kreditkarten?',it:'Accettate carte di credito?',pt:'Aceitam cartão de crédito?',ja:'クレジットカードは使えますか？',zh:'您们接受信用卡吗？',ko:'신용카드 받으시나요?',sv:'Tar ni kreditkort?',da:'Tager I kreditkort?'},
+  {cat:'🗺️ Orientación',es:'¿Dónde está la farmacia?',en:'Where is the pharmacy?',no:'Hvor er apoteket?',fr:'Où est la pharmacie ?',de:'Wo ist die Apotheke?',it:'Dov\'è la farmacia?',pt:'Onde é a farmácia?',ja:'薬局はどこですか？',zh:'药店在哪里？',ko:'약국이 어디 있어요?',sv:'Var är apoteket?',da:'Hvor er apoteket?'},
+  {cat:'💰 Dinero',es:'¿Dónde hay un cajero automático?',en:'Where is an ATM?',no:'Hvor er det minibank?',fr:'Où est un distributeur ?',de:'Wo ist ein Geldautomat?',it:'Dov\'è un bancomat?',pt:'Onde há uma caixa automática?',ja:'ATMはどこですか？',zh:'ATM在哪里？',ko:'ATM이 어디 있어요?',sv:'Var finns det en bankomat?',da:'Hvor er der en hæveautomat?'},
+  {cat:'💰 Dinero',es:'¿Aceptan tarjeta de crédito?',en:'Do you accept credit cards?',no:'Tar dere kredittkort?',fr:'Acceptez-vous les cartes de crédit ?',de:'Nehmen Sie Kreditkarten?',it:'Accettate carte di credito?',pt:'Aceitam cartão de crédito?',ja:'クレジットカードは使えますか？',zh:'你们接受信用卡吗？',ko:'신용카드 받으시나요?',sv:'Tar ni kreditkort?',da:'Tager I kreditkort?'}
 ];
 
 const LANGS=[
@@ -557,90 +625,108 @@ const LANGS=[
   {c:'ru',n:'Ruso',f:'🇷🇺'},{c:'ar',n:'Árabe',f:'🇸🇦'},{c:'zh',n:'Chino',f:'🇨🇳'},
   {c:'ja',n:'Japonés',f:'🇯🇵'},{c:'ko',n:'Coreano',f:'🇰🇷'},{c:'hi',n:'Hindi',f:'🇮🇳'},
   {c:'th',n:'Tailandés',f:'🇹🇭'},{c:'tr',n:'Turco',f:'🇹🇷'},{c:'el',n:'Griego',f:'🇬🇷'},
-  {c:'vi',n:'Vietnamita',f:'🇻🇳'},{c:'id',n:'Indonesio',f:'🇮🇩'},{c:'ms',n:'Malayo',f:'🇲🇾'},
+  {c:'vi',n:'Vietnamita',f:'🇻🇳'},{c:'id',n:'Indonesio',f:'🇮🇩'},{c:'ms',n:'Malayo',f:'🇲🇾'}
 ];
 
-// ════════════════════════════════════
-// STATE
-// ════════════════════════════════════
-const S={dest:null,fromL:{c:'es',n:'Español',f:'🇪🇸'},toL:{c:'en',n:'Inglés',f:'🇬🇧'},myLang:{c:'es',n:'Español',f:'🇪🇸'},lTarget:null,rec:null,recording:false,lastT:''};
-let filtD=[...DESTS], selId=null;
+const CURR=[
+  {c:'EUR',f:'🇪🇺'},{c:'USD',f:'🇺🇸'},{c:'GBP',f:'🇬🇧'},{c:'CHF',f:'🇨🇭'},{c:'JPY',f:'🇯🇵'},
+  {c:'NOK',f:'🇳🇴'},{c:'SEK',f:'🇸🇪'},{c:'DKK',f:'🇩🇰'},{c:'PLN',f:'🇵🇱'},{c:'CNY',f:'🇨🇳'},
+  {c:'MXN',f:'🇲🇽'},{c:'BRL',f:'🇧🇷'},{c:'ARS',f:'🇦🇷'},{c:'CLP',f:'🇨🇱'},{c:'COP',f:'🇨🇴'},
+  {c:'INR',f:'🇮🇳'},{c:'AUD',f:'🇦🇺'},{c:'CAD',f:'🇨🇦'},{c:'KRW',f:'🇰🇷'},{c:'THB',f:'🇹🇭'},
+  {c:'SGD',f:'🇸🇬'},{c:'AED',f:'🇦🇪'},{c:'ZAR',f:'🇿🇦'},{c:'MAD',f:'🇲🇦'},{c:'EGP',f:'🇪🇬'},
+  {c:'NZD',f:'🇳🇿'},{c:'TRY',f:'🇹🇷'},{c:'RUB',f:'🇷🇺'},{c:'IDR',f:'🇮🇩'},{c:'VND',f:'🇻🇳'},
+  {c:'MYR',f:'🇲🇾'},{c:'ISK',f:'🇮🇸'}
+];
+// Tipos de cambio aproximados (por 1 EUR) — respaldo sin conexión
+const RATES={EUR:1,USD:1.08,GBP:0.85,CHF:0.97,JPY:170,NOK:11.7,SEK:11.5,DKK:7.46,PLN:4.3,CNY:7.8,MXN:19.5,BRL:5.9,ARS:980,CLP:1020,COP:4300,INR:90,AUD:1.65,CAD:1.47,KRW:1480,THB:39,SGD:1.46,AED:3.97,ZAR:20,MAD:10.8,EGP:53,NZD:1.78,TRY:35,RUB:99,IDR:17000,VND:27000,MYR:5.1,ISK:150};
 
-// ════════════════════════════════════
-// ONBOARDING
-// ════════════════════════════════════
+// ===================== ESTADO =====================
+const S={uiLang:'es',dest:null,fromL:{c:'es',n:'Español',f:'🇪🇸'},toL:{c:'en',n:'Inglés',f:'🇬🇧'},lTarget:null,rec:null,recording:false,lastT:''};
+let filtD=[...DESTS],selDestId=null;
+const $=id=>document.getElementById(id);
+const t=k=>(I18N[S.uiLang]&&I18N[S.uiLang][k])||I18N.es[k]||k;
+
+// ===================== i18n =====================
+function applyI18n(){
+  document.documentElement.dir=(S.uiLang==='ar')?'rtl':'ltr';
+  try{localStorage.setItem('vf_uilang',S.uiLang);}catch(e){}
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  if(selDestId){const d=DESTS.find(x=>x.id===selDestId);$('destbtn').textContent=t('travelTo')+' '+d.n+' '+d.f;}
+  else $('destbtn').textContent=t('destBtnEmpty');
+}
+
+// ===================== ELEGIR IDIOMA APP =====================
+function renderUiLangs(){
+  $('uilang-grid').innerHTML=UILANGS.map(l=>`
+    <div class="lang-tile ${S.uiLang===l.c?'sel':''}" onclick="selUiLang('${l.c}')">
+      <div class="fl">${l.f}</div><div class="nm">${l.n}</div>
+    </div>`).join('');
+}
+function selUiLang(c){
+  S.uiLang=c;
+  S.fromL={c,n:(UILANGS.find(l=>l.c===c)||{}).n,f:(UILANGS.find(l=>l.c===c)||{}).f};
+  renderUiLangs();applyI18n();
+}
+function goDest(){
+  show('screen-dest');renderDG();applyI18n();
+}
+
+// ===================== ELEGIR DESTINO =====================
 function renderDG(){
-  document.getElementById('dgrid').innerHTML=filtD.map(d=>`
-    <div class="dp ${selId===d.id?'sel':''}" onclick="selD('${d.id}')">
-      <span class="fl">${d.f}</span>${d.n}
+  $('dgrid').innerHTML=filtD.map(d=>`
+    <div class="dest-tile ${selDestId===d.id?'sel':''}" onclick="selD('${d.id}')">
+      <div class="fl">${d.f}</div><div class="nm">${d.n}</div>
     </div>`).join('');
 }
 function filterD(){
-  const q=document.getElementById('dsearch').value.toLowerCase().trim();
+  const q=$('dsearch').value.toLowerCase().trim();
   filtD=q?DESTS.filter(d=>d.n.toLowerCase().includes(q)):[...DESTS];
   renderDG();
 }
 function selD(id){
-  selId=id; renderDG();
+  selDestId=id;renderDG();
   const d=DESTS.find(x=>x.id===id);
-  const btn=document.getElementById('obgobtn');
-  btn.disabled=false;
-  document.getElementById('obbtxt').textContent=`Viajar a ${d.n} ${d.f}`;
-  document.getElementById('obarr').style.display='inline';
+  $('destbtn').disabled=false;
+  $('destbtn').textContent=t('travelTo')+' '+d.n+' '+d.f;
 }
 function startApp(){
-  if(!selId) return;
-  S.dest=DESTS.find(d=>d.id===selId);
+  if(!selDestId)return;
+  S.dest=DESTS.find(d=>d.id===selDestId);
   S.toL={c:S.dest.lc,n:S.dest.lang,f:S.dest.f};
-  // Header
-  $('hflag').textContent=S.dest.f; $('hname').textContent=S.dest.n;
-  $('hsub').textContent=`Idioma: ${S.dest.lang} · Moneda: ${S.dest.mon}`;
-  // Hero
-  $('hflag2').textContent=S.dest.f; $('hname2').textContent=S.dest.n;
-  $('hdet').textContent=`🗣️ ${S.dest.lang}  ·  💱 ${S.dest.mon} (${S.dest.mnom})`;
-  $('hemer').textContent=S.dest.n;
-  // Screen flags
-  ['tflag','cflag','mflag','fflag','eflag'].forEach(id=>$(id).textContent=S.dest.f);
-  $('frasname').textContent=S.dest.lang;
-  $('etip').innerHTML=`ℹ️ Números de emergencia en <strong>${S.dest.n}</strong>. Toca para llamar.`;
-  // Traductor lang
-  $('tf').textContent=S.dest.f; $('tn').textContent=S.dest.lang;
-  // Moneda destino
-  const cto=$('cto');
-  for(let o of cto.options){if(o.value===S.dest.mon){o.selected=true;break;}}
-  // Render data
-  renderEmer(); renderFras();
-  $('ob').style.display='none'; $('app').style.display='block';
-  go('home');
+  $('hflag').textContent=S.dest.f;$('hname').textContent=S.dest.n;
+  $('tf').textContent=S.dest.f;$('tn').textContent=S.dest.lang;
+  $('ff').textContent=S.fromL.f;$('fn').textContent=S.fromL.n;
+  buildCurr();renderEmer();renderFras();
+  show('app');go('home');
 }
-function cambiarDest(){$('ob').style.display='flex';$('app').style.display='none';}
+function changeDest(){show('screen-dest');renderDG();}
 
-// ════════════════════════════════════
-// NAVEGACIÓN
-// ════════════════════════════════════
-function go(name){
-  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
-  $('sc-'+name).classList.add('on');
+// ===================== NAV / PANTALLAS =====================
+function show(scr){
+  ['screen-lang','screen-dest','app'].forEach(s=>$(s).style.display='none');
+  $(scr).style.display='block';window.scrollTo(0,0);
+}
+function go(sec){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  $('sec-'+sec).classList.add('on');
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-  const ni=$('nav-'+name); if(ni) ni.classList.add('on');
+  const ni=$('nav-'+sec);if(ni)ni.classList.add('on');else{const h=$('nav-home');if(h)h.classList.add('on');}
   window.scrollTo(0,0);
-  if(name==='cart') startCam(); else stopCam();
-  if(name==='poi') loadPOI();
+  if(sec==='cart')startCam();else stopCam();
+  if(sec==='poi')loadPOI();
 }
 
-// ════════════════════════════════════
-// LANG MODAL
-// ════════════════════════════════════
-function openL(t){
-  S.lTarget=t;
-  $('lgrid').innerHTML=LANGS.map(l=>`<div class="lo" onclick="pickL('${l.c}','${l.n}','${l.f}')">${l.f} ${l.n}</div>`).join('');
+// ===================== MODAL IDIOMA (traductor) =====================
+function openL(target){
+  S.lTarget=target;
+  $('lgrid').innerHTML=LANGS.map(l=>`<div class="lo" onclick="pickL('${l.c}','${l.n.replace(/'/g,"\\'")}','${l.f}')">${l.f} ${l.n}</div>`).join('');
   $('lmodal').classList.add('op');
 }
 function closeLM(e){if(e.target===$('lmodal'))$('lmodal').classList.remove('op');}
 function pickL(c,n,f){
   $('lmodal').classList.remove('op');
   if(S.lTarget==='from'){S.fromL={c,n,f};$('ff').textContent=f;$('fn').textContent=n;}
-  else if(S.lTarget==='my'){S.myLang={c,n,f};document.querySelectorAll('.mylang-disp').forEach(el=>el.textContent=f+' '+n);}
   else{S.toL={c,n,f};$('tf').textContent=f;$('tn').textContent=n;}
 }
 function swL(){
@@ -649,277 +735,271 @@ function swL(){
   $('tf').textContent=S.toL.f;$('tn').textContent=S.toL.n;
 }
 
-// ════════════════════════════════════
-// TRADUCTOR
-// ════════════════════════════════════
+// ===================== TRADUCTOR =====================
 function toggleMic(){S.recording?stopR():startR();}
 function startR(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert('Tu navegador no soporta voz. Usa el campo de texto.');return;}
   S.rec=new SR();S.rec.lang=S.fromL.c;S.rec.continuous=false;S.rec.interimResults=false;
-  S.rec.onstart=()=>{S.recording=true;$('micbtn').classList.add('rec');$('mico').textContent='⏹️';$('mlbl').textContent='Escuchando...';$('msub').textContent='Habla ahora';};
+  S.rec.onstart=()=>{S.recording=true;$('micbtn').classList.add('rec');$('mico').textContent='⏹️';$('mlbl').textContent=t('micRecT');$('msub').textContent=t('micRecS');};
   S.rec.onresult=e=>{$('txtin').value=e.results[0][0].transcript;stopR();doTrans();};
   S.rec.onerror=()=>stopR();S.rec.onend=()=>{if(S.recording)stopR();};
   S.rec.start();
 }
 function stopR(){
   S.recording=false;try{S.rec.stop();}catch(e){}
-  $('micbtn').classList.remove('rec');$('mico').textContent='🎤';$('mlbl').textContent='Pulsa y habla';$('msub').textContent='Toca para empezar';
+  $('micbtn').classList.remove('rec');$('mico').textContent='🎤';$('mlbl').textContent=t('micIdleT');$('msub').textContent=t('micIdleS');
 }
 async function doTrans(){
   const txt=$('txtin').value.trim();if(!txt)return;
   sh('ldtrad',true);sh('restrad',false);
   try{
-    const r=await claude(`Traduce este texto del ${S.fromL.n} al ${S.toL.n}. Responde SOLO con la traducción, sin explicaciones ni comillas.\nTexto: "${txt}"`);
+    const r=await claude(`Traduce el siguiente texto del ${S.fromL.n} al ${S.toL.n}. Responde SOLO con la traducción, sin comillas ni explicaciones.\nTexto: "${txt}"`);
     $('restxt').textContent=r;S.lastT=r;sh('restrad',true);
-  }catch(e){$('restxt').textContent='❌ Error de conexión.';sh('restrad',true);}
+  }catch(e){$('restxt').textContent='⚠️ Error de conexión. Inténtalo de nuevo.';sh('restrad',true);}
   sh('ldtrad',false);
 }
-function spkRes(){if(!S.lastT)return;const u=new SpeechSynthesisUtterance(S.lastT);u.lang=S.toL.c;speechSynthesis.speak(u);}
+let convOn=false;
+function toggleConv(){
+  convOn=!convOn;
+  const b=$('convbtn');
+  if(convOn){b.classList.add('rec');b.style.background='linear-gradient(135deg,var(--red),#DC2626)';convListen(S.fromL);}
+  else{try{S.rec&&S.rec.stop();}catch(e){}b.classList.remove('rec');b.style.background='';}
+}
+function convListen(lang){
+  if(!convOn)return;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Tu navegador no soporta voz.');convOn=false;return;}
+  S.rec=new SR();S.rec.lang=lang.c;S.rec.interimResults=false;
+  S.rec.onresult=async e=>{
+    const said=e.results[0][0].transcript;
+    const other=(lang.c===S.fromL.c)?S.toL:S.fromL;
+    $('txtin').value=said;
+    try{const tr=await claude(`Traduce del ${lang.n} al ${other.n}. Responde SOLO la traducción.\nTexto:"${said}"`);
+      $('restxt').textContent=tr;S.lastT=tr;sh('restrad',true);speak(tr,other.c);
+      if(convOn)setTimeout(()=>convListen(other),1800);
+    }catch(err){if(convOn)setTimeout(()=>convListen(lang),800);}
+  };
+  S.rec.onerror=()=>{if(convOn)setTimeout(()=>convListen(lang),900);};
+  S.rec.start();
+}
+function spkRes(){if(!S.lastT)return;speak(S.lastT,S.toL.c);}
+function speak(txt,lc){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang=lc;speechSynthesis.speak(u);}catch(e){}}
+function speakSlow(txt,lc){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang=lc;u.rate=0.55;speechSynthesis.speak(u);}catch(e){}}
 
-// ════════════════════════════════════
-// OCR CARTELES
-// ════════════════════════════════════
-// ---- Cámara en vivo ----
+// ===================== CARTELES (OCR) =====================
 let camStream=null;
 async function startCam(){
-  const v=$('cam-live'),ph=$('cam-ph');
-  $('cam-prev').style.display='none';sh('ocrout',false);
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ if(ph){ph.style.display='flex';ph.querySelector('p').textContent='Toca para hacer una foto';} return; }
-  try{
-    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
-    v.srcObject=camStream;v.style.display='block';if(ph)ph.style.display='none';
-  }catch(e){
-    if(v)v.style.display='none';
-    if(ph){ph.style.display='flex';ph.querySelector('p').textContent='Toca para hacer una foto';}
-  }
+  const v=$('cam-live'),ph=$('cam-ph');$('cam-prev').style.display='none';sh('ocrout',false);
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){if(ph)ph.style.display='';$('cam-live').style.display='none';return;}
+  try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});v.srcObject=camStream;v.style.display='block';if(ph)ph.style.display='none';}
+  catch(e){if(v)v.style.display='none';const p=$('cam-ph');if(p)p.style.display='';$('cam-live').style.display='none';}
 }
-function stopCam(){
-  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
-  const v=$('cam-live');if(v)v.srcObject=null;
-}
-// Captura el fotograma actual (o una imagen) reducido a maxDim y devuelve dataURL JPEG.
+function stopCam(){if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}const v=$('cam-live');if(v)v.srcObject=null;}
 function frameToB64(src,maxDim){
   let w=src.videoWidth||src.width,h=src.videoHeight||src.height;
   const s=Math.min(1,maxDim/Math.max(w,h));w=Math.round(w*s);h=Math.round(h*s);
-  const c=document.createElement('canvas');c.width=w;c.height=h;
-  c.getContext('2d').drawImage(src,0,0,w,h);
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(src,0,0,w,h);
   return c.toDataURL('image/jpeg',0.7);
 }
-// Botón "Capturar y traducir": congela el fotograma de la cámara en vivo y traduce.
+function shrink(file,maxDim){return new Promise((res,rej)=>{
+  const img=new Image(),url=URL.createObjectURL(file);
+  img.onload=()=>{res(frameToB64(img,maxDim));URL.revokeObjectURL(url);};
+  img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'));};img.src=url;
+});}
 async function snap(){
   const v=$('cam-live');
   if(!camStream||!v.videoWidth){document.getElementById('fi').click();return;}
-  const url=frameToB64(v,1024);
-  $('cam-prev').src=url;$('cam-prev').style.display='block';v.style.display='none';
+  const url=frameToB64(v,1024);$('cam-prev').src=url;$('cam-prev').style.display='block';v.style.display='none';stopCam();
   await translateImg(url.split(',')[1]);
 }
-// Alternativa: foto de la galería / cámara del sistema.
 async function doOCR(ev){
   const file=ev.target.files[0];if(!file)return;
   $('cam-prev').src=URL.createObjectURL(file);$('cam-prev').style.display='block';
-  const v=$('cam-live');if(v)v.style.display='none';
-  const ph=$('cam-ph');if(ph)ph.style.display='none';
-  const b64=await shrink(file,1024);
-  await translateImg(b64);
+  const v=$('cam-live');if(v)v.style.display='none';const ph=$('cam-ph');if(ph)ph.style.display='none';
+  const b64=await shrink(file,1024);await translateImg(b64);
 }
-// Envía la imagen (base64 JPEG) al Worker y muestra original + traducción.
 async function translateImg(b64){
   sh('ldcart',true);sh('ocrout',false);
+  const uiName=S.fromL.n;
   try{
-    const r=await fetch('https://viajafacil-api.victoribius.workers.dev',{
+    const r=await fetch(API,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'fast',max_tokens:600,messages:[{role:'user',content:[
         {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
-        {type:'text',text:`Lee TODO el texto visible en la imagen y tradúcelo al ${S.myLang.n}.
-Responde EXACTAMENTE en este formato:
-ORIGINAL: [texto original de la imagen]
-TRADUCCIÓN: [traducción al ${S.myLang.n}]
-Si no hay texto legible, escribe solo: No se detectó texto en la imagen.`}
+        {type:'text',text:`Lee TODO el texto visible en la imagen y tradúcelo al ${uiName}.\nResponde EXACTAMENTE en este formato:\nORIGINAL: [texto original]\nTRADUCCION: [traducción al ${uiName}]\nSi no hay texto legible, responde solo: SIN_TEXTO`}
       ]}]})
     });
     const d=await r.json();
+    if(d.error||!(d.content&&d.content[0]&&d.content[0].text)){$('ocrorig').textContent='';$('ocrtrans').textContent='⚠️ '+t('ocrErr');sh('ocrout',true);sh('ldcart',false);return;}
     const txt=((d.content&&d.content[0]&&d.content[0].text)||'').trim();
-    const orig=txt.match(/ORIGINAL:\s*([\s\S]+?)(?=TRADUCCI[ÓO]N:|$)/i);
-    const trans=txt.match(/TRADUCCI[ÓO]N:\s*([\s\S]+)/i);
-    $('ocrorig').textContent=orig?'📝 Original: '+orig[1].trim():'';
-    $('ocrtrans').textContent=trans?S.myLang.f+' Traducción: '+trans[1].trim():(txt||'No se pudo leer el texto.');
+    if(/SIN_TEXTO/i.test(txt)){$('ocrorig').textContent='';$('ocrtrans').textContent='—';}
+    else{
+      let orig='',trans='';
+      txt.split('\n').forEach(line=>{
+        if(/^ORIGINAL/i.test(line))orig=line.replace(/^ORIGINAL:?/i,'').trim();
+        else if(/^TRADUCC/i.test(line))trans=line.replace(/^TRADUCC[^:]*:?/i,'').trim();
+      });
+      $('ocrorig').textContent=orig?'📝 '+orig:'';$('ocrtrans').textContent=trans||txt;
+    }
     sh('ocrout',true);
-  }catch(e){$('ocrtrans').textContent='❌ Error al analizar la imagen.';sh('ocrout',true);}
+  }catch(e){$('ocrorig').textContent='';$('ocrtrans').textContent='⚠️ No se pudo leer la imagen.';sh('ocrout',true);}
   sh('ldcart',false);
 }
-function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
-// Reduce la foto en el móvil antes de enviarla: menos subida y respuesta más rápida.
-function shrink(file,maxDim){return new Promise((res,rej)=>{
-  const img=new Image();const url=URL.createObjectURL(file);
-  img.onload=()=>{
-    let w=img.width,h=img.height;
-    const s=Math.min(1,maxDim/Math.max(w,h));
-    w=Math.round(w*s);h=Math.round(h*s);
-    const c=document.createElement('canvas');c.width=w;c.height=h;
-    c.getContext('2d').drawImage(img,0,0,w,h);
-    URL.revokeObjectURL(url);
-    res(c.toDataURL('image/jpeg',0.7).split(',')[1]);
-  };
-  img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'));};
-  img.src=url;
-});}
 
-// ════════════════════════════════════
-// MONEDAS
-// ════════════════════════════════════
+// ===================== MONEDAS =====================
+function buildCurr(){
+  const opt=c=>`<option value="${c.c}">${c.f} ${c.c}</option>`;
+  $('cfrom').innerHTML=CURR.map(opt).join('');
+  $('cto').innerHTML=CURR.map(opt).join('');
+  $('cfrom').value='EUR';
+  $('cto').value=RATES[S.dest.mon]?S.dest.mon:'USD';
+}
 async function doConv(){
   const amt=parseFloat($('amtin').value);const from=$('cfrom').value;const to=$('cto').value;
   if(!amt||isNaN(amt))return;
-  sh('ldmon',true);sh('curres',false);
+  sh('ldmon',true);sh('monres',false);
+  let rate=null;
   try{
-    const res=await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
-    const d=await res.json();const rate=d.rates[to];
-    $('cramt').textContent=`${(amt*rate).toFixed(2)} ${to}`;
-    $('crrate').textContent=`1 ${from} = ${rate.toFixed(4)} ${to} · Tipo de cambio en tiempo real`;
-    sh('curres',true);
-  }catch(e){
-    try{
-      const txt=await claude(`Convierte ${amt} ${from} a ${to} con tipo de cambio aproximado actual. Responde SOLO: RESULTADO: [cantidad] ${to} | TASA: 1 ${from} = [tasa] ${to}`);
-      const p=txt.split('|');
-      $('cramt').textContent=(p[0]||'').replace('RESULTADO:','').trim();
-      $('crrate').textContent=(p[1]||'').replace('TASA:','').trim()+' · Estimación IA';
-      sh('curres',true);
-    }catch(e2){alert('Error de conexión.');}
-  }
+    const res=await fetch('https://api.exchangerate-api.com/v4/latest/'+from);
+    const d=await res.json();rate=d.rates[to];
+  }catch(e){}
+  let approx=false;
+  if(!rate&&RATES[from]&&RATES[to]){rate=RATES[to]/RATES[from];approx=true;} // respaldo aproximado
+  if(rate){
+    $('mramt').textContent=fmt(amt*rate)+' '+to;
+    $('mrrate').textContent='1 '+from+' = '+fmt(rate,3)+' '+to+(approx?' · '+t('monApprox'):'');
+    sh('monres',true);
+  }else{alert('No se pudo calcular.');}
   sh('ldmon',false);
 }
+function fmt(n,d){return Number(n).toLocaleString(S.uiLang,{maximumFractionDigits:d||2});}
 
-// ════════════════════════════════════
-// EMERGENCIAS
-// ════════════════════════════════════
+// ===================== EMERGENCIAS =====================
+const ECOL={pol:'#2563EB',amb:'#E5484D',bom:'#F2742C',emb:'#10B981',gen:'#F4A823'};
 function renderEmer(){
   if(!S.dest)return;
   const list=EMER[S.dest.id]||DEMER;
   $('emerlist').innerHTML=list.map(e=>`
-    <a class="ei ${e.c}" href="tel:${e.num}">
+    <a class="ei" href="tel:${e.num}" style="border-color:${ECOL[e.c]||'#F1E7DA'}">
       <span class="ei-ico">${e.ico}</span>
-      <div><div class="ei-n">${e.n}</div><div class="ei-num">${e.num}</div></div>
+      <span><span class="ei-n" style="display:block">${e.n}</span><span class="ei-num">${e.num}</span></span>
       <span class="ei-c">📞</span>
     </a>`).join('');
 }
 
-// ════════════════════════════════════
-// FRASES
-// ════════════════════════════════════
+// ===================== FRASES =====================
 function renderFras(){
   if(!S.dest)return;
-  const lc=S.dest.lc;
+  const dlc=S.dest.lc,ulc=S.uiLang;
   const cats=[...new Set(FRASES.map(f=>f.cat))];
   $('fraslist').innerHTML=cats.map(cat=>{
     const items=FRASES.filter(f=>f.cat===cat);
-    return `<p class="sec-ttl" style="margin-top:16px">${cat}</p>`
-      +items.map(f=>{
-        const dest=f[lc]||f.en;
-        return `<div class="fi" onclick="spkF('${dest.replace(/'/g,"\\'")}','${lc}')">
-          <div class="fi-es">${f.es}</div>
-          <div class="fi-d">${dest}</div>
-          <div class="fi-h">🔊 Toca para escuchar en ${S.dest.lang}</div>
-        </div>`;
-      }).join('');
+    const catName=(CATS[cat]&&CATS[cat][ulc])||cat;
+    return `<div class="fcat">${catName}</div>`+items.map(f=>{
+      const mine=f[ulc]||f.en;
+      const dest=f[dlc]||f.en;
+      return `<div class="frase">
+        <div class="fr-mine">${mine}</div>
+        <div class="fr-dest">${dest}</div>
+        <div class="fr-hint"><span onclick="speak(${JSON.stringify(dest).replace(/"/g,'&quot;')},'${dlc}')">🔊 Escuchar</span> &nbsp; <span onclick="speakSlow(${JSON.stringify(dest).replace(/"/g,'&quot;')},'${dlc}')">🐢 Despacio</span></div>
+      </div>`;
+    }).join('');
   }).join('');
 }
-function spkF(t,lc){const u=new SpeechSynthesisUtterance(t);u.lang=lc;speechSynthesis.speak(u);}
 
-// ════════════════════════════════════
-// HELPERS
-// ════════════════════════════════════
-function $(id){return document.getElementById(id);}
-function sh(id,v){$(id).classList[v?'add':'remove']('sh');}
+// ===================== API =====================
+const API='https://viajafacil-api.victoribius.workers.dev';
 async function claude(prompt){
-  const r=await fetch('https://viajafacil-api.victoribius.workers.dev',{
+  const r=await fetch(API,{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'chat',max_tokens:1000,messages:[{role:'user',content:prompt}]})
   });
   const d=await r.json();return d.content[0].text.trim();
 }
-
-// ════════════════════════════════════
-// LUGARES DE INTERÉS (Google Places + geolocalización)
-// ════════════════════════════════════
-let poiCoords=null,poiType='tourist_attraction';
-const poiCache={}; // cachea por categoría+ubicación: evita repetir llamadas a Google (coste)
-function poiDist(la1,lo1,la2,lo2){
-  const R=6371,d2r=Math.PI/180;
-  const dLa=(la2-la1)*d2r,dLo=(lo2-lo1)*d2r;
-  const a=Math.sin(dLa/2)**2+Math.cos(la1*d2r)*Math.cos(la2*d2r)*Math.sin(dLo/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); // km
+// ---- Afiliados (rellena tus IDs cuando te des de alta) ----
+const AFF={getyourguide:'',civitatis:''};
+function affLink(city){
+  // GetYourGuide búsqueda por ciudad; añade tu partner_id cuando lo tengas.
+  let u='https://www.getyourguide.com/s/?q='+encodeURIComponent(city);
+  if(AFF.getyourguide)u+='&partner_id='+AFF.getyourguide;
+  return u;
 }
+// ---- Lugares de interés (Google Places vía Worker) ----
+let poiCoords=null,poiType='tourist_attraction';const poiCache={};
+const POI_MIN={tourist_attraction:[4.2,500],museum:[4.2,250],restaurant:[4.3,200],cafe:[4.2,120],bar:[4.2,120]};
+const POI_RADIUS={tourist_attraction:6000,museum:6000,restaurant:1800,cafe:1500,bar:1800};
+function poiDist(la1,lo1,la2,lo2){const R=6371,d=Math.PI/180,dLa=(la2-la1)*d,dLo=(lo2-lo1)*d;const a=Math.sin(dLa/2)**2+Math.cos(la1*d)*Math.cos(la2*d)*Math.sin(dLo/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function poiCat(btn,type){
-  document.querySelectorAll('#poichips button').forEach(b=>{b.style.background='#fff';b.style.color='#333';});
-  btn.style.background='#14b8a6';btn.style.color='#fff';
-  poiType=type;
-  if(poiCoords)fetchPlaces(poiCoords.la,poiCoords.lo);else loadPOI(true);
+  document.querySelectorAll('#poichips button').forEach(b=>{b.style.background='#fff';b.style.color='var(--ink)';b.style.boxShadow='var(--sh)';});
+  btn.style.background='var(--orange)';btn.style.color='#fff';btn.style.boxShadow='none';
+  poiType=type;if(poiCoords)fetchPlaces(poiCoords.la,poiCoords.lo);else loadPOI(true);
 }
 function loadPOI(force){
-  const out=$('poilist');
-  if(force)for(const k in poiCache)delete poiCache[k]; // “Actualizar” fuerza búsqueda nueva
+  // botón de afiliado para el destino
+  if(S.dest){const a=$('poiaff');if(a){a.href=affLink(S.dest.n);a.style.display='flex';}}
+  if(force)for(const k in poiCache)delete poiCache[k];
   if(poiCoords&&!force){fetchPlaces(poiCoords.la,poiCoords.lo);return;}
-  out.innerHTML='<div class="tip">📡 Buscando tu ubicación…</div>';
-  if(!navigator.geolocation){out.innerHTML='<div class="tip">❌ Tu navegador no permite geolocalización.</div>';return;}
-  navigator.geolocation.getCurrentPosition(p=>{
-    poiCoords={la:p.coords.latitude,lo:p.coords.longitude};
-    fetchPlaces(poiCoords.la,poiCoords.lo);
-  },err=>{
-    out.innerHTML='<div class="tip">❌ Necesito permiso de ubicación. Actívalo y pulsa “Actualizar ubicación”.</div>';
-  },{enableHighAccuracy:true,timeout:10000,maximumAge:60000});
+  sh('ldpoi',true);$('poilist').innerHTML='';
+  if(!navigator.geolocation){sh('ldpoi',false);$('poilist').innerHTML='<div class="tip">❌ '+t('poiNoGeo')+'</div>';return;}
+  navigator.geolocation.getCurrentPosition(p=>{poiCoords={la:p.coords.latitude,lo:p.coords.longitude};fetchPlaces(poiCoords.la,poiCoords.lo);},
+    ()=>{sh('ldpoi',false);$('poilist').innerHTML='<div class="tip">❌ '+t('poiDenied')+'</div>';},
+    {enableHighAccuracy:true,timeout:10000,maximumAge:60000});
 }
-// Umbrales de calidad por categoría: [valoración mínima, nº de reseñas mínimo]
-const POI_MIN={tourist_attraction:[4.2,500],museum:[4.2,250],restaurant:[4.3,200],cafe:[4.2,120],bar:[4.2,120]};
-// Radio de búsqueda: amplio para monumentos/museos, corto para comer/beber.
-const POI_RADIUS={tourist_attraction:6000,museum:6000,restaurant:1800,cafe:1500,bar:1800};
 async function fetchPlaces(la,lo){
-  const out=$('poilist');
   const key=poiType+'@'+la.toFixed(3)+','+lo.toFixed(3);
-  if(poiCache[key]){out.innerHTML=poiCache[key];return;} // ya buscado en esta sesión → sin coste
-  out.innerHTML='<div class="tip">🔎 Buscando los mejores sitios cerca…</div>';
+  if(poiCache[key]){$('poilist').innerHTML=poiCache[key];sh('ldpoi',false);return;}
+  sh('ldpoi',true);$('poilist').innerHTML='';
   try{
-    const radius=POI_RADIUS[poiType]||3000;
-    const r=await fetch('https://viajafacil-api.victoribius.workers.dev/places',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({lat:la,lng:lo,types:[poiType],radius,lang:'es'})
-    });
+    const r=await fetch(API+'/places',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({lat:la,lng:lo,types:[poiType],radius:POI_RADIUS[poiType]||3000,lang:S.uiLang})});
     const d=await r.json();
-    if(d.error){out.innerHTML='<div class="tip">⚙️ El buscador de lugares aún no está activo (falta configurar la clave de Google).</div>';return;}
-    let places=(d.places||[]).map(p=>{
+    if(d.error){$('poilist').innerHTML='<div class="tip">⚙️ '+t('poiUnavail')+'</div>';sh('ldpoi',false);return;}
+    let ps=(d.places||[]).map(p=>{
       const lat=p.location&&p.location.latitude,lon=p.location&&p.location.longitude;
-      const nm=(p.displayName&&p.displayName.text)||'';
-      const photo=(p.photos&&p.photos[0]&&p.photos[0].name)||'';
+      const nm=(p.displayName&&p.displayName.text)||'';const photo=(p.photos&&p.photos[0]&&p.photos[0].name)||'';
       const rating=p.rating||0,cnt=p.userRatingCount||0;
       return{nm,lat,lon,photo,rating,cnt,km:poiDist(la,lo,lat,lon),score:rating*Math.log10(cnt+10)};
     }).filter(x=>x.lat&&x.nm);
-    // Filtro de calidad, con relajación automática si en la zona hay pocos sitios buenos.
-    const m=POI_MIN[poiType]||[4.0,100];
-    let top=places.filter(p=>p.rating>=m[0]&&p.cnt>=m[1]);
-    if(top.length<6) top=places.filter(p=>p.rating>=m[0]-0.3&&p.cnt>=Math.round(m[1]/3));
-    if(top.length<3) top=places.filter(p=>p.cnt>=10&&p.rating>=3.8); // zonas con poca oferta: mínimo de calidad, nunca basura
-    top.sort((a,b)=>b.score-a.score);
-    top=top.slice(0,10);
-    if(!top.length){out.innerHTML='<div class="tip">😕 No encontré sitios recomendables de esta categoría cerca.</div>';return;}
+    const m=POI_MIN[poiType]||[4,100];
+    let top=ps.filter(p=>p.rating>=m[0]&&p.cnt>=m[1]);
+    if(top.length<6)top=ps.filter(p=>p.rating>=m[0]-0.3&&p.cnt>=Math.round(m[1]/3));
+    if(top.length<3)top=ps.filter(p=>p.cnt>=10&&p.rating>=3.8);
+    top.sort((a,b)=>b.score-a.score);top=top.slice(0,10);
+    if(!top.length){$('poilist').innerHTML='<div class="tip">😕 '+t('poiNone')+'</div>';sh('ldpoi',false);return;}
     const html=top.map((p,i)=>{
       const dist=p.km<1?Math.round(p.km*1000)+' m':p.km.toFixed(1)+' km';
-      const maps=`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}`;
-      const stars=p.rating?`⭐ ${p.rating} · ${p.cnt.toLocaleString('es')} reseñas`:'';
-      const img=p.photo
-        ?`<img src="https://viajafacil-api.victoribius.workers.dev/place-photo?ref=${encodeURIComponent(p.photo)}&w=160" alt="" loading="lazy" style="width:60px;height:60px;border-radius:10px;object-fit:cover;flex:0 0 auto">`
-        :`<span class="ei-ico">📍</span>`;
+      const maps='https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lon;
+      const stars=p.rating?'⭐ '+p.rating+' ('+p.cnt.toLocaleString(S.uiLang)+')':'';
+      const img=p.photo?'<img src="'+API+'/place-photo?ref='+encodeURIComponent(p.photo)+'&w=160" alt="" loading="lazy" style="width:60px;height:60px;border-radius:14px;object-fit:cover;flex:0 0 auto">':'<span class="ei-ico">📍</span>';
       const nm=p.nm.replace(/</g,'&lt;');
-      return `<a class="ei" href="${maps}" target="_blank" rel="noopener" style="align-items:center;gap:10px">
-        ${img}
-        <div style="flex:1;min-width:0"><div class="ei-n">${i+1}. ${nm}</div><div class="ei-num">${stars}${stars?' · ':''}${dist}</div></div>
-        <span class="ei-c">🧭</span></a>`;
+      return '<a class="ei" href="'+maps+'" target="_blank" rel="noopener"><span style="flex:0 0 auto">'+img+'</span><span style="flex:1;min-width:0"><span class="ei-n" style="display:block">'+(i+1)+'. '+nm+'</span><span class="ei-num" style="color:var(--muted);font-size:15px;font-weight:700">'+stars+(stars?' · ':'')+dist+'</span></span><span class="ei-c">🧭</span></a>';
     }).join('');
-    poiCache[key]=html;out.innerHTML=html;
-  }catch(e){out.innerHTML='<div class="tip">❌ No se pudo cargar. Revisa tu conexión.</div>';}
+    poiCache[key]=html;$('poilist').innerHTML=html;
+  }catch(e){$('poilist').innerHTML='<div class="tip">❌ '+t('poiErr')+'</div>';}
+  sh('ldpoi',false);
+}
+function sh(id,v){$(id).classList[v?'add':'remove']('on');}
+
+// ===================== ACCESIBILIDAD: LETRA GRANDE =====================
+function setBig(on){
+  document.body.classList.toggle('big',on);
+  try{localStorage.setItem('vf_big',on?'1':'0');}catch(e){}
+  updateBigUI();
+}
+function toggleBig(){setBig(!document.body.classList.contains('big'));}
+function updateBigUI(){
+  const on=document.body.classList.contains('big');
+  document.querySelectorAll('.big-toggle,.hdr-big').forEach(b=>b.classList.toggle('act',on));
 }
 
-// INIT
-renderDG();
+// ===================== INIT =====================
+try{
+  const sl=localStorage.getItem('vf_uilang');
+  if(sl){const u=UILANGS.find(l=>l.c===sl);if(u){S.uiLang=sl;S.fromL={c:sl,n:u.n,f:u.f};}}
+  if(localStorage.getItem('vf_big')==='1')document.body.classList.add('big');
+}catch(e){}
+renderUiLangs();applyI18n();updateBigUI();show('screen-lang');
 </script>
 </body>
 </html>

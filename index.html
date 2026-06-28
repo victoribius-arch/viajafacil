@@ -552,12 +552,12 @@ async function doOCR(ev){
   const prev=$('cam-prev');prev.src=URL.createObjectURL(file);prev.style.display='block';
   document.querySelector('.cam-ph').style.display='none';
   sh('ldcart',true);sh('ocrout',false);
-  const b64=await toB64(file);
+  const b64=await shrink(file,1024);
   try{
     const r=await fetch('https://viajafacil-api.victoribius.workers.dev',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:[
-        {type:'image',source:{type:'base64',media_type:file.type,data:b64}},
+      body:JSON.stringify({model:'fast',max_tokens:600,messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
         {type:'text',text:`Lee TODO el texto visible en la imagen y tradúcelo al español.
 Responde EXACTAMENTE en este formato:
 ORIGINAL: [texto original de la imagen]
@@ -576,6 +576,21 @@ Si no hay texto legible, escribe solo: No se detectó texto en la imagen.`}
   sh('ldcart',false);
 }
 function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
+// Reduce la foto en el móvil antes de enviarla: menos subida y respuesta más rápida.
+function shrink(file,maxDim){return new Promise((res,rej)=>{
+  const img=new Image();const url=URL.createObjectURL(file);
+  img.onload=()=>{
+    let w=img.width,h=img.height;
+    const s=Math.min(1,maxDim/Math.max(w,h));
+    w=Math.round(w*s);h=Math.round(h*s);
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(url);
+    res(c.toDataURL('image/jpeg',0.7).split(',')[1]);
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'));};
+  img.src=url;
+});}
 
 // ════════════════════════════════════
 // MONEDAS

@@ -303,7 +303,10 @@ body.big #poichips button{font-size:19px}
       <span class="m-lbl" id="mlbl" data-i18n="micIdleT">Pulsa y habla</span>
       <span class="m-sub" id="msub" data-i18n="micIdleS">Toca para empezar</span>
     </button>
-    <button class="ph-btn" id="convbtn" onclick="toggleConv()" style="margin-bottom:16px">🔁 <span>Modo conversación</span></button>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <button class="ph-btn" id="convbtn-me" onclick="convTalk('me')" style="flex:1">🗣️ <span>Yo</span></button>
+      <button class="ph-btn" id="convbtn-other" onclick="convTalk('other')" style="flex:1">👤 <span>Otra persona</span></button>
+    </div>
     <div class="ta-w">
       <label data-i18n="orType">O escribe aquí:</label>
       <textarea id="txtin" rows="3"></textarea>
@@ -432,20 +435,20 @@ Object.assign(I18N.ja,{cPoiT:'訪れる場所',cPoiS:'近くで見られるも�
 Object.assign(I18N.ko,{cPoiT:'가볼 만한 곳',cPoiS:'근처에서 볼 만한 것',poiTitle:'가볼 만한 곳',poiTip:'근처 최고의 장소예요. 하나를 누르면 이동해요.',poiAff:'투어·티켓 예약',poiMon:'명소',poiRes:'식당',poiMus:'박물관',poiCaf:'카페',poiBar:'바',poiRefresh:'위치 새로고침',poiLoading:'장소 찾는 중...',cartGallery:'갤러리에서 올리기',slow:'천천히',convBtn:'대화 모드',poiNoGeo:'브라우저가 위치 정보를 허용하지 않습니다.',poiDenied:'위치 권한을 켜고 새로고침을 누르세요.',poiNone:'근처에 눈에 띄는 장소가 없어요.',poiUnavail:'지금은 장소를 이용할 수 없어요.',poiErr:'불러오지 못했어요. 연결을 확인하세요.',ocrErr:'읽지 못했어요 (일시적 제한일 수 있어요). 다시 시도하세요.'});
 Object.assign(I18N.tr,{cPoiT:'Gezilecek yerler',cPoiS:'Yakınında görülecekler',poiTitle:'Gezilecek yerler',poiTip:'Yakınındaki en iyi yerler. Gitmek için birine dokun.',poiAff:'Tur ve bilet rezerve et',poiMon:'Tarihi yerler',poiRes:'Restoranlar',poiMus:'Müzeler',poiCaf:'Kafeler',poiBar:'Barlar',poiRefresh:'Konumu güncelle',poiLoading:'Yerler aranıyor...',cartGallery:'Galeriden yükle',slow:'Yavaş',convBtn:'Sohbet modu',poiNoGeo:'Tarayıcınız konuma izin vermiyor.',poiDenied:'Konum iznini açın ve Güncelle düğmesine dokunun.',poiNone:'Yakında öne çıkan yer yok.',poiUnavail:'Yerler şu anda kullanılamıyor.',poiErr:'Yüklenemedi. Bağlantınızı kontrol edin.',ocrErr:'Okunamadı (geçici bir sınır olabilir). Tekrar deneyin.'});
 Object.assign(I18N.ar,{cPoiT:'أماكن للزيارة',cPoiS:'ما يمكن رؤيته بالقرب منك',poiTitle:'أماكن للزيارة',poiTip:'أفضل الأماكن بالقرب منك. اضغط على أحدها للذهاب.',poiAff:'احجز الجولات والتذاكر',poiMon:'المعالم',poiRes:'مطاعم',poiMus:'متاحف',poiCaf:'مقاهٍ',poiBar:'حانات',poiRefresh:'تحديث الموقع',poiLoading:'جارٍ البحث عن أماكن...',cartGallery:'رفع من المعرض',slow:'ببطء',convBtn:'وضع المحادثة',poiNoGeo:'متصفحك لا يسمح بتحديد الموقع.',poiDenied:'فعّل إذن الموقع واضغط تحديث.',poiNone:'لا توجد أماكن مميزة قريبة.',poiUnavail:'الأماكن غير متاحة حالياً.',poiErr:'تعذّر التحميل. تحقق من اتصالك.',ocrErr:'تعذّرت القراءة (قد يكون حدّاً مؤقتاً). حاول مرة أخرى.'});
-Object.assign(I18N.es,{convTalk:'Conversación: toca para hablar',convStop:'Detener y traducir',convWait:'Traduciendo...',convMic:'Necesito permiso del micrófono.',convNo:'No te he entendido. Inténtalo de nuevo.',convErr:'Error de conexión. Inténtalo de nuevo.'});
-Object.assign(I18N.en,{convTalk:'Conversation: tap to talk',convStop:'Stop and translate',convWait:'Translating...',convMic:'I need microphone permission.',convNo:'I did not catch that. Try again.',convErr:'Connection error. Try again.'});
-Object.assign(I18N.fr,{convTalk:'Conversation : touchez pour parler',convStop:'Arrêter et traduire',convWait:'Traduction...',convMic:'Veuillez autoriser le microphone.',convNo:'Je ne comprends pas. Réessayez.',convErr:'Erreur de connexion. Réessayez.'});
-Object.assign(I18N.de,{convTalk:'Konversation: zum Sprechen tippen',convStop:'Stoppen und übersetzen',convWait:'Übersetze...',convMic:'Mikrofon-Berechtigung wird benötigt.',convNo:'Nicht verstanden. Versuchen Sie es erneut.',convErr:'Verbindungsfehler. Versuchen Sie es erneut.'});
-Object.assign(I18N.it,{convTalk:'Conversazione: tocca per parlare',convStop:'Ferma e traduci',convWait:'Traduzione...',convMic:'Serve il permesso del microfono.',convNo:'Non ho capito. Riprova.',convErr:'Errore di connessione. Riprova.'});
-Object.assign(I18N.pt,{convTalk:'Conversa: toque para falar',convStop:'Parar e traduzir',convWait:'A traduzir...',convMic:'Preciso de permissão do microfone.',convNo:'Não percebi. Tente de novo.',convErr:'Erro de ligação. Tente de novo.'});
-Object.assign(I18N.nl,{convTalk:'Gesprek: tik om te praten',convStop:'Stoppen en vertalen',convWait:'Vertalen...',convMic:'Microfoontoestemming nodig.',convNo:'Niet verstaan. Probeer opnieuw.',convErr:'Verbindingsfout. Probeer opnieuw.'});
-Object.assign(I18N.pl,{convTalk:'Rozmowa: dotknij, aby mówić',convStop:'Zatrzymaj i przetłumacz',convWait:'Tłumaczenie...',convMic:'Potrzebne pozwolenie na mikrofon.',convNo:'Nie zrozumiałem. Spróbuj ponownie.',convErr:'Błąd połączenia. Spróbuj ponownie.'});
-Object.assign(I18N.ru,{convTalk:'Разговор: нажмите, чтобы говорить',convStop:'Остановить и перевести',convWait:'Перевод...',convMic:'Нужен доступ к микрофону.',convNo:'Не расслышал. Попробуйте ещё раз.',convErr:'Ошибка соединения. Попробуйте ещё раз.'});
-Object.assign(I18N.zh,{convTalk:'对话：点击说话',convStop:'停止并翻译',convWait:'翻译中...',convMic:'需要麦克风权限。',convNo:'没听清，请重试。',convErr:'连接错误，请重试。'});
-Object.assign(I18N.ja,{convTalk:'会話：タップして話す',convStop:'停止して翻訳',convWait:'翻訳中...',convMic:'マイクの許可が必要です。',convNo:'聞き取れませんでした。もう一度お試しください。',convErr:'接続エラー。もう一度お試しください。'});
-Object.assign(I18N.ko,{convTalk:'대화: 눌러서 말하기',convStop:'멈추고 번역',convWait:'번역 중...',convMic:'마이크 권한이 필요해요.',convNo:'잘 못 들었어요. 다시 시도하세요.',convErr:'연결 오류. 다시 시도하세요.'});
-Object.assign(I18N.tr,{convTalk:'Sohbet: konuşmak için dokun',convStop:'Durdur ve çevir',convWait:'Çevriliyor...',convMic:'Mikrofon izni gerekiyor.',convNo:'Anlayamadım. Tekrar deneyin.',convErr:'Bağlantı hatası. Tekrar deneyin.'});
-Object.assign(I18N.ar,{convTalk:'محادثة: المس للتحدث',convStop:'إيقاف وترجمة',convWait:'جارٍ الترجمة...',convMic:'أحتاج إذن الميكروفون.',convNo:'لم أفهم. حاول مرة أخرى.',convErr:'خطأ في الاتصال. حاول مرة أخرى.'});
+Object.assign(I18N.es,{convTalk:'Conversación: toca para hablar',convStop:'Detener y traducir',convWait:'Traduciendo...',convMic:'Necesito permiso del micrófono.',convNo:'No te he entendido. Inténtalo de nuevo.',convErr:'Error de conexión. Inténtalo de nuevo.',convMe:'Yo',convOther:'Otra persona'});
+Object.assign(I18N.en,{convTalk:'Conversation: tap to talk',convStop:'Stop and translate',convWait:'Translating...',convMic:'I need microphone permission.',convNo:'I did not catch that. Try again.',convErr:'Connection error. Try again.',convMe:'Me',convOther:'Other person'});
+Object.assign(I18N.fr,{convTalk:'Conversation : touchez pour parler',convStop:'Arrêter et traduire',convWait:'Traduction...',convMic:'Veuillez autoriser le microphone.',convNo:'Je ne comprends pas. Réessayez.',convErr:'Erreur de connexion. Réessayez.',convMe:'Moi',convOther:'Autre personne'});
+Object.assign(I18N.de,{convTalk:'Konversation: zum Sprechen tippen',convStop:'Stoppen und übersetzen',convWait:'Übersetze...',convMic:'Mikrofon-Berechtigung wird benötigt.',convNo:'Nicht verstanden. Versuchen Sie es erneut.',convErr:'Verbindungsfehler. Versuchen Sie es erneut.',convMe:'Ich',convOther:'Andere Person'});
+Object.assign(I18N.it,{convTalk:'Conversazione: tocca per parlare',convStop:'Ferma e traduci',convWait:'Traduzione...',convMic:'Serve il permesso del microfono.',convNo:'Non ho capito. Riprova.',convErr:'Errore di connessione. Riprova.',convMe:'Io',convOther:'Altra persona'});
+Object.assign(I18N.pt,{convTalk:'Conversa: toque para falar',convStop:'Parar e traduzir',convWait:'A traduzir...',convMic:'Preciso de permissão do microfone.',convNo:'Não percebi. Tente de novo.',convErr:'Erro de ligação. Tente de novo.',convMe:'Eu',convOther:'Outra pessoa'});
+Object.assign(I18N.nl,{convTalk:'Gesprek: tik om te praten',convStop:'Stoppen en vertalen',convWait:'Vertalen...',convMic:'Microfoontoestemming nodig.',convNo:'Niet verstaan. Probeer opnieuw.',convErr:'Verbindingsfout. Probeer opnieuw.',convMe:'Ik',convOther:'Andere persoon'});
+Object.assign(I18N.pl,{convTalk:'Rozmowa: dotknij, aby mówić',convStop:'Zatrzymaj i przetłumacz',convWait:'Tłumaczenie...',convMic:'Potrzebne pozwolenie na mikrofon.',convNo:'Nie zrozumiałem. Spróbuj ponownie.',convErr:'Błąd połączenia. Spróbuj ponownie.',convMe:'Ja',convOther:'Inna osoba'});
+Object.assign(I18N.ru,{convTalk:'Разговор: нажмите, чтобы говорить',convStop:'Остановить и перевести',convWait:'Перевод...',convMic:'Нужен доступ к микрофону.',convNo:'Не расслышал. Попробуйте ещё раз.',convErr:'Ошибка соединения. Попробуйте ещё раз.',convMe:'Я',convOther:'Собеседник'});
+Object.assign(I18N.zh,{convTalk:'对话：点击说话',convStop:'停止并翻译',convWait:'翻译中...',convMic:'需要麦克风权限。',convNo:'没听清，请重试。',convErr:'连接错误，请重试。',convMe:'我',convOther:'对方'});
+Object.assign(I18N.ja,{convTalk:'会話：タップして話す',convStop:'停止して翻訳',convWait:'翻訳中...',convMic:'マイクの許可が必要です。',convNo:'聞き取れませんでした。もう一度お試しください。',convErr:'接続エラー。もう一度お試しください。',convMe:'自分',convOther:'相手'});
+Object.assign(I18N.ko,{convTalk:'대화: 눌러서 말하기',convStop:'멈추고 번역',convWait:'번역 중...',convMic:'마이크 권한이 필요해요.',convNo:'잘 못 들었어요. 다시 시도하세요.',convErr:'연결 오류. 다시 시도하세요.',convMe:'나',convOther:'상대방'});
+Object.assign(I18N.tr,{convTalk:'Sohbet: konuşmak için dokun',convStop:'Durdur ve çevir',convWait:'Çevriliyor...',convMic:'Mikrofon izni gerekiyor.',convNo:'Anlayamadım. Tekrar deneyin.',convErr:'Bağlantı hatası. Tekrar deneyin.',convMe:'Ben',convOther:'Diğer kişi'});
+Object.assign(I18N.ar,{convTalk:'محادثة: المس للتحدث',convStop:'إيقاف وترجمة',convWait:'جارٍ الترجمة...',convMic:'أحتاج إذن الميكروفون.',convNo:'لم أفهم. حاول مرة أخرى.',convErr:'خطأ في الاتصال. حاول مرة أخرى.',convMe:'أنا',convOther:'الشخص الآخر'});
 
 const CATS={
   '🏨 Hotel':{es:'🏨 Hotel',en:'🏨 Hotel',fr:'🏨 Hôtel',de:'🏨 Hotel',it:'🏨 Hotel',pt:'🏨 Hotel',nl:'🏨 Hotel',pl:'🏨 Hotel',ru:'🏨 Отель',zh:'🏨 酒店',ja:'🏨 ホテル',ko:'🏨 호텔',tr:'🏨 Otel',ar:'🏨 فندق'},
@@ -674,7 +677,7 @@ function applyI18n(){
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.dataset.i18nPh));
   if(selDestId){const d=DESTS.find(x=>x.id===selDestId);$('destbtn').textContent=t('travelTo')+' '+d.n+' '+d.f;}
   else $('destbtn').textContent=t('destBtnEmpty');
-  if(typeof setConvBtn==='function')setConvBtn(convBusy?'busy':(convOn?'rec':'idle'));
+  if(typeof setConvBtn==='function')setConvBtn();
 }
 
 // ===================== ELEGIR IDIOMA APP =====================
@@ -781,35 +784,48 @@ async function doTrans(){
   }catch(e){$('restxt').textContent='⚠️ Error de conexión. Inténtalo de nuevo.';sh('restrad',true);}
   sh('ldtrad',false);
 }
-// ===== Modo conversación con autodetección (Whisper en el Worker) =====
-let convOn=false, convRec=null, convStream=null, convChunks=[], convBusy=false;
+// ===== Modo conversación: dos botones push-to-talk (Whisper en el Worker) =====
+let convSide=null, convRec=null, convStream=null, convChunks=[], convBusy=false;
 let otherLang=null; // idioma del interlocutor (se aprende al detectarlo)
 function langName(code){const c=(code||'').toLowerCase().slice(0,2);const m=LANGS.find(l=>l.c===c);return m?m.n:(code||'');}
-function setConvBtn(state){ // 'idle' | 'rec' | 'busy'
-  const b=$('convbtn');if(!b)return;
-  b.classList.remove('rec');
-  if(state==='rec'){b.classList.add('rec');b.style.background='linear-gradient(135deg,var(--red),#DC2626)';b.innerHTML='⏹️ <span>'+t('convStop')+'</span>';}
-  else if(state==='busy'){b.style.background='';b.innerHTML='⏳ <span>'+t('convWait')+'</span>';}
-  else {b.style.background='';b.innerHTML='🔁 <span>'+t('convTalk')+'</span>';}
-}
-async function toggleConv(){
-  if(convBusy)return;
-  if(!otherLang)otherLang=S.dest?{c:S.dest.lc,n:S.dest.lang}:{c:S.toL.c,n:S.toL.n};
-  if(!convRec){ // empezar a grabar
-    try{
-      convStream=await navigator.mediaDevices.getUserMedia({audio:true});
-    }catch(e){alert(t('convMic'));return;}
-    convChunks=[];
-    convRec=new MediaRecorder(convStream);
-    convRec.ondataavailable=ev=>{if(ev.data&&ev.data.size)convChunks.push(ev.data);};
-    convRec.onstop=processConv;
-    convRec.start();convOn=true;setConvBtn('rec');
-  } else { // parar y procesar
-    try{convRec.stop();}catch(e){}
+function setConvBtn(){
+  const me=$('convbtn-me'),ot=$('convbtn-other');if(!me||!ot)return;
+  me.classList.remove('rec');ot.classList.remove('rec');me.style.background='';ot.style.background='';
+  me.disabled=false;ot.disabled=false;me.style.opacity='';ot.style.opacity='';
+  if(convBusy){
+    me.innerHTML='⏳ <span>'+t('convWait')+'</span>';ot.innerHTML='⏳ <span>'+t('convWait')+'</span>';
+    me.disabled=true;ot.disabled=true;me.style.opacity='.5';ot.style.opacity='.5';
+    return;
+  }
+  const recBtn=convSide==='me'?me:(convSide==='other'?ot:null);
+  const idleBtn=convSide==='me'?ot:(convSide==='other'?me:null);
+  me.innerHTML='🗣️ <span>'+t('convMe')+'</span>';
+  ot.innerHTML='👤 <span>'+t('convOther')+'</span>';
+  if(recBtn){
+    recBtn.classList.add('rec');recBtn.style.background='linear-gradient(135deg,var(--red),#DC2626)';
+    recBtn.innerHTML='⏹️ <span>'+t('convStop')+'</span>';
+    if(idleBtn){idleBtn.disabled=true;idleBtn.style.opacity='.5';}
   }
 }
+async function convTalk(side){
+  if(convBusy)return;
+  if(!otherLang)otherLang=S.dest?{c:S.dest.lc,n:S.dest.lang}:{c:S.toL.c,n:S.toL.n};
+  if(convRec){ // ya grabando: este botón para y procesa; cualquier otro se ignora
+    if(convSide===side){try{convRec.stop();}catch(e){}}
+    return;
+  }
+  // empezar a grabar
+  try{
+    convStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  }catch(e){alert(t('convMic'));return;}
+  convChunks=[];convSide=side;
+  convRec=new MediaRecorder(convStream);
+  convRec.ondataavailable=ev=>{if(ev.data&&ev.data.size)convChunks.push(ev.data);};
+  convRec.onstop=processConv;
+  convRec.start();setConvBtn();
+}
 async function processConv(){
-  convOn=false;setConvBtn('busy');convBusy=true;
+  const side=convSide;convBusy=true;setConvBtn();
   try{convStream&&convStream.getTracks().forEach(tk=>tk.stop());}catch(e){}
   const blob=new Blob(convChunks,{type:(convRec&&convRec.mimeType)||'audio/webm'});
   convRec=null;convStream=null;
@@ -818,19 +834,22 @@ async function processConv(){
     const sr=await fetch(API+'/stt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio:b64})});
     const sd=await sr.json();
     const said=(sd&&sd.text||'').trim();
-    if(sd&&sd.error||!said){$('restxt').textContent='⚠️ '+t('convNo');sh('restrad',true);convBusy=false;setConvBtn('idle');return;}
+    if(sd&&sd.error||!said){$('restxt').textContent='⚠️ '+t('convNo');sh('restrad',true);convBusy=false;convSide=null;setConvBtn();return;}
     $('txtin').value=said;
-    // Decidir dirección: si el idioma detectado es el del usuario -> traducir al del otro; si no -> al del usuario
-    const det=(sd.language||'').toLowerCase();
-    const userC=S.fromL.c.toLowerCase().slice(0,2);
-    const isUser = det.slice(0,2)===userC || det.includes((S.fromL.n||'').toLowerCase());
     let target;
-    if(isUser){ target=otherLang; }
-    else { target=S.fromL; if(det){const nm=langName(det);otherLang={c:det.slice(0,2),n:nm||det};} }
+    if(side==='other'){
+      // habla el otro -> traducir a MI idioma; aprender su idioma de la detección de Whisper
+      target=S.fromL;
+      const det=(sd.language||'').toLowerCase();
+      if(det){const nm=langName(det);otherLang={c:det.slice(0,2),n:nm||det};}
+    } else {
+      // hablo yo -> traducir al idioma del interlocutor
+      target=otherLang;
+    }
     const tr=await claude(`Traduce el siguiente texto al ${target.n}. Responde SOLO con la traducción, sin comillas ni explicaciones.\nTexto: "${said}"`);
     $('restxt').textContent=tr;S.lastT=tr;sh('restrad',true);speak(tr,target.c);
   }catch(e){$('restxt').textContent='⚠️ '+t('convErr');sh('restrad',true);}
-  convBusy=false;setConvBtn('idle');
+  convBusy=false;convSide=null;setConvBtn();
 }
 function spkRes(){if(!S.lastT)return;speak(S.lastT,S.toL.c);}
 function speak(txt,lc){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang=lc;speechSynthesis.speak(u);}catch(e){}}
@@ -1050,7 +1069,7 @@ try{
 }catch(e){}
 Object.assign(I18N.es,{offlineMsg:'Sin conexión: la IA necesita internet. Frases, emergencias y conversor sí funcionan.'});
 Object.assign(I18N.en,{offlineMsg:'Offline: AI needs internet. Phrases, emergencies and converter still work.'});
-renderUiLangs();applyI18n();setConvBtn('idle');updateBigUI();show('screen-lang');
+renderUiLangs();applyI18n();setConvBtn();updateBigUI();show('screen-lang');
 // ===== PWA: service worker + aviso de sin conexión =====
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
 (function(){

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ViajaFácil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Inter:wght@400;500;600&display=swap');
+:root{--sky:#0EA5E9;--sky-d:#0284C7;--sky-l:#E0F2FE;--mint:#10B981;--mint-l:#ECFDF5;--amber:#F59E0B;--amber-l:#FFFBEB;--rose:#F43F5E;--rose-l:#FFF1F2;--coral:#F97316;--slate:#1E293B;--muted:#64748B;--bg:#F8FAFC;--white:#fff;--r:20px;--sh:0 4px 24px rgba(0,0,0,.09);--shl:0 8px 40px rgba(0,0,0,.14)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden}
+
+/* ONBOARDING */
+#ob{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(160deg,#0EA5E9 0%,#2563EB 55%,#1E293B 100%);position:relative;overflow:hidden}
+#ob::before{content:'';position:absolute;width:320px;height:320px;background:rgba(255,255,255,.06);border-radius:50%;top:-80px;right:-80px}
+#ob::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.04);border-radius:50%;bottom:120px;left:-60px}
+.ob-hero{padding:52px 28px 28px;color:#fff;position:relative;z-index:1}
+.ob-logo{font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;margin-bottom:6px;letter-spacing:-.5px}
+.ob-logo span{color:#BAE6FD}
+.ob-tag{font-size:15px;opacity:.85;line-height:1.5;max-width:280px}
+.ob-plane{font-size:68px;margin-top:18px;display:block;animation:fl 3s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+.ob-card{background:#fff;border-radius:28px 28px 0 0;padding:26px 22px 36px;position:relative;z-index:1;margin-top:auto}
+.ob-q{font-family:'Nunito',sans-serif;font-size:21px;font-weight:800;color:var(--slate);margin-bottom:4px}
+.ob-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.search-box{display:flex;align-items:center;background:var(--bg);border:2px solid #E2E8F0;border-radius:14px;padding:0 14px;margin-bottom:14px;transition:border-color .2s}
+.search-box:focus-within{border-color:var(--sky)}
+.search-box input{flex:1;border:none;background:transparent;padding:14px 8px;font-size:16px;font-family:'Inter',sans-serif;outline:none;color:var(--slate)}
+.dest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;max-height:230px;overflow-y:auto}
+.dp{background:var(--bg);border:2px solid #E2E8F0;border-radius:12px;padding:11px 6px;text-align:center;cursor:pointer;transition:all .15s;font-size:11px;font-weight:600;color:var(--muted)}
+.dp .fl{font-size:24px;display:block;margin-bottom:3px}
+.dp:hover,.dp.sel{border-color:var(--sky);background:var(--sky-l);color:var(--sky-d)}
+.dp.sel{font-weight:700}
+.ob-btn{width:100%;background:linear-gradient(135deg,var(--sky),#2563EB);border:none;border-radius:var(--r);padding:19px;color:#fff;font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 8px 28px rgba(14,165,233,.38);transition:transform .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.ob-btn:active{transform:scale(.97)}
+.ob-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* APP */
+#app{display:none}
+.hdr{background:linear-gradient(135deg,var(--sky) 0%,#2563EB 100%);padding:18px 18px 14px;color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(14,165,233,.3)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900}
+.hdr-logo span{color:#BAE6FD}
+.dest-badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
+.hdr-sub{font-size:12px;opacity:.8;margin-top:3px}
+
+/* SCREENS */
+.sc{display:none;padding:18px}
+.sc.on{display:block}
+
+/* HOME */
+.dest-hero{background:linear-gradient(135deg,#1E293B,#334155);border-radius:var(--r);padding:18px;color:#fff;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.dh-flag{font-size:50px;line-height:1}
+.dh-name{font-family:'Nunito',sans-serif;font-size:21px;font-weight:900;margin-bottom:2px}
+.dh-det{font-size:13px;opacity:.75;line-height:1.5}
+.ch-btn{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.sec-ttl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
+.card{background:var(--white);border-radius:var(--r);padding:19px 13px 15px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s;border:2px solid transparent;text-align:center;position:relative}
+.card:active{transform:scale(.96)}
+.c-ico{font-size:36px;margin-bottom:7px;display:block}
+.c-ttl{font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:var(--slate);margin-bottom:3px}
+.c-dsc{font-size:11px;color:var(--muted);line-height:1.4}
+.c-badge{position:absolute;top:9px;right:9px;background:var(--coral);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:7px;text-transform:uppercase}
+.cb{background:linear-gradient(135deg,#FFF1F2,#FFE4E6);border:2px solid var(--rose);border-radius:var(--r);padding:16px 18px;display:flex;align-items:center;gap:13px;cursor:pointer;margin-bottom:8px}
+.cb:active{transform:scale(.98)}
+.cb-ico{font-size:32px;flex-shrink:0}
+.cb-ttl{font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--slate)}
+.cb-dsc{font-size:12px;color:var(--muted)}
+.cb-arr{margin-left:auto;font-size:20px;color:var(--rose)}
+
+/* SCREEN HEADER */
+.sc-hdr{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.bk{width:44px;height:44px;border-radius:12px;background:var(--white);border:none;box-shadow:var(--sh);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sc-ttl{font-family:'Nunito',sans-serif;font-size:21px;font-weight:800}
+.sc-flag{margin-left:auto;font-size:18px}
+
+/* TRADUCTOR */
+.lang-bar{background:var(--white);border-radius:var(--r);padding:11px 13px;box-shadow:var(--sh);display:flex;align-items:center;gap:7px;margin-bottom:13px}
+.lc{flex:1;background:var(--sky-l);border:none;border-radius:12px;padding:11px 7px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--sky-d);cursor:pointer;text-align:center}
+.sw{background:var(--sky);border:none;border-radius:10px;width:36px;height:36px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.tip{background:var(--sky-l);border-radius:12px;padding:10px 13px;font-size:13px;color:var(--sky-d);margin-bottom:13px;display:flex;gap:6px;align-items:flex-start}
+.big-mic{width:100%;background:linear-gradient(135deg,var(--sky),#2563EB);border:none;border-radius:var(--r);padding:24px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:0 8px 32px rgba(14,165,233,.38);transition:transform .15s;margin-bottom:13px}
+.big-mic:active{transform:scale(.97)}
+.big-mic.rec{background:linear-gradient(135deg,var(--rose),#DC2626);animation:pu 1.2s infinite;box-shadow:0 8px 32px rgba(244,63,94,.38)}
+@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.m-ico{font-size:48px;line-height:1}
+.m-lbl{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800}
+.m-sub{font-size:13px;opacity:.8}
+.ta-w{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:13px}
+.ta-w textarea{width:100%;border:none;padding:15px;font-size:17px;font-family:'Inter',sans-serif;resize:none;outline:none;color:var(--slate);background:transparent;min-height:72px}
+.ta-w button{width:100%;background:var(--sky);border:none;color:#fff;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer}
+.res-box{background:var(--sky-l);border-radius:var(--r);padding:17px;display:none}
+.res-box.sh{display:block}
+.res-txt{font-size:20px;font-weight:600;color:var(--sky-d);line-height:1.5;margin-bottom:11px}
+.sp-btn{background:var(--sky);border:none;color:#fff;padding:10px 16px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+
+/* CARTELES */
+.cam-z{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:13px}
+.cam-ph{background:linear-gradient(135deg,#1E293B,#334155);height:185px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.cam-ph p{color:rgba(255,255,255,.65);font-size:14px}
+#cam-prev{width:100%;max-height:245px;object-fit:cover;display:none}
+#fi{display:none}
+.ph-btn{width:100%;background:linear-gradient(135deg,var(--mint),#059669);border:none;border-radius:var(--r);padding:19px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 28px rgba(16,185,129,.3);margin-bottom:13px}
+.ph-btn span{font-size:24px}
+.ph-btn p{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800}
+.ocr-out{background:var(--mint-l);border-radius:var(--r);padding:17px;display:none}
+.ocr-out.sh{display:block}
+.ocr-orig{font-size:13px;color:var(--muted);margin-bottom:5px;font-style:italic}
+.ocr-trans{font-size:20px;font-weight:600;color:#065F46;line-height:1.5}
+
+/* MONEDAS */
+.cur-c{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:17px;margin-bottom:13px}
+.cl{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:5px}
+.cr{display:flex;align-items:center;gap:7px;margin-bottom:13px}
+.ci{flex:1;border:2px solid #E2E8F0;border-radius:12px;padding:13px;font-size:23px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--slate);outline:none;transition:border-color .2s}
+.ci:focus{border-color:var(--amber)}
+.cs{background:var(--amber-l);border:2px solid var(--amber);border-radius:12px;padding:12px 9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#92400E;outline:none;cursor:pointer}
+.conv-btn{width:100%;background:linear-gradient(135deg,var(--amber),#D97706);border:none;border-radius:var(--r);padding:18px;color:#fff;font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;cursor:pointer;margin-bottom:13px;box-shadow:0 8px 28px rgba(245,158,11,.3)}
+.cur-res{background:var(--amber-l);border-radius:var(--r);padding:22px;text-align:center;display:none}
+.cur-res.sh{display:block}
+.cr-amt{font-family:'Nunito',sans-serif;font-size:42px;font-weight:900;color:#92400E;line-height:1;margin-bottom:4px}
+.cr-rate{font-size:13px;color:var(--muted)}
+
+/* EMERGENCIAS */
+.el{display:flex;flex-direction:column;gap:10px}
+.ei{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:15px 17px;display:flex;align-items:center;gap:13px;text-decoration:none;border:2px solid transparent;transition:transform .1s}
+.ei:active{transform:scale(.97)}
+.ei.pol{border-color:#2563EB}.ei.amb{border-color:var(--rose)}.ei.bom{border-color:var(--coral)}.ei.emb{border-color:var(--mint)}.ei.gen{border-color:var(--amber)}
+.ei-ico{font-size:29px;flex-shrink:0}
+.ei-n{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--slate)}
+.ei-num{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--rose)}
+.ei-c{margin-left:auto;font-size:22px}
+
+/* FRASES */
+.fi{background:#fff;border-radius:14px;padding:13px 15px;margin-bottom:9px;box-shadow:var(--sh);cursor:pointer;border-left:4px solid var(--sky)}
+.fi-es{font-size:13px;color:var(--muted);margin-bottom:4px}
+.fi-d{font-size:17px;font-weight:700;color:var(--slate);margin-bottom:3px}
+.fi-h{font-size:11px;color:var(--sky)}
+
+/* LOADING */
+.ld{display:none;text-align:center;padding:18px}
+.ld.sh{display:block}
+.sp{width:32px;height:32px;border:3px solid #E2E8F0;border-top-color:var(--sky);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld p{font-size:14px;color:var(--muted)}
+
+/* LANG MODAL */
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end}
+.mb.op{display:flex}
+.ms{background:#fff;border-radius:24px 24px 0 0;padding:18px;width:100%;max-height:70vh;overflow-y:auto}
+.ms h3{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;margin-bottom:13px;text-align:center}
+.lg{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.lo{background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--slate)}
+.lo:hover{border-color:var(--sky);background:var(--sky-l)}
+
+/* NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid #E2E8F0;display:flex;padding:8px 0 12px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px}
+.ni-i{font-size:21px}
+.ni-l{font-size:10px;font-weight:600;color:var(--muted)}
+.ni.on .ni-l{color:var(--sky)}
+.spacer{height:72px}
+</style>
+</head>
+<body>
+
+<!-- ════════ ONBOARDING ════════ -->
+<div id="ob">
+  <div class="ob-hero">
+    <div class="ob-logo">Viaja<span>Fácil</span></div>
+    <p class="ob-tag">Tu asistente inteligente para viajar sin barreras de idioma</p>
+    <span class="ob-plane">✈️</span>
+  </div>
+  <div class="ob-card">
+    <p class="ob-q">¿A dónde vas a viajar? 🌍</p>
+    <p class="ob-sub">Elige tu destino y la app se configura sola: idioma, moneda y emergencias</p>
+    <div class="search-box">
+      <span style="font-size:19px">🔍</span>
+      <input type="text" id="dsearch" placeholder="Buscar país..." oninput="filterD()" autocomplete="off">
+    </div>
+    <div class="dest-grid" id="dgrid"></div>
+    <button class="ob-btn" id="obgobtn" disabled onclick="startApp()">
+      <span id="obbtxt">Selecciona un destino</span>
+      <span id="obarr" style="display:none">→</span>
+    </button>
+  </div>
+</div>
+
+<!-- ════════ APP ════════ -->
+<div id="app">
+  <div class="hdr">
+    <div class="hdr-row">
+      <div class="hdr-logo">Viaja<span>Fácil</span> ✈️</div>
+      <div class="dest-badge" onclick="cambiarDest()">
+        <span id="hflag"></span><span id="hname"></span><span>✏️</span>
+      </div>
+    </div>
+    <div class="hdr-sub" id="hsub"></div>
+  </div>
+
+  <!-- HOME -->
+  <div id="sc-home" class="sc on">
+    <div class="dest-hero">
+      <span class="dh-flag" id="hflag2"></span>
+      <div>
+        <div class="dh-name" id="hname2"></div>
+        <div class="dh-det" id="hdet"></div>
+      </div>
+      <button class="ch-btn" onclick="cambiarDest()">Cambiar ✏️</button>
+    </div>
+    <p class="sec-ttl">¿Qué necesitas?</p>
+    <div class="grid">
+      <div class="card" style="border-color:var(--sky)" onclick="go('trad')"><span class="c-ico">🗣️</span><div class="c-ttl">Traductor</div><div class="c-dsc">Voz y texto al instante</div></div>
+      <div class="card" style="border-color:var(--mint)" onclick="go('cart')"><span class="c-ico">📷</span><div class="c-ttl">Leer Carteles</div><div class="c-dsc">Cámara + IA</div><div class="c-badge">IA</div></div>
+      <div class="card" style="border-color:var(--amber)" onclick="go('mon')"><span class="c-ico">💱</span><div class="c-ttl">Monedas</div><div class="c-dsc">Cambio en tiempo real</div></div>
+      <div class="card" style="border-color:#8B5CF6" onclick="go('fras')"><span class="c-ico">💬</span><div class="c-ttl">Frases Útiles</div><div class="c-dsc">Las esenciales al viajar</div></div>
+    </div>
+    <p class="sec-ttl">Urgencias</p>
+    <div class="cb" onclick="go('emer')">
+      <span class="cb-ico">🆘</span>
+      <div><div class="cb-ttl">Emergencias</div><div class="cb-dsc">Teléfonos urgentes en <span id="hemer"></span></div></div>
+      <span class="cb-arr">›</span>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- TRADUCTOR -->
+  <div id="sc-trad" class="sc">
+    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">🗣️ Traductor</div><span class="sc-flag" id="tflag"></span></div>
+    <div class="lang-bar">
+      <button class="lc" onclick="openL('from')"><div id="ff">🇪🇸</div><div id="fn" style="font-size:12px">Español</div></button>
+      <button class="sw" onclick="swL()">⇄</button>
+      <button class="lc" onclick="openL('to')"><div id="tf">🏳️</div><div id="tn" style="font-size:12px">Destino</div></button>
+    </div>
+    <div class="tip">ℹ️ Pulsa el micrófono y habla. La IA traduce automáticamente al idioma de tu destino.</div>
+    <button class="big-mic" id="micbtn" onclick="toggleMic()">
+      <span class="m-ico" id="mico">🎤</span>
+      <p class="m-lbl" id="mlbl">Pulsa y habla</p>
+      <p class="m-sub" id="msub">Toca para empezar</p>
+    </button>
+    <div class="ta-w">
+      <textarea id="txtin" placeholder="O escribe aquí el texto..." rows="3"></textarea>
+      <button onclick="doTrans()">✨ Traducir texto</button>
+    </div>
+    <div class="ld" id="ldtrad"><div class="sp"></div><p>Traduciendo...</p></div>
+    <div class="res-box" id="restrad"><div class="res-txt" id="restxt"></div><button class="sp-btn" onclick="spkRes()">🔊 Escuchar</button></div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- CARTELES -->
+  <div id="sc-cart" class="sc">
+    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">📷 Leer Carteles</div><span class="sc-flag" id="cflag"></span></div>
+    <div class="tip">ℹ️ Haz una foto a cualquier cartel, menú o señal. La IA lo leerá y traducirá al español.</div>
+    <div class="cam-z">
+      <div class="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:44px">📸</span><p>Toca para hacer una foto</p></div>
+      <img id="cam-prev" alt="preview">
+    </div>
+    <input type="file" id="fi" accept="image/*" capture="environment" onchange="doOCR(event)">
+    <button class="ph-btn" onclick="document.getElementById('fi').click()"><span>📷</span><p>Hacer foto al cartel</p></button>
+    <div class="ld" id="ldcart"><div class="sp"></div><p>Analizando con IA...</p></div>
+    <div class="ocr-out" id="ocrout"><div class="ocr-orig" id="ocrorig"></div><div class="ocr-trans" id="ocrtrans"></div></div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- MONEDAS -->
+  <div id="sc-mon" class="sc">
+    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">💱 Cambio de Moneda</div><span class="sc-flag" id="mflag"></span></div>
+    <div class="cur-c">
+      <div class="cl">Tengo esta cantidad:</div>
+      <div class="cr">
+        <input type="number" class="ci" id="amtin" value="100">
+        <select class="cs" id="cfrom">
+          <option value="EUR">🇪🇺 EUR</option><option value="USD">🇺🇸 USD</option><option value="GBP">🇬🇧 GBP</option>
+          <option value="CHF">🇨🇭 CHF</option><option value="JPY">🇯🇵 JPY</option><option value="MXN">🇲🇽 MXN</option>
+          <option value="BRL">🇧🇷 BRL</option><option value="ARS">🇦🇷 ARS</option><option value="COP">🇨🇴 COP</option>
+          <option value="CLP">🇨🇱 CLP</option><option value="INR">🇮🇳 INR</option><option value="AUD">🇦🇺 AUD</option>
+          <option value="CAD">🇨🇦 CAD</option><option value="NOK">🇳🇴 NOK</option><option value="SEK">🇸🇪 SEK</option>
+          <option value="DKK">🇩🇰 DKK</option><option value="PLN">🇵🇱 PLN</option><option value="TRY">🇹🇷 TRY</option>
+          <option value="RUB">🇷🇺 RUB</option><option value="KRW">🇰🇷 KRW</option><option value="THB">🇹🇭 THB</option>
+          <option value="SGD">🇸🇬 SGD</option><option value="AED">🇦🇪 AED</option><option value="ZAR">🇿🇦 ZAR</option>
+          <option value="MAD">🇲🇦 MAD</option><option value="EGP">🇪🇬 EGP</option><option value="NZD">🇳🇿 NZD</option>
+        </select>
+      </div>
+      <div class="cl">Quiero saber cuánto son en:</div>
+      <div class="cr">
+        <select class="cs" id="cto" style="flex:1;font-size:15px;padding:13px 9px">
+          <option value="NOK">🇳🇴 NOK – Corona Noruega</option><option value="EUR">🇪🇺 EUR – Euro</option>
+          <option value="USD">🇺🇸 USD – Dólar</option><option value="GBP">🇬🇧 GBP – Libra</option>
+          <option value="JPY">🇯🇵 JPY – Yen</option><option value="CHF">🇨🇭 CHF – Franco Suizo</option>
+          <option value="CNY">🇨🇳 CNY – Yuan</option><option value="MXN">🇲🇽 MXN – Peso MX</option>
+          <option value="BRL">🇧🇷 BRL – Real</option><option value="ARS">🇦🇷 ARS – Peso AR</option>
+          <option value="INR">🇮🇳 INR – Rupia</option><option value="AUD">🇦🇺 AUD – $ Australiano</option>
+          <option value="CAD">🇨🇦 CAD – $ Canadiense</option><option value="SEK">🇸🇪 SEK – Corona Sueca</option>
+          <option value="DKK">🇩🇰 DKK – Corona Danesa</option><option value="TRY">🇹🇷 TRY – Lira</option>
+          <option value="KRW">🇰🇷 KRW – Won</option><option value="THB">🇹🇭 THB – Baht</option>
+          <option value="SGD">🇸🇬 SGD – $ Singapur</option><option value="AED">🇦🇪 AED – Dírham</option>
+          <option value="ZAR">🇿🇦 ZAR – Rand</option><option value="MAD">🇲🇦 MAD – Dírham Marroquí</option>
+          <option value="EGP">🇪🇬 EGP – Libra Egipcia</option><option value="NZD">🇳🇿 NZD – $ NZ</option>
+        </select>
+      </div>
+    </div>
+    <button class="conv-btn" onclick="doConv()">💱 Convertir ahora</button>
+    <div class="ld" id="ldmon"><div class="sp"></div><p>Obteniendo tipo de cambio...</p></div>
+    <div class="cur-res" id="curres"><div class="cr-amt" id="cramt">—</div><div class="cr-rate" id="crrate"></div></div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- FRASES -->
+  <div id="sc-fras" class="sc">
+    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">💬 Frases Útiles</div><span class="sc-flag" id="fflag"></span></div>
+    <div class="tip">ℹ️ Toca cualquier frase para escucharla en <span id="frasname"></span>.</div>
+    <div id="fraslist"></div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- EMERGENCIAS -->
+  <div id="sc-emer" class="sc">
+    <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">🆘 Emergencias</div><span class="sc-flag" id="eflag"></span></div>
+    <div class="tip" id="etip">ℹ️ Teléfonos de emergencia en tu destino. Toca para llamar.</div>
+    <div class="el" id="emerlist"></div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- NAV -->
+  <div class="bnav">
+    <div class="ni on" onclick="go('home')" id="nav-home"><span class="ni-i">🏠</span><span class="ni-l">Inicio</span></div>
+    <div class="ni" onclick="go('trad')" id="nav-trad"><span class="ni-i">🗣️</span><span class="ni-l">Traducir</span></div>
+    <div class="ni" onclick="go('cart')" id="nav-cart"><span class="ni-i">📷</span><span class="ni-l">Carteles</span></div>
+    <div class="ni" onclick="go('mon')" id="nav-mon"><span class="ni-i">💱</span><span class="ni-l">Monedas</span></div>
+    <div class="ni" onclick="go('emer')" id="nav-emer"><span class="ni-i">🆘</span><span class="ni-l">Ayuda</span></div>
+  </div>
+</div>
+
+<!-- LANG MODAL -->
+<div class="mb" id="lmodal" onclick="closeLM(event)">
+  <div class="ms"><h3>Selecciona idioma</h3><div class="lg" id="lgrid"></div></div>
+</div>
+
+<script>
+// ════════════════════════════════════
+// DATOS
+// ════════════════════════════════════
+const DESTS=[
+  {id:'no',n:'Noruega',f:'🇳🇴',lang:'Noruego',lc:'no',mon:'NOK',mnom:'Corona Noruega'},
+  {id:'se',n:'Suecia',f:'🇸🇪',lang:'Sueco',lc:'sv',mon:'SEK',mnom:'Corona Sueca'},
+  {id:'dk',n:'Dinamarca',f:'🇩🇰',lang:'Danés',lc:'da',mon:'DKK',mnom:'Corona Danesa'},
+  {id:'fi',n:'Finlandia',f:'🇫🇮',lang:'Finlandés',lc:'fi',mon:'EUR',mnom:'Euro'},
+  {id:'fr',n:'Francia',f:'🇫🇷',lang:'Francés',lc:'fr',mon:'EUR',mnom:'Euro'},
+  {id:'de',n:'Alemania',f:'🇩🇪',lang:'Alemán',lc:'de',mon:'EUR',mnom:'Euro'},
+  {id:'it',n:'Italia',f:'🇮🇹',lang:'Italiano',lc:'it',mon:'EUR',mnom:'Euro'},
+  {id:'pt',n:'Portugal',f:'🇵🇹',lang:'Portugués',lc:'pt',mon:'EUR',mnom:'Euro'},
+  {id:'nl',n:'Países Bajos',f:'🇳🇱',lang:'Holandés',lc:'nl',mon:'EUR',mnom:'Euro'},
+  {id:'be',n:'Bélgica',f:'🇧🇪',lang:'Francés',lc:'fr',mon:'EUR',mnom:'Euro'},
+  {id:'ch',n:'Suiza',f:'🇨🇭',lang:'Alemán',lc:'de',mon:'CHF',mnom:'Franco Suizo'},
+  {id:'at',n:'Austria',f:'🇦🇹',lang:'Alemán',lc:'de',mon:'EUR',mnom:'Euro'},
+  {id:'pl',n:'Polonia',f:'🇵🇱',lang:'Polaco',lc:'pl',mon:'PLN',mnom:'Esloti'},
+  {id:'gr',n:'Grecia',f:'🇬🇷',lang:'Griego',lc:'el',mon:'EUR',mnom:'Euro'},
+  {id:'uk',n:'Reino Unido',f:'🇬🇧',lang:'Inglés',lc:'en',mon:'GBP',mnom:'Libra Esterlina'},
+  {id:'ie',n:'Irlanda',f:'🇮🇪',lang:'Inglés',lc:'en',mon:'EUR',mnom:'Euro'},
+  {id:'us',n:'Estados Unidos',f:'🇺🇸',lang:'Inglés',lc:'en',mon:'USD',mnom:'Dólar'},
+  {id:'ca',n:'Canadá',f:'🇨🇦',lang:'Inglés',lc:'en',mon:'CAD',mnom:'Dólar Canadiense'},
+  {id:'mx',n:'México',f:'🇲🇽',lang:'Español',lc:'es',mon:'MXN',mnom:'Peso Mexicano'},
+  {id:'ar',n:'Argentina',f:'🇦🇷',lang:'Español',lc:'es',mon:'ARS',mnom:'Peso Argentino'},
+  {id:'cl',n:'Chile',f:'🇨🇱',lang:'Español',lc:'es',mon:'CLP',mnom:'Peso Chileno'},
+  {id:'co',n:'Colombia',f:'🇨🇴',lang:'Español',lc:'es',mon:'COP',mnom:'Peso Colombiano'},
+  {id:'br',n:'Brasil',f:'🇧🇷',lang:'Portugués',lc:'pt',mon:'BRL',mnom:'Real Brasileño'},
+  {id:'jp',n:'Japón',f:'🇯🇵',lang:'Japonés',lc:'ja',mon:'JPY',mnom:'Yen Japonés'},
+  {id:'cn',n:'China',f:'🇨🇳',lang:'Chino',lc:'zh',mon:'CNY',mnom:'Yuan Chino'},
+  {id:'kr',n:'Corea del Sur',f:'🇰🇷',lang:'Coreano',lc:'ko',mon:'KRW',mnom:'Won Coreano'},
+  {id:'in',n:'India',f:'🇮🇳',lang:'Hindi/Inglés',lc:'hi',mon:'INR',mnom:'Rupia India'},
+  {id:'th',n:'Tailandia',f:'🇹🇭',lang:'Tailandés',lc:'th',mon:'THB',mnom:'Baht Tailandés'},
+  {id:'sg',n:'Singapur',f:'🇸🇬',lang:'Inglés',lc:'en',mon:'SGD',mnom:'Dólar de Singapur'},
+  {id:'au',n:'Australia',f:'🇦🇺',lang:'Inglés',lc:'en',mon:'AUD',mnom:'Dólar Australiano'},
+  {id:'nz',n:'Nueva Zelanda',f:'🇳🇿',lang:'Inglés',lc:'en',mon:'NZD',mnom:'Dólar NZ'},
+  {id:'eg',n:'Egipto',f:'🇪🇬',lang:'Árabe',lc:'ar',mon:'EGP',mnom:'Libra Egipcia'},
+  {id:'ma',n:'Marruecos',f:'🇲🇦',lang:'Árabe/Francés',lc:'fr',mon:'MAD',mnom:'Dírham Marroquí'},
+  {id:'za',n:'Sudáfrica',f:'🇿🇦',lang:'Inglés/Zulú',lc:'en',mon:'ZAR',mnom:'Rand Sudafricano'},
+  {id:'tr',n:'Turquía',f:'🇹🇷',lang:'Turco',lc:'tr',mon:'TRY',mnom:'Lira Turca'},
+  {id:'ae',n:'Emiratos Árabes',f:'🇦🇪',lang:'Árabe',lc:'ar',mon:'AED',mnom:'Dírham'},
+  {id:'ru',n:'Rusia',f:'🇷🇺',lang:'Ruso',lc:'ru',mon:'RUB',mnom:'Rublo Ruso'},
+  {id:'id',n:'Indonesia',f:'🇮🇩',lang:'Indonesio',lc:'id',mon:'IDR',mnom:'Rupia Indonesia'},
+  {id:'vn',n:'Vietnam',f:'🇻🇳',lang:'Vietnamita',lc:'vi',mon:'VND',mnom:'Dong Vietnamita'},
+  {id:'my',n:'Malasia',f:'🇲🇾',lang:'Malayo',lc:'ms',mon:'MYR',mnom:'Ringgit Malayo'},
+  {id:'is',n:'Islandia',f:'🇮🇸',lang:'Islandés',lc:'is',mon:'ISK',mnom:'Corona Islandesa'},
+];
+
+const EMER={
+  no:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'113',c:'amb'},{ico:'🚒',n:'Bomberos',num:'110',c:'bom'},{ico:'🏛️',n:'Embajada España (Oslo)',num:'+47 22 99 18 00',c:'emb'},{ico:'🆘',n:'Emergencias Europa',num:'112',c:'gen'}],
+  se:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'},{ico:'🏛️',n:'Embajada España (Estocolmo)',num:'+46 8 667 43 00',c:'emb'}],
+  dk:[{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'},{ico:'🏛️',n:'Embajada España (Copenhague)',num:'+45 35 42 47 00',c:'emb'}],
+  fr:[{ico:'👮',n:'Police',num:'17',c:'pol'},{ico:'🚑',n:'SAMU (Médico)',num:'15',c:'amb'},{ico:'🚒',n:'Pompiers',num:'18',c:'bom'},{ico:'🏛️',n:'Embajada España (París)',num:'+33 1 44 43 18 00',c:'emb'},{ico:'🆘',n:'Emergencias Europa',num:'112',c:'gen'}],
+  de:[{ico:'👮',n:'Polizei',num:'110',c:'pol'},{ico:'🚑',n:'Rettungsdienst',num:'112',c:'amb'},{ico:'🚒',n:'Feuerwehr',num:'112',c:'bom'},{ico:'🏛️',n:'Embajada España (Berlín)',num:'+49 30 254 007 0',c:'emb'}],
+  it:[{ico:'👮',n:'Carabinieri',num:'112',c:'pol'},{ico:'🚑',n:'Pronto Soccorso',num:'118',c:'amb'},{ico:'🚒',n:'Vigili del Fuoco',num:'115',c:'bom'},{ico:'🏛️',n:'Embajada España (Roma)',num:'+39 06 684 0401',c:'emb'}],
+  uk:[{ico:'👮',n:'Police',num:'999',c:'pol'},{ico:'🚑',n:'Ambulance',num:'999',c:'amb'},{ico:'🚒',n:'Fire Brigade',num:'999',c:'bom'},{ico:'🏛️',n:'Embajada España (Londres)',num:'+44 20 7235 5555',c:'emb'}],
+  us:[{ico:'👮',n:'Police',num:'911',c:'pol'},{ico:'🚑',n:'Ambulance',num:'911',c:'amb'},{ico:'🚒',n:'Fire Department',num:'911',c:'bom'}],
+  jp:[{ico:'👮',n:'警察 Policía',num:'110',c:'pol'},{ico:'🚑',n:'救急 Ambulancia',num:'119',c:'amb'},{ico:'🚒',n:'消防 Bomberos',num:'119',c:'bom'},{ico:'🏛️',n:'Embajada España (Tokio)',num:'+81 3 3583 8531',c:'emb'}],
+  cn:[{ico:'👮',n:'警察 Policía',num:'110',c:'pol'},{ico:'🚑',n:'急救 Ambulancia',num:'120',c:'amb'},{ico:'🚒',n:'消防 Bomberos',num:'119',c:'bom'}],
+  mx:[{ico:'👮',n:'Policía',num:'911',c:'pol'},{ico:'🚑',n:'Cruz Roja',num:'065',c:'amb'},{ico:'🚒',n:'Bomberos',num:'068',c:'bom'}],
+  pt:[{ico:'👮',n:'PSP / GNR',num:'112',c:'pol'},{ico:'🚑',n:'INEM (Médico)',num:'112',c:'amb'},{ico:'🚒',n:'Bombeiros',num:'112',c:'bom'}],
+  au:[{ico:'👮',n:'Police',num:'000',c:'pol'},{ico:'🚑',n:'Ambulance',num:'000',c:'amb'},{ico:'🚒',n:'Fire',num:'000',c:'bom'}],
+  tr:[{ico:'👮',n:'Polis',num:'155',c:'pol'},{ico:'🚑',n:'Acil Sağlık',num:'112',c:'amb'},{ico:'🚒',n:'İtfaiye',num:'110',c:'bom'}],
+};
+const DEMER=[{ico:'🆘',n:'Emergencias',num:'112',c:'gen'},{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'}];
+
+const FRASES=[
+  {cat:'🏨 Hotel',es:'¿Dónde está mi habitación?',en:'Where is my room?',no:'Hvor er rommet mitt?',fr:'Où est ma chambre?',de:'Wo ist mein Zimmer?',it:'Dov\'è la mia camera?',pt:'Onde fica o meu quarto?',ja:'私の部屋はどこですか？',zh:'我的房间在哪里？',ko:'제 방이 어디인가요?',sv:'Var är mitt rum?',da:'Hvor er mit værelse?'},
+  {cat:'🏨 Hotel',es:'La llave de la habitación, por favor',en:'Room key, please',no:'Romsenøkkelen, takk',fr:'La clé de chambre, s\'il vous plaît',de:'Den Zimmerschlüssel, bitte',it:'La chiave della camera, per favore',pt:'A chave do quarto, por favor',ja:'部屋の鍵をください',zh:'请给我房间钥匙',ko:'방 열쇠 주세요',sv:'Rumsnyckeln, tack',da:'Værelsenøglen, tak'},
+  {cat:'🍽️ Restaurante',es:'La cuenta, por favor',en:'The bill, please',no:'Regningen, takk',fr:'L\'addition, s\'il vous plaît',de:'Die Rechnung, bitte',it:'Il conto, per favore',pt:'A conta, por favor',ja:'お会計をお願いします',zh:'买单',ko:'계산서 주세요',sv:'Notan, tack',da:'Regningen, tak'},
+  {cat:'🍽️ Restaurante',es:'¿Tiene menú en español?',en:'Do you have a menu in Spanish?',no:'Har dere meny på spansk?',fr:'Avez-vous un menu en espagnol?',de:'Haben Sie eine Speisekarte auf Spanisch?',it:'Avete un menù in spagnolo?',pt:'Tem menu em espanhol?',ja:'スペイン語のメニューはありますか？',zh:'有西班牙语菜单吗？',ko:'스페인어 메뉴가 있나요?',sv:'Har ni meny på spanska?',da:'Har I menu på spansk?'},
+  {cat:'🍽️ Restaurante',es:'Soy alérgico al gluten',en:'I am allergic to gluten',no:'Jeg er allergisk mot gluten',fr:'Je suis allergique au gluten',de:'Ich bin glutenallergisch',it:'Sono allergico al glutine',pt:'Sou alérgico ao glúten',ja:'グルテンアレルギーがあります',zh:'我对面筋过敏',ko:'저는 글루텐 알레르기가 있어요',sv:'Jag är allergisk mot gluten',da:'Jeg er glutenallergiker'},
+  {cat:'🚕 Transporte',es:'¿Me puede llevar al aeropuerto?',en:'Can you take me to the airport?',no:'Kan du kjøre meg til flyplassen?',fr:'Pouvez-vous m\'emmener à l\'aéroport?',de:'Können Sie mich zum Flughafen bringen?',it:'Può portarmi all\'aeroporto?',pt:'Pode levar-me ao aeroporto?',ja:'空港まで連れて行ってください',zh:'请送我去机场',ko:'공항까지 데려다 주세요',sv:'Kan du köra mig till flygplatsen?',da:'Kan du køre mig til lufthavnen?'},
+  {cat:'🚕 Transporte',es:'¿Cuánto cuesta?',en:'How much does it cost?',no:'Hvor mye koster det?',fr:'Combien ça coûte?',de:'Was kostet das?',it:'Quanto costa?',pt:'Quanto custa?',ja:'いくらですか？',zh:'多少钱？',ko:'얼마예요?',sv:'Hur mycket kostar det?',da:'Hvad koster det?'},
+  {cat:'🏥 Salud',es:'Necesito un médico',en:'I need a doctor',no:'Jeg trenger lege',fr:'J\'ai besoin d\'un médecin',de:'Ich brauche einen Arzt',it:'Ho bisogno di un medico',pt:'Preciso de um médico',ja:'医者が必要です',zh:'我需要医生',ko:'의사가 필요해요',sv:'Jag behöver en läkare',da:'Jeg har brug for en læge'},
+  {cat:'🏥 Salud',es:'Llame a una ambulancia',en:'Call an ambulance',no:'Ring etter ambulanse',fr:'Appelez une ambulance',de:'Rufen Sie einen Krankenwagen',it:'Chiami un\'ambulanza',pt:'Chame uma ambulância',ja:'救急車を呼んでください',zh:'请叫救护车',ko:'구급차를 불러주세요',sv:'Ring en ambulans',da:'Ring efter en ambulance'},
+  {cat:'🗺️ Orientación',es:'Estoy perdido/a',en:'I am lost',no:'Jeg har gått meg vill',fr:'Je suis perdu(e)',de:'Ich habe mich verlaufen',it:'Mi sono perso/a',pt:'Estou perdido/a',ja:'道に迷いました',zh:'我迷路了',ko:'길을 잃었어요',sv:'Jag har gått vilse',da:'Jeg er faret vild'},
+  {cat:'🗺️ Orientación',es:'¿Dónde está la farmacia?',en:'Where is the pharmacy?',no:'Hvor er apoteket?',fr:'Où est la pharmacie?',de:'Wo ist die Apotheke?',it:'Dov\'è la farmacia?',pt:'Onde é a farmácia?',ja:'薬局はどこですか？',zh:'药店在哪里？',ko:'약국이 어디 있어요?',sv:'Var är apoteket?',da:'Hvor er apoteket?'},
+  {cat:'💰 Dinero',es:'¿Dónde hay un cajero automático?',en:'Where is an ATM?',no:'Hvor er det minibank?',fr:'Où est un distributeur?',de:'Wo ist ein Geldautomat?',it:'Dov\'è un bancomat?',pt:'Onde há uma caixa automática?',ja:'ATMはどこですか？',zh:'ATM在哪里？',ko:'ATM이 어디 있어요?',sv:'Var finns det ett bankomat?',da:'Hvor er der en hæveautomat?'},
+  {cat:'💰 Dinero',es:'¿Aceptan tarjeta de crédito?',en:'Do you accept credit cards?',no:'Tar dere kredittkort?',fr:'Acceptez-vous les cartes de crédit?',de:'Nehmen Sie Kreditkarten?',it:'Accettate carte di credito?',pt:'Aceitam cartão de crédito?',ja:'クレジットカードは使えますか？',zh:'您们接受信用卡吗？',ko:'신용카드 받으시나요?',sv:'Tar ni kreditkort?',da:'Tager I kreditkort?'},
+];
+
+const LANGS=[
+  {c:'es',n:'Español',f:'🇪🇸'},{c:'en',n:'Inglés',f:'🇬🇧'},{c:'fr',n:'Francés',f:'🇫🇷'},
+  {c:'de',n:'Alemán',f:'🇩🇪'},{c:'it',n:'Italiano',f:'🇮🇹'},{c:'pt',n:'Portugués',f:'🇵🇹'},
+  {c:'no',n:'Noruego',f:'🇳🇴'},{c:'sv',n:'Sueco',f:'🇸🇪'},{c:'da',n:'Danés',f:'🇩🇰'},
+  {c:'fi',n:'Finlandés',f:'🇫🇮'},{c:'nl',n:'Holandés',f:'🇳🇱'},{c:'pl',n:'Polaco',f:'🇵🇱'},
+  {c:'ru',n:'Ruso',f:'🇷🇺'},{c:'ar',n:'Árabe',f:'🇸🇦'},{c:'zh',n:'Chino',f:'🇨🇳'},
+  {c:'ja',n:'Japonés',f:'🇯🇵'},{c:'ko',n:'Coreano',f:'🇰🇷'},{c:'hi',n:'Hindi',f:'🇮🇳'},
+  {c:'th',n:'Tailandés',f:'🇹🇭'},{c:'tr',n:'Turco',f:'🇹🇷'},{c:'el',n:'Griego',f:'🇬🇷'},
+  {c:'vi',n:'Vietnamita',f:'🇻🇳'},{c:'id',n:'Indonesio',f:'🇮🇩'},{c:'ms',n:'Malayo',f:'🇲🇾'},
+];
+
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+const S={dest:null,fromL:{c:'es',n:'Español',f:'🇪🇸'},toL:{c:'en',n:'Inglés',f:'🇬🇧'},lTarget:null,rec:null,recording:false,lastT:''};
+let filtD=[...DESTS], selId=null;
+
+// ════════════════════════════════════
+// ONBOARDING
+// ════════════════════════════════════
+function renderDG(){
+  document.getElementById('dgrid').innerHTML=filtD.map(d=>`
+    <div class="dp ${selId===d.id?'sel':''}" onclick="selD('${d.id}')">
+      <span class="fl">${d.f}</span>${d.n}
+    </div>`).join('');
+}
+function filterD(){
+  const q=document.getElementById('dsearch').value.toLowerCase().trim();
+  filtD=q?DESTS.filter(d=>d.n.toLowerCase().includes(q)):[...DESTS];
+  renderDG();
+}
+function selD(id){
+  selId=id; renderDG();
+  const d=DESTS.find(x=>x.id===id);
+  const btn=document.getElementById('obgobtn');
+  btn.disabled=false;
+  document.getElementById('obbtxt').textContent=`Viajar a ${d.n} ${d.f}`;
+  document.getElementById('obarr').style.display='inline';
+}
+function startApp(){
+  if(!selId) return;
+  S.dest=DESTS.find(d=>d.id===selId);
+  S.toL={c:S.dest.lc,n:S.dest.lang,f:S.dest.f};
+  // Header
+  $('hflag').textContent=S.dest.f; $('hname').textContent=S.dest.n;
+  $('hsub').textContent=`Idioma: ${S.dest.lang} · Moneda: ${S.dest.mon}`;
+  // Hero
+  $('hflag2').textContent=S.dest.f; $('hname2').textContent=S.dest.n;
+  $('hdet').textContent=`🗣️ ${S.dest.lang}  ·  💱 ${S.dest.mon} (${S.dest.mnom})`;
+  $('hemer').textContent=S.dest.n;
+  // Screen flags
+  ['tflag','cflag','mflag','fflag','eflag'].forEach(id=>$(id).textContent=S.dest.f);
+  $('frasname').textContent=S.dest.lang;
+  $('etip').innerHTML=`ℹ️ Números de emergencia en <strong>${S.dest.n}</strong>. Toca para llamar.`;
+  // Traductor lang
+  $('tf').textContent=S.dest.f; $('tn').textContent=S.dest.lang;
+  // Moneda destino
+  const cto=$('cto');
+  for(let o of cto.options){if(o.value===S.dest.mon){o.selected=true;break;}}
+  // Render data
+  renderEmer(); renderFras();
+  $('ob').style.display='none'; $('app').style.display='block';
+  go('home');
+}
+function cambiarDest(){$('ob').style.display='flex';$('app').style.display='none';}
+
+// ════════════════════════════════════
+// NAVEGACIÓN
+// ════════════════════════════════════
+function go(name){
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
+  $('sc-'+name).classList.add('on');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  const ni=$('nav-'+name); if(ni) ni.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+// ════════════════════════════════════
+// LANG MODAL
+// ════════════════════════════════════
+function openL(t){
+  S.lTarget=t;
+  $('lgrid').innerHTML=LANGS.map(l=>`<div class="lo" onclick="pickL('${l.c}','${l.n}','${l.f}')">${l.f} ${l.n}</div>`).join('');
+  $('lmodal').classList.add('op');
+}
+function closeLM(e){if(e.target===$('lmodal'))$('lmodal').classList.remove('op');}
+function pickL(c,n,f){
+  $('lmodal').classList.remove('op');
+  if(S.lTarget==='from'){S.fromL={c,n,f};$('ff').textContent=f;$('fn').textContent=n;}
+  else{S.toL={c,n,f};$('tf').textContent=f;$('tn').textContent=n;}
+}
+function swL(){
+  [S.fromL,S.toL]=[S.toL,S.fromL];
+  $('ff').textContent=S.fromL.f;$('fn').textContent=S.fromL.n;
+  $('tf').textContent=S.toL.f;$('tn').textContent=S.toL.n;
+}
+
+// ════════════════════════════════════
+// TRADUCTOR
+// ════════════════════════════════════
+function toggleMic(){S.recording?stopR():startR();}
+function startR(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Tu navegador no soporta voz. Usa el campo de texto.');return;}
+  S.rec=new SR();S.rec.lang=S.fromL.c;S.rec.continuous=false;S.rec.interimResults=false;
+  S.rec.onstart=()=>{S.recording=true;$('micbtn').classList.add('rec');$('mico').textContent='⏹️';$('mlbl').textContent='Escuchando...';$('msub').textContent='Habla ahora';};
+  S.rec.onresult=e=>{$('txtin').value=e.results[0][0].transcript;stopR();doTrans();};
+  S.rec.onerror=()=>stopR();S.rec.onend=()=>{if(S.recording)stopR();};
+  S.rec.start();
+}
+function stopR(){
+  S.recording=false;try{S.rec.stop();}catch(e){}
+  $('micbtn').classList.remove('rec');$('mico').textContent='🎤';$('mlbl').textContent='Pulsa y habla';$('msub').textContent='Toca para empezar';
+}
+async function doTrans(){
+  const txt=$('txtin').value.trim();if(!txt)return;
+  sh('ldtrad',true);sh('restrad',false);
+  try{
+    const r=await claude(`Traduce este texto del ${S.fromL.n} al ${S.toL.n}. Responde SOLO con la traducción, sin explicaciones ni comillas.\nTexto: "${txt}"`);
+    $('restxt').textContent=r;S.lastT=r;sh('restrad',true);
+  }catch(e){$('restxt').textContent='❌ Error de conexión.';sh('restrad',true);}
+  sh('ldtrad',false);
+}
+function spkRes(){if(!S.lastT)return;const u=new SpeechSynthesisUtterance(S.lastT);u.lang=S.toL.c;speechSynthesis.speak(u);}
+
+// ════════════════════════════════════
+// OCR CARTELES
+// ════════════════════════════════════
+async function doOCR(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const prev=$('cam-prev');prev.src=URL.createObjectURL(file);prev.style.display='block';
+  document.querySelector('.cam-ph').style.display='none';
+  sh('ldcart',true);sh('ocrout',false);
+  const b64=await toB64(file);
+  try{
+    const r=await fetch('https://viajafacil-api.victoribius.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:file.type,data:b64}},
+        {type:'text',text:`Lee TODO el texto visible en la imagen y tradúcelo al español.
+Responde EXACTAMENTE en este formato:
+ORIGINAL: [texto original de la imagen]
+TRADUCCIÓN: [traducción al español]
+Si no hay texto legible, escribe solo: No se detectó texto en la imagen.`}
+      ]}]})
+    });
+    const d=await r.json();const txt=d.content[0].text;
+    const orig=txt.match(/ORIGINAL:\s*(.+?)(?=TRADUCCIÓN:|$)/s);
+    const trans=txt.match(/TRADUCCIÓN:\s*(.+)/s);
+    $('ocrorig').textContent=orig?'📝 Original: '+orig[1].trim():'';
+    $('ocrtrans').textContent=trans?trans[1].trim():txt;
+    sh('ocrout',true);
+  }catch(e){$('ocrtrans').textContent='❌ Error al analizar la imagen.';sh('ocrout',true);}
+  sh('ldcart',false);
+}
+function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
+
+// ════════════════════════════════════
+// MONEDAS
+// ════════════════════════════════════
+async function doConv(){
+  const amt=parseFloat($('amtin').value);const from=$('cfrom').value;const to=$('cto').value;
+  if(!amt||isNaN(amt))return;
+  sh('ldmon',true);sh('curres',false);
+  try{
+    const res=await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
+    const d=await res.json();const rate=d.rates[to];
+    $('cramt').textContent=`${(amt*rate).toFixed(2)} ${to}`;
+    $('crrate').textContent=`1 ${from} = ${rate.toFixed(4)} ${to} · Tipo de cambio en tiempo real`;
+    sh('curres',true);
+  }catch(e){
+    try{
+      const txt=await claude(`Convierte ${amt} ${from} a ${to} con tipo de cambio aproximado actual. Responde SOLO: RESULTADO: [cantidad] ${to} | TASA: 1 ${from} = [tasa] ${to}`);
+      const p=txt.split('|');
+      $('cramt').textContent=(p[0]||'').replace('RESULTADO:','').trim();
+      $('crrate').textContent=(p[1]||'').replace('TASA:','').trim()+' · Estimación IA';
+      sh('curres',true);
+    }catch(e2){alert('Error de conexión.');}
+  }
+  sh('ldmon',false);
+}
+
+// ════════════════════════════════════
+// EMERGENCIAS
+// ════════════════════════════════════
+function renderEmer(){
+  if(!S.dest)return;
+  const list=EMER[S.dest.id]||DEMER;
+  $('emerlist').innerHTML=list.map(e=>`
+    <a class="ei ${e.c}" href="tel:${e.num}">
+      <span class="ei-ico">${e.ico}</span>
+      <div><div class="ei-n">${e.n}</div><div class="ei-num">${e.num}</div></div>
+      <span class="ei-c">📞</span>
+    </a>`).join('');
+}
+
+// ════════════════════════════════════
+// FRASES
+// ════════════════════════════════════
+function renderFras(){
+  if(!S.dest)return;
+  const lc=S.dest.lc;
+  const cats=[...new Set(FRASES.map(f=>f.cat))];
+  $('fraslist').innerHTML=cats.map(cat=>{
+    const items=FRASES.filter(f=>f.cat===cat);
+    return `<p class="sec-ttl" style="margin-top:16px">${cat}</p>`
+      +items.map(f=>{
+        const dest=f[lc]||f.en;
+        return `<div class="fi" onclick="spkF('${dest.replace(/'/g,"\\'")}','${lc}')">
+          <div class="fi-es">${f.es}</div>
+          <div class="fi-d">${dest}</div>
+          <div class="fi-h">🔊 Toca para escuchar en ${S.dest.lang}</div>
+        </div>`;
+      }).join('');
+  }).join('');
+}
+function spkF(t,lc){const u=new SpeechSynthesisUtterance(t);u.lang=lc;speechSynthesis.speak(u);}
+
+// ════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════
+function $(id){return document.getElementById(id);}
+function sh(id,v){$(id).classList[v?'add':'remove']('sh');}
+async function claude(prompt){
+  const r=await fetch('https://viajafacil-api.victoribius.workers.dev',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  });
+  const d=await r.json();return d.content[0].text.trim();
+}
+
+// INIT
+renderDG();
+</script>
+</body>
+</html>

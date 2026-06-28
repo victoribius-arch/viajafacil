@@ -252,7 +252,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-
   <!-- CARTELES -->
   <div id="sc-cart" class="sc">
     <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">📷 Leer Carteles</div><span class="sc-flag" id="cflag"></span></div>
-    <div class="tip">ℹ️ Apunta con la cámara al cartel, menú o señal y pulsa Capturar. La IA lo leerá y traducirá al español al momento.</div>
+    <div class="tip">ℹ️ Apunta con la cámara al cartel, menú o señal y pulsa Capturar. La IA detecta el idioma y lo traduce al tuyo al momento.</div>
+    <div class="lang-bar" style="margin-bottom:13px"><span style="font-size:13px;color:var(--muted)">🌐 Traducir a:</span><button onclick="openL('my')" id="mylang" style="margin-left:auto;background:none;border:0;font-weight:700;cursor:pointer;font-size:14px;color:inherit">🇪🇸 Español</button></div>
     <div class="cam-z">
       <video id="cam-live" autoplay playsinline muted style="width:100%;border-radius:14px;display:none;background:#000"></video>
       <div class="cam-ph" id="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:44px">📸</span><p>Activando cámara…</p></div>
@@ -445,7 +446,7 @@ const LANGS=[
 // ════════════════════════════════════
 // STATE
 // ════════════════════════════════════
-const S={dest:null,fromL:{c:'es',n:'Español',f:'🇪🇸'},toL:{c:'en',n:'Inglés',f:'🇬🇧'},lTarget:null,rec:null,recording:false,lastT:''};
+const S={dest:null,fromL:{c:'es',n:'Español',f:'🇪🇸'},toL:{c:'en',n:'Inglés',f:'🇬🇧'},myLang:{c:'es',n:'Español',f:'🇪🇸'},lTarget:null,rec:null,recording:false,lastT:''};
 let filtD=[...DESTS], selId=null;
 
 // ════════════════════════════════════
@@ -522,6 +523,7 @@ function closeLM(e){if(e.target===$('lmodal'))$('lmodal').classList.remove('op')
 function pickL(c,n,f){
   $('lmodal').classList.remove('op');
   if(S.lTarget==='from'){S.fromL={c,n,f};$('ff').textContent=f;$('fn').textContent=n;}
+  else if(S.lTarget==='my'){S.myLang={c,n,f};const m=$('mylang');if(m)m.textContent=f+' '+n;}
   else{S.toL={c,n,f};$('tf').textContent=f;$('tn').textContent=n;}
 }
 function swL(){
@@ -612,10 +614,10 @@ async function translateImg(b64){
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'fast',max_tokens:600,messages:[{role:'user',content:[
         {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
-        {type:'text',text:`Lee TODO el texto visible en la imagen y tradúcelo al español.
+        {type:'text',text:`Lee TODO el texto visible en la imagen y tradúcelo al ${S.myLang.n}.
 Responde EXACTAMENTE en este formato:
 ORIGINAL: [texto original de la imagen]
-TRADUCCIÓN: [traducción al español]
+TRADUCCIÓN: [traducción al ${S.myLang.n}]
 Si no hay texto legible, escribe solo: No se detectó texto en la imagen.`}
       ]}]})
     });
@@ -624,7 +626,7 @@ Si no hay texto legible, escribe solo: No se detectó texto en la imagen.`}
     const orig=txt.match(/ORIGINAL:\s*([\s\S]+?)(?=TRADUCCI[ÓO]N:|$)/i);
     const trans=txt.match(/TRADUCCI[ÓO]N:\s*([\s\S]+)/i);
     $('ocrorig').textContent=orig?'📝 Original: '+orig[1].trim():'';
-    $('ocrtrans').textContent=trans?'🇪🇸 Traducción: '+trans[1].trim():(txt||'No se pudo leer el texto.');
+    $('ocrtrans').textContent=trans?S.myLang.f+' Traducción: '+trans[1].trim():(txt||'No se pudo leer el texto.');
     sh('ocrout',true);
   }catch(e){$('ocrtrans').textContent='❌ Error al analizar la imagen.';sh('ocrout',true);}
   sh('ldcart',false);

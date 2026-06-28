@@ -173,6 +173,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-
     <span class="ob-plane">✈️</span>
   </div>
   <div class="ob-card">
+    <div class="lang-bar" style="margin-bottom:14px">
+      <span style="font-size:13px;color:var(--muted)">🌐 Tu idioma:</span>
+      <button onclick="openL('my')" class="mylang-disp" style="margin-left:auto;background:none;border:0;font-weight:700;font-size:14px;cursor:pointer;color:inherit">🇪🇸 Español</button>
+    </div>
     <p class="ob-q">¿A dónde vas a viajar? 🌍</p>
     <p class="ob-sub">Elige tu destino y la app se configura sola: idioma, moneda y emergencias</p>
     <div class="search-box">
@@ -253,7 +257,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-
   <div id="sc-cart" class="sc">
     <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">📷 Leer Carteles</div><span class="sc-flag" id="cflag"></span></div>
     <div class="tip">ℹ️ Apunta con la cámara al cartel, menú o señal y pulsa Capturar. La IA detecta el idioma y lo traduce al tuyo al momento.</div>
-    <div class="lang-bar" style="margin-bottom:13px"><span style="font-size:13px;color:var(--muted)">🌐 Traducir a:</span><button onclick="openL('my')" id="mylang" style="margin-left:auto;background:none;border:0;font-weight:700;cursor:pointer;font-size:14px;color:inherit">🇪🇸 Español</button></div>
+    <div class="lang-bar" style="margin-bottom:13px"><span style="font-size:13px;color:var(--muted)">🌐 Traducir a:</span><button onclick="openL('my')" class="mylang-disp" style="margin-left:auto;background:none;border:0;font-weight:700;cursor:pointer;font-size:14px;color:inherit">🇪🇸 Español</button></div>
     <div class="cam-z">
       <video id="cam-live" autoplay playsinline muted style="width:100%;border-radius:14px;display:none;background:#000"></video>
       <div class="cam-ph" id="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:44px">📸</span><p>Activando cámara…</p></div>
@@ -636,7 +640,7 @@ function closeLM(e){if(e.target===$('lmodal'))$('lmodal').classList.remove('op')
 function pickL(c,n,f){
   $('lmodal').classList.remove('op');
   if(S.lTarget==='from'){S.fromL={c,n,f};$('ff').textContent=f;$('fn').textContent=n;}
-  else if(S.lTarget==='my'){S.myLang={c,n,f};const m=$('mylang');if(m)m.textContent=f+' '+n;}
+  else if(S.lTarget==='my'){S.myLang={c,n,f};document.querySelectorAll('.mylang-disp').forEach(el=>el.textContent=f+' '+n);}
   else{S.toL={c,n,f};$('tf').textContent=f;$('tn').textContent=n;}
 }
 function swL(){

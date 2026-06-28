@@ -495,6 +495,40 @@ const EMER={
 };
 const DEMER=[{ico:'🆘',n:'Emergencias',num:'112',c:'gen'},{ico:'👮',n:'Policía',num:'112',c:'pol'},{ico:'🚑',n:'Ambulancia',num:'112',c:'amb'},{ico:'🚒',n:'Bomberos',num:'112',c:'bom'}];
 
+// Números reales por país [policía, ambulancia, bomberos]. Los que no aparezcan usan el 112
+// (que en móvil enruta a emergencias en gran parte del mundo). Los países europeos ya usan 112.
+const EMERNUM={
+  ca:['911','911','911'],ar:['911','107','100'],cl:['133','131','132'],co:['123','123','123'],
+  br:['190','192','193'],pe:['105','106','116'],bo:['110','118','119'],uy:['911','105','104'],
+  py:['911','141','132'],ec:['911','911','911'],ve:['911','171','171'],gt:['110','123','123'],
+  cr:['911','911','911'],pa:['911','911','911'],do:['911','911','911'],cu:['106','104','105'],
+  pr:['911','911','911'],sv:['911','911','911'],hn:['911','911','911'],ni:['118','128','115'],
+  bz:['911','911','911'],jm:['119','110','110'],tt:['999','811','990'],bs:['911','911','911'],
+  bb:['211','511','311'],
+  kr:['112','119','119'],in:['112','112','112'],th:['191','1669','199'],sg:['999','995','995'],
+  id:['110','118','113'],vn:['113','115','114'],my:['999','999','994'],ph:['911','911','911'],
+  tw:['110','119','119'],hk:['999','999','999'],mo:['999','999','999'],mn:['102','103','101'],
+  kz:['102','103','101'],uz:['102','103','101'],kg:['102','103','101'],tj:['102','103','101'],
+  pk:['15','1122','16'],bd:['999','999','999'],lk:['119','110','111'],np:['100','102','101'],
+  kh:['117','119','118'],la:['191','195','190'],mv:['119','102','118'],bn:['993','991','995'],
+  nz:['111','111','111'],fj:['911','911','911'],
+  sa:['999','997','998'],ae:['999','998','997'],qa:['999','999','999'],kw:['112','112','112'],
+  bh:['999','999','999'],om:['9999','9999','9999'],jo:['911','911','911'],lb:['112','140','175'],
+  il:['100','101','102'],iq:['104','122','115'],ir:['110','115','125'],ru:['102','103','101'],
+  za:['10111','10177','10177'],eg:['122','123','180'],ma:['19','15','15'],dz:['17','14','14'],
+  tn:['197','190','198'],ng:['112','112','112'],ke:['999','999','999'],gh:['191','193','192'],
+  tz:['112','112','112'],ug:['999','999','999'],
+};
+Object.keys(EMERNUM).forEach(id=>{
+  if(EMER[id])return; // no pisar los que ya tienen ficha detallada
+  const e=EMERNUM[id];
+  EMER[id]=[
+    {ico:'👮',n:'Policía',num:e[0],c:'pol'},
+    {ico:'🚑',n:'Ambulancia',num:e[1],c:'amb'},
+    {ico:'🚒',n:'Bomberos',num:e[2],c:'bom'},
+  ];
+});
+
 const FRASES=[
   {cat:'🏨 Hotel',es:'¿Dónde está mi habitación?',en:'Where is my room?',no:'Hvor er rommet mitt?',fr:'Où est ma chambre?',de:'Wo ist mein Zimmer?',it:'Dov\'è la mia camera?',pt:'Onde fica o meu quarto?',ja:'私の部屋はどこですか？',zh:'我的房间在哪里？',ko:'제 방이 어디인가요?',sv:'Var är mitt rum?',da:'Hvor er mit værelse?'},
   {cat:'🏨 Hotel',es:'La llave de la habitación, por favor',en:'Room key, please',no:'Romsenøkkelen, takk',fr:'La clé de chambre, s\'il vous plaît',de:'Den Zimmerschlüssel, bitte',it:'La chiave della camera, per favore',pt:'A chave do quarto, por favor',ja:'部屋の鍵をください',zh:'请给我房间钥匙',ko:'방 열쇠 주세요',sv:'Rumsnyckeln, tack',da:'Værelsenøglen, tak'},

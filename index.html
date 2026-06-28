@@ -329,8 +329,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-
   <!-- LUGARES DE INTERÉS -->
   <div id="sc-poi" class="sc">
     <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">🧭 Lugares de interés</div><span class="sc-flag" id="pflag"></span></div>
-    <div class="tip">ℹ️ Sitios interesantes cerca de ti (hasta 2 km). Toca uno para ir con Google Maps.</div>
-    <button class="ph-btn" onclick="loadPOI(true)" style="margin-bottom:12px"><span>🔄</span><p>Actualizar mi ubicación</p></button>
+    <div class="tip">ℹ️ Sitios cerca de ti (2 km). Elige categoría y toca uno para ir con Google Maps.</div>
+    <div id="poichips" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px">
+      <button onclick="poiCat(this,'tourist_attraction')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#14b8a6;color:#fff;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🏛️ Monumentos</button>
+      <button onclick="poiCat(this,'restaurant')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🍽️ Restaurantes</button>
+      <button onclick="poiCat(this,'museum')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🖼️ Museos</button>
+      <button onclick="poiCat(this,'cafe')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">☕ Cafés</button>
+      <button onclick="poiCat(this,'bar')" style="flex:0 0 auto;padding:8px 13px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#333;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">🍸 Bares</button>
+    </div>
+    <button class="ph-btn" onclick="loadPOI(true)" style="margin-bottom:12px"><span>🔄</span><p>Actualizar ubicación</p></button>
     <div class="el" id="poilist"></div>
     <div class="spacer"></div>
   </div>
@@ -795,53 +802,65 @@ async function claude(prompt){
 }
 
 // ════════════════════════════════════
-// LUGARES DE INTERÉS (OpenStreetMap + geolocalización)
+// LUGARES DE INTERÉS (Google Places + geolocalización)
 // ════════════════════════════════════
-let poiLoaded=false;
-const POI_ICON={attraction:'📍',museum:'🏛️',viewpoint:'🌄',artwork:'🎨',gallery:'🖼️',monument:'🗿',memorial:'🕯️',castle:'🏰',ruins:'🏚️',church:'⛪',place_of_worship:'⛪',zoo:'🦁',theme_park:'🎢'};
+let poiCoords=null,poiType='tourist_attraction';
 function poiDist(la1,lo1,la2,lo2){
   const R=6371,d2r=Math.PI/180;
   const dLa=(la2-la1)*d2r,dLo=(lo2-lo1)*d2r;
   const a=Math.sin(dLa/2)**2+Math.cos(la1*d2r)*Math.cos(la2*d2r)*Math.sin(dLo/2)**2;
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); // km
 }
+function poiCat(btn,type){
+  document.querySelectorAll('#poichips button').forEach(b=>{b.style.background='#fff';b.style.color='#333';});
+  btn.style.background='#14b8a6';btn.style.color='#fff';
+  poiType=type;
+  if(poiCoords)fetchPlaces(poiCoords.la,poiCoords.lo);else loadPOI(true);
+}
 function loadPOI(force){
-  if(poiLoaded&&!force)return;
   const out=$('poilist');
+  if(poiCoords&&!force){fetchPlaces(poiCoords.la,poiCoords.lo);return;}
   out.innerHTML='<div class="tip">📡 Buscando tu ubicación…</div>';
   if(!navigator.geolocation){out.innerHTML='<div class="tip">❌ Tu navegador no permite geolocalización.</div>';return;}
-  navigator.geolocation.getCurrentPosition(async pos=>{
-    const la=pos.coords.latitude,lo=pos.coords.longitude;
-    out.innerHTML='<div class="tip">🔎 Buscando lugares de interés cerca…</div>';
-    const q=`[out:json][timeout:25];(node["tourism"~"attraction|museum|viewpoint|artwork|gallery|zoo|theme_park"](around:2000,${la},${lo});node["historic"](around:2000,${la},${lo});way["tourism"~"attraction|museum|gallery"](around:2000,${la},${lo}););out center 60;`;
-    try{
-      const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)});
-      const d=await r.json();
-      const seen=new Set();
-      const items=(d.elements||[]).map(e=>{
-        const lat=e.lat||(e.center&&e.center.lat),lon=e.lon||(e.center&&e.center.lon);
-        const nm=e.tags&&(e.tags['name:es']||e.tags.name);
-        if(!lat||!lon||!nm)return null;
-        const type=((e.tags.tourism||e.tags.historic||'')+'').split(';')[0];
-        return{nm,lat,lon,type,km:poiDist(la,lo,lat,lon)};
-      }).filter(Boolean).filter(p=>{const k=p.nm.toLowerCase();if(seen.has(k))return false;seen.add(k);return true;})
-        .sort((a,b)=>a.km-b.km).slice(0,30);
-      if(!items.length){out.innerHTML='<div class="tip">😕 No encontré lugares de interés a 2 km. Prueba a actualizar en otra zona.</div>';return;}
-      out.innerHTML=items.map(p=>{
-        const ico=POI_ICON[p.type]||'📍';
-        const dist=p.km<1?Math.round(p.km*1000)+' m':p.km.toFixed(1)+' km';
-        const maps=`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}`;
-        const nm=p.nm.replace(/</g,'&lt;');
-        return `<a class="ei" href="${maps}" target="_blank" rel="noopener">
-          <span class="ei-ico">${ico}</span>
-          <div><div class="ei-n">${nm}</div><div class="ei-num">${dist} · toca para ir</div></div>
-          <span class="ei-c">🧭</span></a>`;
-      }).join('');
-      poiLoaded=true;
-    }catch(e){out.innerHTML='<div class="tip">❌ No se pudo cargar. Revisa tu conexión e inténtalo de nuevo.</div>';}
+  navigator.geolocation.getCurrentPosition(p=>{
+    poiCoords={la:p.coords.latitude,lo:p.coords.longitude};
+    fetchPlaces(poiCoords.la,poiCoords.lo);
   },err=>{
-    out.innerHTML='<div class="tip">❌ Necesito permiso de ubicación para mostrarte lugares cercanos. Actívalo y pulsa “Actualizar mi ubicación”.</div>';
+    out.innerHTML='<div class="tip">❌ Necesito permiso de ubicación. Actívalo y pulsa “Actualizar ubicación”.</div>';
   },{enableHighAccuracy:true,timeout:10000,maximumAge:60000});
+}
+async function fetchPlaces(la,lo){
+  const out=$('poilist');
+  out.innerHTML='<div class="tip">🔎 Buscando lugares cerca…</div>';
+  try{
+    const r=await fetch('https://viajafacil-api.victoribius.workers.dev/places',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({lat:la,lng:lo,types:[poiType],radius:2000,lang:'es'})
+    });
+    const d=await r.json();
+    if(d.error){out.innerHTML='<div class="tip">⚙️ El buscador de lugares aún no está activo (falta configurar la clave de Google).</div>';return;}
+    const places=d.places||[];
+    if(!places.length){out.innerHTML='<div class="tip">😕 No encontré sitios de esta categoría cerca.</div>';return;}
+    const items=places.map(p=>{
+      const lat=p.location&&p.location.latitude,lon=p.location&&p.location.longitude;
+      const nm=(p.displayName&&p.displayName.text)||'';
+      const photo=(p.photos&&p.photos[0]&&p.photos[0].name)||'';
+      return{nm,lat,lon,km:poiDist(la,lo,lat,lon),rating:p.rating,cnt:p.userRatingCount||0,photo};
+    }).filter(x=>x.lat&&x.nm).sort((a,b)=>a.km-b.km);
+    out.innerHTML=items.map(p=>{
+      const dist=p.km<1?Math.round(p.km*1000)+' m':p.km.toFixed(1)+' km';
+      const maps=`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}`;
+      const stars=p.rating?`⭐ ${p.rating} (${p.cnt})`:'';
+      const img=p.photo
+        ?`<img src="https://viajafacil-api.victoribius.workers.dev/place-photo?ref=${encodeURIComponent(p.photo)}&w=160" alt="" loading="lazy" style="width:60px;height:60px;border-radius:10px;object-fit:cover;flex:0 0 auto">`
+        :`<span class="ei-ico">📍</span>`;
+      const nm=p.nm.replace(/</g,'&lt;');
+      return `<a class="ei" href="${maps}" target="_blank" rel="noopener" style="align-items:center;gap:10px">
+        ${img}
+        <div style="flex:1;min-width:0"><div class="ei-n">${nm}</div><div class="ei-num">${stars}${stars?' · ':''}${dist} · toca para ir</div></div>
+        <span class="ei-c">🧭</span></a>`;
+    }).join('');
+  }catch(e){out.innerHTML='<div class="tip">❌ No se pudo cargar. Revisa tu conexión.</div>';}
 }
 
 // INIT

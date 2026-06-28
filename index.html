@@ -565,11 +565,12 @@ TRADUCCIÓN: [traducción al español]
 Si no hay texto legible, escribe solo: No se detectó texto en la imagen.`}
       ]}]})
     });
-    const d=await r.json();const txt=d.content[0].text;
-    const orig=txt.match(/ORIGINAL:\s*(.+?)(?=TRADUCCIÓN:|$)/s);
-    const trans=txt.match(/TRADUCCIÓN:\s*(.+)/s);
+    const d=await r.json();
+    const txt=((d.content&&d.content[0]&&d.content[0].text)||'').trim();
+    const orig=txt.match(/ORIGINAL:\s*([\s\S]+?)(?=TRADUCCI[ÓO]N:|$)/i);
+    const trans=txt.match(/TRADUCCI[ÓO]N:\s*([\s\S]+)/i);
     $('ocrorig').textContent=orig?'📝 Original: '+orig[1].trim():'';
-    $('ocrtrans').textContent=trans?trans[1].trim():txt;
+    $('ocrtrans').textContent=trans?'🇪🇸 Traducción: '+trans[1].trim():(txt||'No se pudo leer el texto.');
     sh('ocrout',true);
   }catch(e){$('ocrtrans').textContent='❌ Error al analizar la imagen.';sh('ocrout',true);}
   sh('ldcart',false);

@@ -251,13 +251,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--slate);min-
   <!-- CARTELES -->
   <div id="sc-cart" class="sc">
     <div class="sc-hdr"><button class="bk" onclick="go('home')">←</button><div class="sc-ttl">📷 Leer Carteles</div><span class="sc-flag" id="cflag"></span></div>
-    <div class="tip">ℹ️ Haz una foto a cualquier cartel, menú o señal. La IA lo leerá y traducirá al español.</div>
+    <div class="tip">ℹ️ Apunta con la cámara al cartel, menú o señal y pulsa Capturar. La IA lo leerá y traducirá al español al momento.</div>
     <div class="cam-z">
-      <div class="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:44px">📸</span><p>Toca para hacer una foto</p></div>
+      <video id="cam-live" autoplay playsinline muted style="width:100%;border-radius:14px;display:none;background:#000"></video>
+      <div class="cam-ph" id="cam-ph" onclick="document.getElementById('fi').click()"><span style="font-size:44px">📸</span><p>Activando cámara…</p></div>
       <img id="cam-prev" alt="preview">
     </div>
-    <input type="file" id="fi" accept="image/*" capture="environment" onchange="doOCR(event)">
-    <button class="ph-btn" onclick="document.getElementById('fi').click()"><span>📷</span><p>Hacer foto al cartel</p></button>
+    <input type="file" id="fi" accept="image/*" capture="environment" onchange="doOCR(event)" style="display:none">
+    <button class="ph-btn" onclick="snap()"><span>📷</span><p>Capturar y traducir</p></button>
+    <button class="ph-btn" onclick="document.getElementById('fi').click()" style="margin-top:8px;opacity:.65"><span>🖼️</span><p>O subir una foto de la galería</p></button>
     <div class="ld" id="ldcart"><div class="sp"></div><p>Analizando con IA...</p></div>
     <div class="ocr-out" id="ocrout"><div class="ocr-orig" id="ocrorig"></div><div class="ocr-trans" id="ocrtrans"></div></div>
     <div class="spacer"></div>
@@ -494,6 +496,7 @@ function go(name){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   const ni=$('nav-'+name); if(ni) ni.classList.add('on');
   window.scrollTo(0,0);
+  if(name==='cart') startCam(); else stopCam();
 }
 
 // ════════════════════════════════════
@@ -547,12 +550,52 @@ function spkRes(){if(!S.lastT)return;const u=new SpeechSynthesisUtterance(S.last
 // ════════════════════════════════════
 // OCR CARTELES
 // ════════════════════════════════════
+// ---- Cámara en vivo ----
+let camStream=null;
+async function startCam(){
+  const v=$('cam-live'),ph=$('cam-ph');
+  $('cam-prev').style.display='none';sh('ocrout',false);
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ if(ph){ph.style.display='flex';ph.querySelector('p').textContent='Toca para hacer una foto';} return; }
+  try{
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+    v.srcObject=camStream;v.style.display='block';if(ph)ph.style.display='none';
+  }catch(e){
+    if(v)v.style.display='none';
+    if(ph){ph.style.display='flex';ph.querySelector('p').textContent='Toca para hacer una foto';}
+  }
+}
+function stopCam(){
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+  const v=$('cam-live');if(v)v.srcObject=null;
+}
+// Captura el fotograma actual (o una imagen) reducido a maxDim y devuelve dataURL JPEG.
+function frameToB64(src,maxDim){
+  let w=src.videoWidth||src.width,h=src.videoHeight||src.height;
+  const s=Math.min(1,maxDim/Math.max(w,h));w=Math.round(w*s);h=Math.round(h*s);
+  const c=document.createElement('canvas');c.width=w;c.height=h;
+  c.getContext('2d').drawImage(src,0,0,w,h);
+  return c.toDataURL('image/jpeg',0.7);
+}
+// Botón "Capturar y traducir": congela el fotograma de la cámara en vivo y traduce.
+async function snap(){
+  const v=$('cam-live');
+  if(!camStream||!v.videoWidth){document.getElementById('fi').click();return;}
+  const url=frameToB64(v,1024);
+  $('cam-prev').src=url;$('cam-prev').style.display='block';v.style.display='none';
+  await translateImg(url.split(',')[1]);
+}
+// Alternativa: foto de la galería / cámara del sistema.
 async function doOCR(ev){
   const file=ev.target.files[0];if(!file)return;
-  const prev=$('cam-prev');prev.src=URL.createObjectURL(file);prev.style.display='block';
-  document.querySelector('.cam-ph').style.display='none';
-  sh('ldcart',true);sh('ocrout',false);
+  $('cam-prev').src=URL.createObjectURL(file);$('cam-prev').style.display='block';
+  const v=$('cam-live');if(v)v.style.display='none';
+  const ph=$('cam-ph');if(ph)ph.style.display='none';
   const b64=await shrink(file,1024);
+  await translateImg(b64);
+}
+// Envía la imagen (base64 JPEG) al Worker y muestra original + traducción.
+async function translateImg(b64){
+  sh('ldcart',true);sh('ocrout',false);
   try{
     const r=await fetch('https://viajafacil-api.victoribius.workers.dev',{
       method:'POST',headers:{'Content-Type':'application/json'},

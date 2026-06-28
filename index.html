@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ViajaFácil</title>
+<meta name="theme-color" content="#F2742C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ViajaFácil">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800;900&display=swap');
 :root{
@@ -1042,7 +1048,18 @@ try{
   if(sl){const u=UILANGS.find(l=>l.c===sl);if(u){S.uiLang=sl;S.fromL={c:sl,n:u.n,f:u.f};}}
   if(localStorage.getItem('vf_big')==='1')document.body.classList.add('big');
 }catch(e){}
+Object.assign(I18N.es,{offlineMsg:'Sin conexión: la IA necesita internet. Frases, emergencias y conversor sí funcionan.'});
+Object.assign(I18N.en,{offlineMsg:'Offline: AI needs internet. Phrases, emergencies and converter still work.'});
 renderUiLangs();applyI18n();setConvBtn('idle');updateBigUI();show('screen-lang');
+// ===== PWA: service worker + aviso de sin conexión =====
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+(function(){
+  const bn=document.createElement('div');bn.id='offbar';
+  bn.style.cssText='position:fixed;bottom:84px;left:50%;transform:translateX(-50%);max-width:460px;width:92%;background:#1f2937;color:#fff;padding:11px 14px;border-radius:14px;font-weight:700;font-size:14px;text-align:center;z-index:300;box-shadow:0 6px 20px rgba(0,0,0,.25);display:none';
+  document.body.appendChild(bn);
+  function upd(){if(navigator.onLine){bn.style.display='none';}else{bn.textContent='📴 '+t('offlineMsg');bn.style.display='block';}}
+  window.addEventListener('online',upd);window.addEventListener('offline',upd);upd();
+})();
 </script>
 </body>
 </html>
